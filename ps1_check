@@ -1,0 +1,8 @@
+# Script to check Pan-STARRS catalogue to see if there are nearby stellar objects to candidates
+
+import os
+import numpy as np
+from astropy.io import ascii
+from astropy.coordinates import SkyCoord
+import astropy.units as u
+from astroquery.vizier import Vizier

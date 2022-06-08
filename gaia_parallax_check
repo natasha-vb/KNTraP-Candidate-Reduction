@@ -1,0 +1,5 @@
+# Script to query Gaia catalogue and check parallax of candidates 
+
+from query_catalog_pipe import GaiaAstrometry
+from astropy.coordinates import SkyCoord
+import astropy.units as u 
