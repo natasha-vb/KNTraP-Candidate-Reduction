@@ -3,5 +3,6 @@ import pandas as pd
 import glob 
 
 filepath = glob.glob("*.clusters")
-filename = file.read(filepath)
-print(filename)
+file = open(filepath, "r")
+filedata = file.read()
+print(filedata)
