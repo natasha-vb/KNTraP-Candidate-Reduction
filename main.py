@@ -6,6 +6,7 @@ import glob
 import argparse
 from pathlib import Path
 from astropy.table import Table
+from astropy.io import fits
 
 def read_file(fname):
     try:
@@ -38,6 +39,7 @@ def read_file(fname):
         return df_tmp
 
 
-def read_single_file(fname):
-    df_tmp = pd.read_file(fname)
+sci_list = glob.glob("../../workspace/257_tmpl/1/*.diff.fits")
+diff_list = glob.glob("../../workspace/257_tmpl/1/*.diff.im.fits")
+tmpl_list = glob.glob("../../workspace/257_tmpl/1/*.diff.tmpl.fits")
 
