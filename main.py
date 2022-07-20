@@ -92,8 +92,6 @@ if __name__ == "__main__":
 
     #Run SE on science image
     for im in sci_im:
-        _,_ = run_sextractor.run_sextractor(im, spreadmodel,
+        _,_ = run_sextractor.run_sextractor(im, spreadmodel, catending=None,
                                                 sextractor_loc, psfex_loc, savecats_dir,
                                                 fwhm, detect_minarea, detect_thresh)
-
-        
