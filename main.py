@@ -9,6 +9,8 @@ from pathlib import Path
 from astropy.table import Table
 from astropy.io import fits
 
+from utils import run_sextractor
+
 def read_file(fname):
     try:
         df_tmp = Table.read(fname, format="ascii").to_pandas()
@@ -45,10 +47,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run Source Extractor to filter transient candidates")
 
     parser.add_argument(
-            "--path_field",
+            "field",
             type=str,
-            default="../../workspace/257A_tmpl",
-            help="Path to field"
+            help="Selected field"
     )
     parser.add_argument(
             "--path_out",
@@ -63,10 +64,36 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    os.makedirs(args.path_out, exist_ok=True)
-    
-    
+    os.makedirs(args.path_out, exist_ok=True)  
 
+    # read in fits files
     sci_list = glob.glob("../../workspace/257A_tmpl/1/*.diff.fits")
     diff_list = glob.glob("../../workspace/257A_tmpl/1/*.diff.im.fits")
     tmpl_list = glob.glob("../../workspace/257A_tmpl/1/*.diff.tmpl.fits")
+
+    if args.test:
+        print("Processing single set:", sci_list[0], diff_list[0], tmpl_list[0])
+        sci_im = sci_list[0]
+        diff_im = diff_list[0]
+        tmpl_im = tmpl_list[0]
+    else:
+        sci_im = sci_list
+        diff_im = diff_list
+        tmpl_im = tmpl_list
+    
+    # SE parameters
+    savecats_dir = f"./cats/{args.field}"
+    sextractor_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/sextractor/2.19.5/bin/sex"
+    psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin/psfex"
+    spreadmodel = True
+    fwhm = 1.2           #default setting
+    detect_minarea = 5   #default setting
+    detect_thresh = 1.5  #default setting
+
+    #Run SE on science image
+    for im in sci_im:
+        _,_ = run_sextractor.run_sextractor(im, spreadmodel,
+                                                sextractor_loc, psfex_loc, savecats_dir,
+                                                fwhm, detect_minarea, detect_thresh)
+
+        
