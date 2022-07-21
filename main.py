@@ -95,3 +95,5 @@ if __name__ == "__main__":
         _,_ = run_sextractor.run_sextractor(im, spreadmodel, catending=None,
                                                 sextractor_loc, psfex_loc, savecats_dir,
                                                 fwhm, detect_minarea, detect_thresh)
+        
+    

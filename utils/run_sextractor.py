@@ -27,17 +27,20 @@ def run_sextractor(fitsfiles,spreadmodel = True, catending = None,
     catted_fitsfiles = []
     PSF_success = [False]*len(fitsfiles)
 
+    # Loop SE over images, one by one
     for ii, f in enumerate(fitsfiles):
         fname = ntpath.basename(f)
         if catending:
-            catalogue_name = savecats_dir + os.path.sep + fname.replace('.fits','_'+catending+'.cat')
+            catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','_'+catending+'.cat')
         else:
-            catalogue_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
-    
+            catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
+
+        # Run SE then PSFEx on image
         if spreadmodel:
           try:
-                [f_psf] = get_psf(   ####################      )
-
+                [f_psf] = get_psf.get_psf([f], outdir=savecats_dir, savepsffits=False,
+                                            sextractor_loc=sextractor_loc,
+                                            psfex_loc=psfex_loc)
                 PSF_success[ii] = True
 
             except:
@@ -46,31 +49,32 @@ def run_sextractor(fitsfiles,spreadmodel = True, catending = None,
      else:
             PSF_success[ii] = True
     
+    # Run SE to get final catalogs
      if PSF_success[ii] == True:
         if spreadmodel:
             command =   f'{sextractor_loc} -c {config_path} '\
-                        f'-CATALOGUE_NAME {catalogue_name} '\
-                        f'-CATALOGUE_TYPE ASCII_HEAD '\
+                        f'-CATALOG_NAME {catalog_name} '\
+                        f'-CATALOG_TYPE ASCII_HEAD '\
                         f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
                         f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
-                        f'PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
+                        f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
                         f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
                         f'{f}'
         else:
              command =  f'{sextractor_loc} -c {config_path} '\
-                        f'-CATALOGUE_NAME {catalogue_name} '\
-                        f'-CATALOGUE_TYPE ASCII_HEAD '\
+                        f'-CATALOG_NAME {catalog_name} '\
+                        f'-CATALOG_TYPE ASCII_HEAD '\
                         f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
                         f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
-                        f'PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
+                        f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
                         f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
-                        f'-CHECKIMAGE_TYPE SEGMENTATION,APERTURES -CHECKIMAGE_NAME seg..fits,aper.fits \'
+                        f'-CHECKIMAGE_TYPE SEGMENTATION,APERTURES -CHECKIMAGE_NAME seg.fits,aper.fits \'
                         f'-PHOT_APERTURES 8 \'
                         f'{f}'
         
         try:
             rval = subprocess.run(command.split(), check=True)
-            catfiles.appead(catalogue_name)
+            catfiles.append(catalog_name)
             catted_fitsfiles.append(f)
             if spreadmodel:
                 os.remove(f_psf)
