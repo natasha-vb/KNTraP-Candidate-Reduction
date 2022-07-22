@@ -70,12 +70,23 @@ if __name__ == "__main__":
 
     ccds = range(1,62,1)
 
+    print(ccds)
+
     for ccd in ccds:
                 
         # Read in fits files
         sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
         diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
         tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits")
+
+        print(sci_list)
+        print(diff_list)
+        print(tmpl_list)
+
+        print('First files in list:')
+        print(sci_list[0])
+        print(diff_list[0])
+        print(tmpl_list[0])
 
         if args.test:
             print("Processing single set:", sci_list[0], diff_list[0], tmpl_list[0])
@@ -96,20 +107,22 @@ if __name__ == "__main__":
         detect_minarea = 5   #default setting
         detect_thresh = 1.5  #default setting
 
+        print(savecats_dir)
+
         # Run SE on science image
-        _,_ = run_sextractor.run_sextractor(sci_im, spreadmodel, catending=ccd+'.sci',
-                                                sextractor_loc, psfex_loc, savecats_dir,
-                                                fwhm, detect_minarea, detect_thresh)
+        # _,_ = run_sextractor.run_sextractor(sci_im, spreadmodel, catending=ccd+'.sci',
+                                                # sextractor_loc, psfex_loc, savecats_dir,
+                                                # fwhm, detect_minarea, detect_thresh)
         
         # Run SE on difference image
-        _,_ = run_sextractor.run_sextractor_subtractionimage#(sci_im, spreadmodel, catending=ccd+'.diff',
+        # _,_ = run_sextractor.run_sextractor_subtractionimage#(sci_im, spreadmodel, catending=ccd+'.diff',
                                                               #sextractor_loc, psfex_loc, savecats_dir,
                                                               #fwhm, detect_minarea, detect_thresh)
 
 
         # Run SE on template image
-        _,_ = run_sextractor.run_sextractor(tmpl_im, spreadmodel, catending=ccd+'.temp',
-                                                sextractor_loc, psfex_loc, savecats_dir,
-                                                fwhm, detect_minarea, detect_thresh)
+        # _,_ = run_sextractor.run_sextractor(tmpl_im, spreadmodel, catending=ccd+'.temp',
+                                                # sextractor_loc, psfex_loc, savecats_dir,
+                                                # fwhm, detect_minarea, detect_thresh)
 
     
