@@ -85,5 +85,5 @@ def run_sextractor(fitsfiles,spreadmodel = True, catending = None,
     return catfiles, catted_fitsfiles
 
 
-def run_sextractor_subtractionimage(   )
+# def run_sextractor_subtractionimage(   )
     
