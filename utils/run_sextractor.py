@@ -49,38 +49,38 @@ def run_sextractor(fitsfiles,spreadmodel = True, catending = None,
             PSF_success[ii] = True
     
     # Run SE to get final catalogs
-     if PSF_success[ii] == True:
-        if spreadmodel:
-            command =   f'{sextractor_loc} -c {config_path} '\
-                        f'-CATALOG_NAME {catalog_name} '\
-                        f'-CATALOG_TYPE ASCII_HEAD '\
-                        f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
-                        f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
-                        f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
-                        f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
-                        f'{f}'
-        else:
-             command =  f'{sextractor_loc} -c {config_path} '\
-                        f'-CATALOG_NAME {catalog_name} '\
-                        f'-CATALOG_TYPE ASCII_HEAD '\
-                        f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
-                        f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
-                        f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
-                        f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
-                        f'-CHECKIMAGE_TYPE SEGMENTATION,APERTURES -CHECKIMAGE_NAME seg.fits,aper.fits \'
-                        f'-PHOT_APERTURES 8 \'
-                        f'{f}'
-        
-        try:
-            rval = subprocess.run(command.split(), check=True)
-            catfiles.append(catalog_name)
-            catted_fitsfiles.append(f)
+        if PSF_success[ii] == True:
             if spreadmodel:
-                os.remove(f_psf)
+                command =   f'{sextractor_loc} -c {config_path} '\
+                            f'-CATALOG_NAME {catalog_name} '\
+                            f'-CATALOG_TYPE ASCII_HEAD '\
+                            f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
+                            f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
+                            f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
+                            f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
+                            f'{f}'
+            else:
+                command =  f'{sextractor_loc} -c {config_path} '\
+                            f'-CATALOG_NAME {catalog_name} '\
+                            f'-CATALOG_TYPE ASCII_HEAD '\
+                            f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
+                            f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
+                            f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
+                            f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
+                            f'-CHECKIMAGE_TYPE SEGMENTATION,APERTURES -CHECKIMAGE_NAME seg.fits,aper.fits \'
+                            f'-PHOT_APERTURES 8 \'
+                            f'{f}'
+            
+            try:
+                rval = subprocess.run(command.split(), check=True)
+                catfiles.append(catalog_name)
+                catted_fitsfiles.append(f)
+                if spreadmodel:
+                    os.remove(f_psf)
 
-        except subprocess.CalledProcessError as err:
-            print('\nCould not run SExtractor with exit error %s\n'%err)
-            print('Command used:\n%s\n'%command)
+            except subprocess.CalledProcessError as err:
+                print('\nCould not run SExtractor with exit error %s\n'%err)
+                print('Command used:\n%s\n'%command)
 
     return catfiles, catted_fitsfiles
 
