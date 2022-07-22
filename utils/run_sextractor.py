@@ -45,7 +45,7 @@ def run_sextractor(fitsfiles,spreadmodel = True, catending = None,
             except:
                 print(f'\nSKIPPED: PSF measurement unsuccessful for {f}')
                 continue
-     else:
+        else:
             PSF_success[ii] = True
     
     # Run SE to get final catalogs
