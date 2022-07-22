@@ -68,7 +68,7 @@ def run_sextractor(fitsfiles,spreadmodel = True, catending = None,
                             f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
                             f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
                             f'-CHECKIMAGE_TYPE SEGMENTATION,APERTURES -CHECKIMAGE_NAME seg.fits,aper.fits '\
-                            f'-PHOT_APERTURES 8 \'
+                            f'-PHOT_APERTURES 8 '\
                             f'{f}'
             
             try:
