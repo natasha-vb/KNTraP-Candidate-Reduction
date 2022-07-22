@@ -37,12 +37,11 @@ def run_sextractor(fitsfiles,spreadmodel = True, catending = None,
 
         # Run SE then PSFEx on image
         if spreadmodel:
-          try:
+            try:
                 [f_psf] = get_psf.get_psf([f], outdir=savecats_dir, savepsffits=False,
                                             sextractor_loc=sextractor_loc,
                                             psfex_loc=psfex_loc)
                 PSF_success[ii] = True
-
             except:
                 print(f'\nSKIPPED: PSF measurement unsuccessful for {f}')
                 continue
