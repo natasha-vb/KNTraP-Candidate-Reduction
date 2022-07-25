@@ -38,7 +38,7 @@ psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin
 def create_temp_files(f_conv, f_params, conv_name, params_name,
                         config_name, psfconfig_name,
                         sextractor_loc = sextractor_loc,
-                        psfex_loc = psfex_loc)
+                        psfex_loc = psfex_loc):
     
     fp = open(params_name, "w")
     fp.write(f_params)
