@@ -143,19 +143,19 @@ if __name__ == "__main__":
             print(savecats_dir)
 
             # Run SE on science image
-            # _,_ = run_sextractor.run_sextractor(sci_im, spreadmodel, sextractor_loc,
-                                                    # psfex_loc, savecats_dir, catending=ccd+'.sci',
+            # _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc, psfex_loc, 
+                                                    # savecats_dir, spreadmodel, catending=ccd+'.sci',
                                                     # fwhm, detect_minarea, detect_thresh)
             
             # Run SE on difference image
-            # _,_ = run_sextractor.run_sextractor_subtractionimage#(sci_im, spreadmodel, sextractor_loc,
-                                                                # psfex_loc, savecats_dir, catending=ccd+'.diff',
+            # _,_ = run_sextractor.run_sextractor_subtractionimage#(sci_im, sextractor_loc, psfex_loc,
+                                                                # savecats_dir, spreadmodel, catending=ccd+'.diff',
                                                                 #fwhm, detect_minarea, detect_thresh)
 
 
             # Run SE on template image
-            # _,_ = run_sextractor.run_sextractor(tmpl_im, spreadmodel, sextractor_loc,
-                                                    # psfex_loc, savecats_dir, catending=ccd+'.temp',
+            # _,_ = run_sextractor.run_sextractor(tmpl_im, sextractor_loc, psfex_loc,
+                                                    # savecats_dir,spreadmodel, catending=ccd+'.temp',
                                                     # fwhm, detect_minarea, detect_thresh)
 
         
