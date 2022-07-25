@@ -11,7 +11,7 @@ import time
 import string    
 import random
 
-from misc import get_psf
+from utils.misc import get_psf
 
 def run_sextractor(fitsfiles, sextractor_loc, psfex_loc,
                     savecats_dir, spreadmodel = True, catending = None,
