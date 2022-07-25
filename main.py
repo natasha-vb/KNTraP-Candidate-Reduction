@@ -84,11 +84,11 @@ if __name__ == "__main__":
         for ii, im in enumerate(sci_list):
             print(sci_list[ii])
 
-        print('DIFFERENCE IMAGES:', diff_list)
+        print('DIFFERENCE IMAGES:')
         for ii, im in enumerate(diff_list):
             print(diff_list[ii])
 
-        print('TEMPLATE IMAGES:', tmpl_list)
+        print('TEMPLATE IMAGES:')
         for ii, im in enumerate(tmpl_list):
             print(tmpl_list[ii])
 
