@@ -69,9 +69,6 @@ if __name__ == "__main__":
     # Loop over every CCD
 
     ccds = range(1,62,1)
-    print('CCD List:')
-    for n in ccds:
-        print(n)
 
     if args.test:
         ccd = 1
@@ -81,16 +78,26 @@ if __name__ == "__main__":
         diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
         tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits")
 
-        print('SCIENCE IMAGES:', sci_list)
+        ##### Need to sort files in order of date
+
+        print('SCIENCE IMAGES:')
+        for ii, im in enumerate(sci_list):
+            print(sci_list[ii])
+
         print('DIFFERENCE IMAGES:', diff_list)
+        for ii, im in enumerate(diff_list):
+            print(diff_list[ii])
+
         print('TEMPLATE IMAGES:', tmpl_list)
+        for ii, im in enumerate(tmpl_list):
+            print(tmpl_list[ii])
 
         print('First files in list:')
         print(sci_list[0])
         print(diff_list[0])
         print(tmpl_list[0])
 
-        print("Processing single set:", sci_list[0], diff_list[0], tmpl_list[0])
+        # print("Processing single set:", sci_list[0], diff_list[0], tmpl_list[0])
         sci_im = sci_list[0]
         diff_im = diff_list[0]
         tmpl_im = tmpl_list[0]
