@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
         print('SAVE CATALOG DIRECTORY: ', savecats_dir)
 
-        Run SE on science image
+        # Run SE on science image
         _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc, psfex_loc, 
                                                 savecats_dir, spreadmodel, catending=ccd+'.sci',
                                                 fwhm, detect_minarea, detect_thresh)
