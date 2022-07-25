@@ -98,10 +98,10 @@ if __name__ == "__main__":
         # for ii, im in enumerate(tmpl_list):
         #     print(tmpl_list[ii])
 
-        print('First files in list:')
-        print(sci_list[0])
-        print(diff_list[0])
-        print(tmpl_list[0])
+        # print('First files in list:')
+        # print(sci_list[0])
+        # print(diff_list[0])
+        # print(tmpl_list[0])
         
         # SE parameters
         savecats_dir = f"./cats/{args.field}"
