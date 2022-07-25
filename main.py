@@ -71,7 +71,7 @@ if __name__ == "__main__":
     ccds = range(1,62,1)
     print('CCD List:', ccds)
 
-    if arg.test:
+    if args.test:
         ccd = 1
 
         # Read in fits files
