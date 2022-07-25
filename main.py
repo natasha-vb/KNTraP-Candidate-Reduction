@@ -69,7 +69,9 @@ if __name__ == "__main__":
     # Loop over every CCD
 
     ccds = range(1,62,1)
-    print('CCD List:', ccds)
+    print('CCD List:')
+    for n in ccds:
+        print(n)
 
     if args.test:
         ccd = 1
@@ -79,9 +81,9 @@ if __name__ == "__main__":
         diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
         tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits")
 
-        print(sci_list)
-        print(diff_list)
-        print(tmpl_list)
+        print('SCIENCE IMAGES:', sci_list)
+        print('DIFFERENCE IMAGES:', diff_list)
+        print('TEMPLATE IMAGES:', tmpl_list)
 
         print('First files in list:')
         print(sci_list[0])
