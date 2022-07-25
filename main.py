@@ -84,17 +84,19 @@ if __name__ == "__main__":
         diff_list = diff_list.sort()
         tmpl_list = tmpl_list.sort()
 
-        print('SCIENCE IMAGES:')
-        for ii, im in enumerate(sci_list):
-            print(sci_list[ii])
+        print(sci_list)
 
-        print('DIFFERENCE IMAGES:')
-        for ii, im in enumerate(diff_list):
-            print(diff_list[ii])
+        # print('SCIENCE IMAGES:')
+        # for ii, im in enumerate(sci_list):
+        #     print(sci_list[ii])
 
-        print('TEMPLATE IMAGES:')
-        for ii, im in enumerate(tmpl_list):
-            print(tmpl_list[ii])
+        # print('DIFFERENCE IMAGES:')
+        # for ii, im in enumerate(diff_list):
+        #     print(diff_list[ii])
+
+        # print('TEMPLATE IMAGES:')
+        # for ii, im in enumerate(tmpl_list):
+        #     print(tmpl_list[ii])
 
         print('First files in list:')
         print(sci_list[0])
