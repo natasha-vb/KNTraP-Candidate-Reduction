@@ -13,8 +13,8 @@ import random
 
 from misc import get_psf
 
-def run_sextractor(fitsfiles,spreadmodel = True, catending = None,
-                    sextractor_loc, psfex_loc, savecats_dir,
+def run_sextractor(fitsfiles,spreadmodel = True, sextractor_loc,
+                    psfex_loc, savecats_dir, catending = None,
                     fwhm = 1.2, detect_minarea = 5, detect_thresh = 1.5):
     
     nnw_path = "./default.nnw"
