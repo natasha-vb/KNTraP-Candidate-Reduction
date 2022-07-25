@@ -85,5 +85,8 @@ def run_sextractor(fitsfiles, sextractor_loc, psfex_loc,
     return catfiles, catted_fitsfiles
 
 
+# Running SE on subtraction image
+# Has to grab PSF files from science images
+
 # def run_sextractor_subtractionimage(   )
     
