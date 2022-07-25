@@ -80,6 +80,10 @@ if __name__ == "__main__":
 
         ##### Need to sort files in order of date
 
+        sci_list = sci_list.sort()
+        diff_list = diff_list.sort()
+        tmpl_list = tmpl_list.sort()
+
         print('SCIENCE IMAGES:')
         for ii, im in enumerate(sci_list):
             print(sci_list[ii])
@@ -96,11 +100,6 @@ if __name__ == "__main__":
         print(sci_list[0])
         print(diff_list[0])
         print(tmpl_list[0])
-
-        # print("Processing single set:", sci_list[0], diff_list[0], tmpl_list[0])
-        sci_im = sci_list[0]
-        diff_im = diff_list[0]
-        tmpl_im = tmpl_list[0]
         
         # SE parameters
         savecats_dir = f"./cats/{args.field}"
