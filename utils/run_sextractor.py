@@ -17,10 +17,10 @@ def run_sextractor(fitsfiles, sextractor_loc = 'sex', psfex_loc = 'psfex',
                     savecats_dir = None , spreadmodel = True, catending = None,
                     fwhm = 1.2, detect_minarea = 5, detect_thresh = 1.5):
     
-    nnw_path = "./default.nnw"
-    conv_path = "./default.conv" 
-    params_path = "./default.param"
-    config_path = "./default.sex"
+    nnw_path = "./utils/default.nnw"
+    conv_path = "./utils/default.conv" 
+    params_path = "./utils/default.param"
+    config_path = "./utils/default.sex"
 
     catfiles = []
     psffiles = []
