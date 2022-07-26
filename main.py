@@ -51,6 +51,9 @@ if __name__ == "__main__":
             type=str,
             help="Selected field"
     )
+
+    ## select ccd?
+
     parser.add_argument(
             "--path_out",
             type=str,
@@ -65,8 +68,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     os.makedirs(args.path_out, exist_ok=True)  
-
-    # Loop over every CCD
 
     ccds = range(1,62,1)
 
@@ -150,8 +151,9 @@ if __name__ == "__main__":
 
         # Run SE on science image
         catending = f'{ccd}.sci'
-        _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc, psfex_loc, 
-                                                savecats_dir, spreadmodel, catending=catending,
+        _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc = sextractor_loc,
+                                                psfex_loc = psfex_loc, savecats_dir = savecats_dir, 
+                                                spreadmodel = spreadmodel, catending=catending,
                                                 fwhm = fwhm, detect_minarea = detect_minarea, 
                                                 detect_thresh = detect_thresh)
         

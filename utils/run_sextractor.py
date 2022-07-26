@@ -13,8 +13,8 @@ import random
 
 from utils.misc import get_psf
 
-def run_sextractor(fitsfiles, sextractor_loc, psfex_loc,
-                    savecats_dir, spreadmodel = True, catending = None,
+def run_sextractor(fitsfiles, sextractor_loc = 'sex', psfex_loc = 'psfex',
+                    savecats_dir = None , spreadmodel = True, catending = None,
                     fwhm = 1.2, detect_minarea = 5, detect_thresh = 1.5):
     
     nnw_path = "./default.nnw"
@@ -88,7 +88,7 @@ def run_sextractor(fitsfiles, sextractor_loc, psfex_loc,
 
 
 # Running SE on subtraction image
-# Has to grab PSF files from science images
+# Has to grab PSF files from science images --> doesn't run get_psf
 
 # def run_sextractor_subtractionimage(   )
     
