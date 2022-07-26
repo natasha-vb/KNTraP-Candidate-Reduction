@@ -134,7 +134,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
         f_psfbinary = outdir+'/'+f_filestub+'.psf'
         PSFs.append(f_psfbinary)
 
-    # remove_temp_files([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
+    remove_temp_files([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
 
     if savepsffits:
         return PSFs, PSFfits
