@@ -133,9 +133,9 @@ if __name__ == "__main__":
         print(diff_list[0])
         print(tmpl_list[0])
     
-        sci_im = sci_list[0]
-        diff_im = diff_list[0]
-        tmpl_im = tmpl_list[0]
+        sci_im = [sci_list[0]]
+        diff_im = [diff_list[0]]
+        tmpl_im = [tmpl_list[0]]
         
         # SE parameters
         savecats_dir = f"./cats/{args.field}/{ccd}"
