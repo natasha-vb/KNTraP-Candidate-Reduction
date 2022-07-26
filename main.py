@@ -148,7 +148,8 @@ if __name__ == "__main__":
         # Run SE on science image
         _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc, psfex_loc, 
                                                 savecats_dir, spreadmodel, catending=ccd+'.sci',
-                                                fwhm, detect_minarea, detect_thresh)
+                                                fwhm = fwhm, detect_minarea = detect_minarea, 
+                                                detect_thresh = detect_thresh)
         
         # Run SE on difference image
         # _,_ = run_sextractor.run_sextractor_subtractionimage(sci_im, sextractor_loc, psfex_loc,
@@ -162,3 +163,8 @@ if __name__ == "__main__":
         #                                         fwhm, detect_minarea, detect_thresh)
 
         
+######################## ERROR MESSAGE:
+# File "main.py", line 151
+
+#               ^
+# SyntaxError: positional argument follows keyword argument
