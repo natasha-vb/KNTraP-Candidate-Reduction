@@ -60,7 +60,7 @@ if __name__ == "__main__":
     parser.add_argument(
             "--test",
             action="store_true",
-            default="process one set of images only",
+            help="process one set of images only",
     )
     args = parser.parse_args()
 
@@ -71,6 +71,9 @@ if __name__ == "__main__":
     ccds = range(1,62,1)
 
     if args.test:
+        print('TESTING FOR A SINGLE FILE')
+
+        ## Temporarily setting it to a single CCD for testing
         ccd = 1
 
         # Read in fits files
@@ -95,7 +98,7 @@ if __name__ == "__main__":
         for ii, im in enumerate(tmpl_list):
             print(tmpl_list[ii])
 
-        print('First files in list:')
+        print('FIRST FILES IN LIST:')
         print(sci_list[0])
         print(diff_list[0])
         print(tmpl_list[0])
@@ -109,7 +112,7 @@ if __name__ == "__main__":
         detect_minarea = 5   #default setting
         detect_thresh = 1.5  #default setting
 
-        print(savecats_dir)
+        print('SAVE CATALOG DIRECTORY: ', savecats_dir)
 
     else:
         # for ccd in ccds:
@@ -151,6 +154,7 @@ if __name__ == "__main__":
                                                 fwhm = fwhm, detect_minarea = detect_minarea, 
                                                 detect_thresh = detect_thresh)
         
+
         # Run SE on difference image
         # _,_ = run_sextractor.run_sextractor_subtractionimage(sci_im, sextractor_loc, psfex_loc,
         #                                                     savecats_dir, spreadmodel, catending=ccd+'.diff',
@@ -161,10 +165,3 @@ if __name__ == "__main__":
         # _,_ = run_sextractor.run_sextractor(tmpl_im, sextractor_loc, psfex_loc,
         #                                         savecats_dir,spreadmodel, catending=ccd+'.temp',
         #                                         fwhm, detect_minarea, detect_thresh)
-
-        
-######################## ERROR MESSAGE:
-# File "main.py", line 151
-
-#               ^
-# SyntaxError: positional argument follows keyword argument

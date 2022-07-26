@@ -34,6 +34,8 @@ def run_sextractor(fitsfiles, sextractor_loc, psfex_loc,
             catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','_'+catending+'.cat')
         else:
             catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
+        
+        print('CATALOG NAME: ', catalog_name)
 
         # Run SE then PSFEx on image
         if spreadmodel:
@@ -75,8 +77,8 @@ def run_sextractor(fitsfiles, sextractor_loc, psfex_loc,
                 rval = subprocess.run(command.split(), check=True)
                 catfiles.append(catalog_name)
                 catted_fitsfiles.append(f)
-                if spreadmodel:
-                    os.remove(f_psf)
+                # if spreadmodel:
+                #     os.remove(f_psf)
 
             except subprocess.CalledProcessError as err:
                 print('\nCould not run SExtractor with exit error %s\n'%err)
