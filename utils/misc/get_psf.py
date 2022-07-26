@@ -44,7 +44,7 @@ def create_temp_files(f_conv, f_params, conv_name, params_name,
     fp.write(f_params)
     fp.close()
 
-    fp.open(conv_name, "w")
+    fp = open(conv_name, "w")
     fp.write(f_conv)
     fp.close
 
