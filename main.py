@@ -150,7 +150,7 @@ if __name__ == "__main__":
 
         # Run SE on science image
         _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc, psfex_loc, 
-                                                savecats_dir, spreadmodel, catending=ccd+'.sci',
+                                                savecats_dir, spreadmodel, catending={ccd}+'.sci',
                                                 fwhm = fwhm, detect_minarea = detect_minarea, 
                                                 detect_thresh = detect_thresh)
         
