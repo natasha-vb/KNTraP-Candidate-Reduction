@@ -42,7 +42,7 @@ def run_sextractor(fitsfiles, sextractor_loc = 'sex', psfex_loc = 'psfex',
             try:
                 [f_psf] = get_psf.get_psf([f], outdir=savecats_dir, savepsffits=False,
                                             sextractor_loc=sextractor_loc,
-                                            psfex_loc=psfex_loc, catending=catending)
+                                            psfex_loc=psfex_loc, catending=None)
                 PSF_success[ii] = True
             except:
                 print(f'\nSKIPPED: PSF measurement unsuccessful for {f}')
