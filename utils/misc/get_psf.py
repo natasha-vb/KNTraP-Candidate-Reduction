@@ -64,7 +64,7 @@ def remove_temp_files(fs):
 
 def get_psf(fitsfiles, outdir='./', savepsffits=False,
             sextractor_loc = sextractor_loc,
-            psfex_loc = psfex_loc):
+            psfex_loc = psfex_loc, catending=None):
 
     create_temp_files(f_conv,f_params,conv_name,params_name,
                       config_name,psfconfig_name,
@@ -131,7 +131,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
 
             os.remove(proto_file)
         
-        f_psfbinary = outdir+'/'+f_filestub+'.psf'
+        f_psfbinary = outdir+'/'+f_filestub+'_'+catending+'.psf'
         PSFs.append(f_psfbinary)
 
     remove_temp_files([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])

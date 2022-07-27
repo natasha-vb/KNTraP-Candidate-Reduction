@@ -51,9 +51,12 @@ if __name__ == "__main__":
             type=str,
             help="Selected field"
     )
-
-    ## select ccd?
-
+    parser.add_argument(
+            "--ccd"
+            type=int
+            default='1'
+            help="Selected CCD"
+    )
     parser.add_argument(
             "--path_out",
             type=str,
@@ -75,7 +78,8 @@ if __name__ == "__main__":
         print('TESTING FOR A SINGLE FILE')
 
         ## Temporarily setting it to a single CCD for testing
-        ccd = 1
+        if args.ccd:
+            ccd = args.ccd
 
         # Read in fits files
         sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
@@ -115,6 +119,28 @@ if __name__ == "__main__":
 
         print('SAVE CATALOG DIRECTORY: ', savecats_dir)
 
+         # Run SE on science image
+        # catending = f'{ccd}.sci'
+        # _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc = sextractor_loc,
+        #                                         psfex_loc = psfex_loc, savecats_dir = savecats_dir, 
+        #                                         spreadmodel = spreadmodel, catending=catending,
+        #                                         fwhm = fwhm, detect_minarea = detect_minarea, 
+        #                                         detect_thresh = detect_thresh)
+        
+
+        # # Run SE on difference image
+        # catending = f'{ccd}.diff'
+        # _,_ = run_sextractor.run_sextractor_subtractionimage(diff_im, sextractor_loc, psfex_loc,
+        #                                                     savecats_dir, catending=catending,
+        #                                                     fwhm = fwhm, detect_minarea = detect_minarea, 
+        #                                                     detect_thresh = detect_thresh)
+
+        # Run SE on template image
+        # _,_ = run_sextractor.run_sextractor(tmpl_im, sextractor_loc, psfex_loc,
+        #                                         savecats_dir,spreadmodel, catending=ccd+'.temp',
+        #                                         fwhm, detect_minarea, detect_thresh)
+
+
     else:
         # for ccd in ccds:
 
@@ -133,10 +159,6 @@ if __name__ == "__main__":
         print(sci_list[0])
         print(diff_list[0])
         print(tmpl_list[0])
-    
-        sci_im = [sci_list[0]]
-        diff_im = [diff_list[0]]
-        tmpl_im = [tmpl_list[0]]
         
         # SE parameters
         savecats_dir = f"./cats/{args.field}/{ccd}"
@@ -157,14 +179,16 @@ if __name__ == "__main__":
                                                 fwhm = fwhm, detect_minarea = detect_minarea, 
                                                 detect_thresh = detect_thresh)
         
-
         # Run SE on difference image
-        # _,_ = run_sextractor.run_sextractor_subtractionimage(sci_im, sextractor_loc, psfex_loc,
-        #                                                     savecats_dir, spreadmodel, catending=ccd+'.diff',
-        #                                                     fwhm, detect_minarea, detect_thresh)
-
+        catending = f'{ccd}.diff'
+        _,_ = run_sextractor.run_sextractor_subtractionimage(diff_im, sextractor_loc, psfex_loc,
+                                                            savecats_dir, catending=catending,
+                                                            fwhm = fwhm, detect_minarea = detect_minarea, 
+                                                            detect_thresh = detect_thresh)
 
         # Run SE on template image
+        catending = f'{ccd}.tmpl'
         # _,_ = run_sextractor.run_sextractor(tmpl_im, sextractor_loc, psfex_loc,
-        #                                         savecats_dir,spreadmodel, catending=ccd+'.temp',
-        #                                         fwhm, detect_minarea, detect_thresh)
+        #                                         savecats_dir,spreadmodel, catending=catending,
+        #                                         fwhm = fwhm, detect_minarea = detect_minarea,
+        #                                         detect_thresh = detect_thresh)
