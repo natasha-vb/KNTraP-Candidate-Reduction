@@ -131,7 +131,11 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
 
             os.remove(proto_file)
         
-        f_psfbinary = outdir+'/'+f_filestub+'_'+catending+'.psf'
+        if catending:
+            f_psfbinary = outdir+'/'+f_filestub+'_'+catending+'.psf'
+        else:
+            f_psfbinary = outdir+'/'+f_filestub+'.psf'
+            
         PSFs.append(f_psfbinary)
 
     remove_temp_files([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
