@@ -139,12 +139,12 @@ if __name__ == "__main__":
                                                     detect_thresh = detect_thresh)
             
             # Run SE on difference image
-            catending = f'{ccd}.diff'
-            _,_ = run_sextractor.run_sextractor_subtractionimage(diff_im, sextractor_loc = sextractor_loc, 
-                                                                    psfex_loc = psfex_loc, savecats_dir = savecats_dir,
-                                                                    catending=catending, fwhm = fwhm, 
-                                                                    detect_minarea = detect_minarea, 
-                                                                    detect_thresh = detect_thresh)
+            # catending = f'{ccd}.diff'
+            # _,_ = run_sextractor.run_sextractor_subtractionimage(diff_im, sextractor_loc = sextractor_loc, 
+            #                                                         psfex_loc = psfex_loc, savecats_dir = savecats_dir,
+            #                                                         catending=catending, fwhm = fwhm, 
+            #                                                         detect_minarea = detect_minarea, 
+            #                                                         detect_thresh = detect_thresh)
 
             # Run SE on template image
             # _,_ = run_sextractor.run_sextractor(tmpl_im, sextractor_loc, psfex_loc,
