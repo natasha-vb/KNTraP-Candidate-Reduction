@@ -120,7 +120,7 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc = 'sex', psfex_loc
                    f'-CATALOG_TYPE ASCII_HEAD '\
                    f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
                    f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
-                   f'-PSF_NAME {PSF NAME IDK CHANGE IT HERE} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
+                   f'-PSF_NAME {PSF_NAME_IDK_CHANGE_IT_HERE} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
                    f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
                    f'-CHECKIMAGE_TYPE SEGMENTATION,APERTURES -CHECKIMAGE_NAME seg.fits,aper.fits '\
                    f'-PHOT_APERTURES 8 '\
