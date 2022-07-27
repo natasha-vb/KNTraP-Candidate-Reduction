@@ -35,7 +35,7 @@ def run_sextractor(fitsfiles, sextractor_loc = 'sex', psfex_loc = 'psfex',
         else:
             catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
         
-        print('CATALOG NAME: ', catalog_name)
+        print('SCI CATALOG NAME: ', catalog_name)
 
         # Run SE then PSFEx on image
         if spreadmodel:
@@ -111,10 +111,10 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc = 'sex', psfex_loc
         else:
             catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
         
-        print('CATALOG NAME: ', catalog_name)
+        print('DIFF CATALOG NAME: ', catalog_name)
 
         # Grab matching PSF filename from science image
-        psf_fname = catalog_name.replace('_1.sci.cat', '.psf')
+        psf_fname = catalog_name.replace('.im_1.diff.cat', '.psf')
 
         command =  f'{sextractor_loc} -c {config_path} '\
                    f'-CATALOG_NAME {catalog_name} '\
