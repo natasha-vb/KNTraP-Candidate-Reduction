@@ -54,7 +54,6 @@ if __name__ == "__main__":
     parser.add_argument(
             "--ccd",
             type=int,
-            default='1',
             help="Selected CCD"
     )
     parser.add_argument(
