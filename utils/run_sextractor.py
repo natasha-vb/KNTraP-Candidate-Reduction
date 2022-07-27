@@ -107,14 +107,14 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc = 'sex', psfex_loc
     for ii, f in enumerate(fitsfiles):
         fname = ntpath.basename(f)
         if catending:
-            catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','_'+catending+'.cat')
+            catalog_name = savecats_dir + os.path.sep + fname.replace('im.fits','_'+catending+'.cat')
         else:
-            catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
+            catalog_name = savecats_dir + os.path.sep + fname.replace('im.fits','.cat')
         
         print('CATALOG NAME: ', catalog_name)
 
         # Grab matching PSF filename from science image
-        psf_fname = savecats_dir + os.path.sep + fname.replace('sci.im.fits', '.psf')
+        psf_fname = savecats_dir + os.path.sep + fname.replace('.im.fits', '.psf')
 
         command =  f'{sextractor_loc} -c {config_path} '\
                    f'-CATALOG_NAME {catalog_name} '\
