@@ -59,7 +59,7 @@ if __name__ == "__main__":
     parser.add_argument(
             "--path_out",
             type=str,
-            default="./SE_outputs",
+            default="./cats",
             help="Path to outputs"
     )
     parser.add_argument(
