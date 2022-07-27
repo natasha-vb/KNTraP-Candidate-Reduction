@@ -78,7 +78,7 @@ if __name__ == "__main__":
         print('TESTING FOR A SINGLE FILE')
 
         if args.ccd:
-            ccds = args.ccd
+            ccds = [args.ccd]
         else:
             ccds = range(1,62,1)
 
