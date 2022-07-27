@@ -104,10 +104,15 @@ if __name__ == "__main__":
             for ii, im in enumerate(tmpl_list):
                 print(tmpl_list[ii])
 
-            print('FIRST FILES IN LIST:')
-            print(sci_list[0])
-            print(diff_list[0])
-            print(tmpl_list[0])
+            ### PUT IN SOMETHING IN CASE OF EMPTY LIST
+
+            if len(sci_list) == 0:
+                print(f"CCD {ccd} IS EMPTY")
+            else:
+                print('FIRST FILES IN LIST:')
+                print(sci_list[0])
+                print(diff_list[0])
+                print(tmpl_list[0])
             
             # SE parameters
             savecats_dir = f"./cats/{args.field}"
