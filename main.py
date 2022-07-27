@@ -72,79 +72,85 @@ if __name__ == "__main__":
 
     os.makedirs(args.path_out, exist_ok=True)  
 
-    ccds = range(1,62,1)
+
 
     if args.test:
         print('TESTING FOR A SINGLE FILE')
 
-        ## Temporarily setting it to a single CCD for testing
         if args.ccd:
-            ccd = args.ccd
+            ccds = args.ccd
+        else:
+            ccds = range(1,62,1)
 
-        # Read in fits files
-        sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
-        diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
-        tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits")
+        for ccd in ccds:
+            # Read in fits files
+            sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
+            diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
+            tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits")
 
-        # Sort files in order of date
-        sci_list.sort()
-        diff_list.sort()
-        tmpl_list.sort()
+            # Sort files in order of date
+            sci_list.sort()
+            diff_list.sort()
+            tmpl_list.sort()
 
-        print('SCIENCE IMAGES:')
-        for ii, im in enumerate(sci_list):
-            print(sci_list[ii])
+            print(f'SCIENCE IMAGES, CCD {ccd}:')
+            for ii, im in enumerate(sci_list):
+                print(sci_list[ii])
 
-        print('DIFFERENCE IMAGES:')
-        for ii, im in enumerate(diff_list):
-            print(diff_list[ii])
+            print(f'DIFFERENCE IMAGES, CCD {ccd}:')
+            for ii, im in enumerate(diff_list):
+                print(diff_list[ii])
 
-        print('TEMPLATE IMAGES:')
-        for ii, im in enumerate(tmpl_list):
-            print(tmpl_list[ii])
+            print(f'TEMPLATE IMAGES, CCD {ccd}:')
+            for ii, im in enumerate(tmpl_list):
+                print(tmpl_list[ii])
 
-        print('FIRST FILES IN LIST:')
-        print(sci_list[0])
-        print(diff_list[0])
-        print(tmpl_list[0])
-        
-        # SE parameters
-        savecats_dir = f"./cats/{args.field}"
-        sextractor_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/sextractor/2.19.5/bin/sex"
-        psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin/psfex"
-        spreadmodel = True
-        fwhm = 1.2           #default setting
-        detect_minarea = 5   #default setting
-        detect_thresh = 1.5  #default setting
+            print('FIRST FILES IN LIST:')
+            print(sci_list[0])
+            print(diff_list[0])
+            print(tmpl_list[0])
+            
+            # SE parameters
+            savecats_dir = f"./cats/{args.field}"
+            sextractor_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/sextractor/2.19.5/bin/sex"
+            psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin/psfex"
+            spreadmodel = True
+            fwhm = 1.2           #default setting
+            detect_minarea = 5   #default setting
+            detect_thresh = 1.5  #default setting
 
-        print('SAVE CATALOG DIRECTORY: ', savecats_dir)
+            print('SAVE CATALOG DIRECTORY: ', savecats_dir)
 
-         # Run SE on science image
-        # catending = f'{ccd}.sci'
-        # _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc = sextractor_loc,
-        #                                         psfex_loc = psfex_loc, savecats_dir = savecats_dir, 
-        #                                         spreadmodel = spreadmodel, catending=catending,
-        #                                         fwhm = fwhm, detect_minarea = detect_minarea, 
-        #                                         detect_thresh = detect_thresh)
-        
+            # Run SE on science image
+            # catending = f'{ccd}.sci'
+            # _,_ = run_sextractor.run_sextractor(sci_im, sextractor_loc = sextractor_loc,
+            #                                         psfex_loc = psfex_loc, savecats_dir = savecats_dir, 
+            #                                         spreadmodel = spreadmodel, catending=catending,
+            #                                         fwhm = fwhm, detect_minarea = detect_minarea, 
+            #                                         detect_thresh = detect_thresh)
+            
 
-        # # Run SE on difference image
-        # catending = f'{ccd}.diff'
-        # _,_ = run_sextractor.run_sextractor_subtractionimage(diff_im, sextractor_loc, psfex_loc,
-        #                                                     savecats_dir, catending=catending,
-        #                                                     fwhm = fwhm, detect_minarea = detect_minarea, 
-        #                                                     detect_thresh = detect_thresh)
+            # # Run SE on difference image
+            # catending = f'{ccd}.diff'
+            # _,_ = run_sextractor.run_sextractor_subtractionimage(diff_im, sextractor_loc, psfex_loc,
+            #                                                     savecats_dir, catending=catending,
+            #                                                     fwhm = fwhm, detect_minarea = detect_minarea, 
+            #                                                     detect_thresh = detect_thresh)
 
-        # Run SE on template image
-        # _,_ = run_sextractor.run_sextractor(tmpl_im, sextractor_loc, psfex_loc,
-        #                                         savecats_dir,spreadmodel, catending=ccd+'.temp',
-        #                                         fwhm, detect_minarea, detect_thresh)
+            # Run SE on template image
+            # _,_ = run_sextractor.run_sextractor(tmpl_im, sextractor_loc, psfex_loc,
+            #                                         savecats_dir,spreadmodel, catending=ccd+'.temp',
+            #                                         fwhm, detect_minarea, detect_thresh)
 
 
     else:
-        # for ccd in ccds:
+        
+        if args.ccd:
+            ccds = args.ccd
+        else:
+            ccds = range(1,62,1)
 
-        ccd = 1
+        # for ccd in ccds:
                 
         # Read in fits files
         sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
