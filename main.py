@@ -120,7 +120,7 @@ if __name__ == "__main__":
                 print(tmpl_im)
 
             # SE parameters
-            savecats_dir = f"./cats/{args.field}"
+            savecats_dir = f"./cats/{args.field}/{ccd}"
             sextractor_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/sextractor/2.19.5/bin/sex"
             psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin/psfex"
             spreadmodel = True
