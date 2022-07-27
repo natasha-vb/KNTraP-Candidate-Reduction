@@ -64,7 +64,7 @@ def remove_temp_files(fs):
 
 def get_psf(fitsfiles, outdir='./', savepsffits=False,
             sextractor_loc = sextractor_loc,
-            psfex_loc = psfex_loc, catending=None):
+            psfex_loc = psfex_loc, catending=catending):
 
     create_temp_files(f_conv,f_params,conv_name,params_name,
                       config_name,psfconfig_name,
