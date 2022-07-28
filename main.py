@@ -150,25 +150,25 @@ if __name__ == "__main__":
                                                 detect_thresh=detect_thresh, verbose=args.verbose)
         
         # Run SE on difference image
-        # if args.verbose:
-        #     print('============================================')
-        #     print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
-        #     print('============================================')
-        # catending = f'{ccd}.diff'
-        # _,_ = run_sextractor.run_sextractor_subtractionimage(diff_list, sextractor_loc=sextractor_loc, 
-        #                                                         psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-        #                                                         catending=catending, fwhm=fwhm, 
-        #                                                         detect_minarea=detect_minarea, 
-        #                                                         detect_thresh=detect_thresh, verbose=args.verbose)
+        if args.verbose:
+            print('============================================')
+            print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
+            print('============================================')
+        catending = f'{ccd}.diff'
+        _,_ = run_sextractor.run_sextractor_subtractionimage(diff_list, sextractor_loc=sextractor_loc, 
+                                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+                                                                catending=catending, fwhm=fwhm, 
+                                                                detect_minarea=detect_minarea, 
+                                                                detect_thresh=detect_thresh, verbose=args.verbose)
 
         # Run SE on template image
-        # if args.verbose:
-        #     print('==========================================')
-        #     print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
-        #     print('==========================================')
-        # catending = f'{ccd}.tmpl'
-        # _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
-        #                                         psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-        #                                         catending=catending, fwhm=fwhm, 
-        #                                         detect_minarea=detect_minarea, 
-        #                                         detect_thresh=detect_thresh, verbose=args.verbose)
+        if args.verbose:
+            print('==========================================')
+            print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
+            print('==========================================')
+        catending = f'{ccd}.tmpl'
+        _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
+                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+                                                catending=catending, fwhm=fwhm, 
+                                                detect_minarea=detect_minarea, 
+                                                detect_thresh=detect_thresh, verbose=args.verbose)
