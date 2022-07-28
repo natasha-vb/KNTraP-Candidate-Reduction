@@ -78,6 +78,7 @@ if __name__ == "__main__":
 
     if args.test:
         print('TESTING FOR A SINGLE IMAGE SET')
+        print('___________________________________________')
 
     if args.ccd:
         ccds = [args.ccd]

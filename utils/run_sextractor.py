@@ -41,10 +41,10 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
             catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
         
         if verbose:
-            print('=======================================')
+            print('________________________________________')
             print(f'INPUT: {f}')
             print(f'INTENDED OUTPUT: {catalog_name}')
-            print('=======================================')
+            print('________________________________________')
 
         # Run SE then PSFEx on image
         if spreadmodel:
@@ -86,7 +86,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                             f'{f}'
             if verbose:
                 print('Currently running source extractor to output required catalog...')
-                print('=============================================')
+                print('___________________________________________')
                 print('Executing command: %s\n' % command)
             try:
                 rval = subprocess.run(command.split(), check=True)
@@ -133,10 +133,10 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc='sex', psfex_loc='
             catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
         
         if verbose:
-            print('=======================================')
+            print('___________________________________________')
             print(f'INPUT: {f}')
             print(f'INTENDED OUTPUT: {catalog_name}')
-            print('=======================================')
+            print('___________________________________________')
 
         # Grab matching PSF filename from science image
         psf_fname = catalog_name.replace('.im_1.diff.cat', '.psf')
@@ -152,7 +152,7 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc='sex', psfex_loc='
                    f'{f}'
         if verbose:
             print('Currently running source extractor to output required catalog...')
-            print('=============================================')
+            print('___________________________________________')
             print('Executing command: %s\n' % command)   
         try:
             rval = subprocess.run(command.split(), check=True)

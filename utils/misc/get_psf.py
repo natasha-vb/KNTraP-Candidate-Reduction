@@ -92,7 +92,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                        f'-MAG_ZEROPOINT 25.0 '
                        f'-CATALOG_TYPE FITS_LDAC '
                        f'-FILTER_NAME {conv_name} '
-                       f'-VERBOSE_TYPE {VERBOSE_TYPE}'
+                       f'-VERBOSE_TYPE {VERBOSE_TYPE} '
                        f'-PARAMETERS_NAME {params_name} '
                        f'-CATALOG_NAME {cat_out_name_temp} '
                        f'{f}')
@@ -110,7 +110,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             if savepsffits:
                 command = (f"{psfex_loc} "
                            f"-PSF_DIR {outdir} "
-                           f"-VERBOSE_TYPE {VERBOSE_TYPE}"
+                           f"-VERBOSE_TYPE {VERBOSE_TYPE} "
                            f"-c {psfconfig_name} "
                            f"-CHECKIMAGE_TYPE PROTOTYPES "
                            f"-CHECKIMAGE_NAME  proto.fits "
@@ -119,7 +119,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             else:
                 command = (f"{psfex_loc} "
                            f"-PSF_DIR {outdir} "
-                           f"-VERBOSE_TYPE {VERBOSE_TYPE}"
+                           f"-VERBOSE_TYPE {VERBOSE_TYPE} "
                            f"-c {psfconfig_name} "
                            f"-CHECKIMAGE_TYPE NONE "
                            f"-CHECKIMAGE_NAME  NONE "
