@@ -158,7 +158,7 @@ if __name__ == "__main__":
                                                                     detect_thresh=detect_thresh, verbose=verbose)
 
             # Run SE on template image
-            #  if args.verbose:
+            # if args.verbose:
             #     print('==========================================')
             #     print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
             #     print('==========================================')
