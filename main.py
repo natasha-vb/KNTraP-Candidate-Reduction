@@ -145,7 +145,7 @@ if __name__ == "__main__":
         catending = f'{ccd}.sci'
         _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
-                                                spreadmodel=spreadmodel, catending=catending,
+                                                catending=catending,
                                                 fwhm=fwhm, detect_minarea=detect_minarea, 
                                                 detect_thresh=detect_thresh, verbose=args.verbose)
         
