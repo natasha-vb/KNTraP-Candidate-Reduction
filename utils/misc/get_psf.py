@@ -130,6 +130,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             subprocess.check_call(command, shell=True)
             if verbose:
                 print('Above PSFex completed successfully!\n')
+                print('-----------------------------------')
         except subprocess.CalledProcessError as err:
             print('Could not run psfex with exit error %s'%err)
         
