@@ -148,7 +148,7 @@ if __name__ == "__main__":
                                                     detect_thresh = detect_thresh, verbose=verbose)
             
             # Run SE on difference image
-             if args.verbose:
+            if args.verbose:
                 print('============================================')
                 print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
                 print('============================================')
