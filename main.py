@@ -129,7 +129,6 @@ if __name__ == "__main__":
         savecats_dir = f"./cats/{args.field}/{ccd}"
         sextractor_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/sextractor/2.19.5/bin/sex"
         psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin/psfex"
-        spreadmodel = True
         fwhm = 1.2           #default setting
         detect_minarea = 5   #default setting
         detect_thresh = 1.5  #default setting
@@ -145,7 +144,7 @@ if __name__ == "__main__":
         catending = f'{ccd}.sci'
         _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
-                                                catending=catending,
+                                                spreadmodel=True, catending=catending,
                                                 fwhm=fwhm, detect_minarea=detect_minarea, 
                                                 detect_thresh=detect_thresh, verbose=args.verbose)
         

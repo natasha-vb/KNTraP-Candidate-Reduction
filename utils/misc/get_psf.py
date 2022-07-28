@@ -101,6 +101,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             rval = subprocess.check_call(command,shell=True)
             if verbose:
                 print('Above Source Extractor completed successfully!\n')
+                print('OUTPUT FILE: ', cat_out_name_temp)
         except subprocess.CalledProcessError as err:
             print('\nCould not run SExtractor with exit error %s\n'%err)
             print('Command used:\n%s\n'%command)
