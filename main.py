@@ -65,12 +65,12 @@ if __name__ == "__main__":
     parser.add_argument(
             "--test",
             action="store_true",
-            help="Process one set of images only",
+            help="Process one set of images only"
     )
     parser.add_argument(
             "--verbose", "--v",
-            action="store_true"
-            help="Making code verbose"
+            action="store_true",
+            help="Making code more verbose"
     )
     args = parser.parse_args()
 
