@@ -157,7 +157,7 @@ if __name__ == "__main__":
                                                                     psfex_loc = psfex_loc, savecats_dir = savecats_dir,
                                                                     catending=catending, fwhm = fwhm, 
                                                                     detect_minarea = detect_minarea, 
-                                                                    detect_thresh = detect_thresh, verbose)
+                                                                    detect_thresh = detect_thresh, verbose=verbose)
 
             # Run SE on template image
             #  if args.verbose:
