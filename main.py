@@ -77,8 +77,9 @@ if __name__ == "__main__":
     os.makedirs(args.path_out, exist_ok=True)  
 
     if args.test:
-        print('TESTING FOR A SINGLE IMAGE SET')
-        print('___________________________________________')
+        print('-------------------------------------------')
+        print('      TESTING FOR A SINGLE IMAGE SET       ')
+        print('-------------------------------------------')
 
     if args.ccd:
         ccds = [args.ccd]

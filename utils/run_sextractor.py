@@ -86,7 +86,6 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                             f'{f}'
             if verbose:
                 print('Currently running source extractor to output required catalog...')
-                print('___________________________________________')
                 print('Executing command: %s\n' % command)
             try:
                 rval = subprocess.run(command.split(), check=True)
@@ -152,7 +151,6 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc='sex', psfex_loc='
                    f'{f}'
         if verbose:
             print('Currently running source extractor to output required catalog...')
-            print('___________________________________________')
             print('Executing command: %s\n' % command)   
         try:
             rval = subprocess.run(command.split(), check=True)

@@ -110,8 +110,8 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             if savepsffits:
                 command = (f"{psfex_loc} "
                            f"-PSF_DIR {outdir} "
-                           f"-VERBOSE_TYPE {VERBOSE_TYPE} "
                            f"-c {psfconfig_name} "
+                           f"-VERBOSE_TYPE {VERBOSE_TYPE} "
                            f"-CHECKIMAGE_TYPE PROTOTYPES "
                            f"-CHECKIMAGE_NAME  proto.fits "
                            f"-PSF_SUFFIX .psf "
@@ -119,8 +119,8 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             else:
                 command = (f"{psfex_loc} "
                            f"-PSF_DIR {outdir} "
-                           f"-VERBOSE_TYPE {VERBOSE_TYPE} "
                            f"-c {psfconfig_name} "
+                           f"-VERBOSE_TYPE {VERBOSE_TYPE} "
                            f"-CHECKIMAGE_TYPE NONE "
                            f"-CHECKIMAGE_NAME  NONE "
                            f"-PSF_SUFFIX .psf "
