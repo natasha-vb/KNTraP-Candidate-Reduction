@@ -147,7 +147,7 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc='sex', psfex_loc='
                    f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
                    f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
                    f'-PSF_NAME {psf_fname} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
-                   f'-VERBOSE_TYPE {VERBOSE_TYPE}'
+                   f'-VERBOSE_TYPE {VERBOSE_TYPE} '\
                    f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
                    f'{f}'
         if verbose:
