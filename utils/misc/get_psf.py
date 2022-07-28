@@ -135,7 +135,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
         except subprocess.CalledProcessError as err:
             print('Could not run psfex with exit error %s'%err)
         
-        remove_temp_files([cat_out_name_temp])
+        # remove_temp_files([cat_out_name_temp])
 
         f_filestub = Path(ntpath.basename(f)).stem
 
