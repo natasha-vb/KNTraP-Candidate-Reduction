@@ -64,7 +64,7 @@ def remove_temp_files(fs):
 
 def get_psf(fitsfiles, outdir='./', savepsffits=False,
             sextractor_loc = sextractor_loc,
-            psfex_loc = psfex_loc, catending=None):
+            psfex_loc = psfex_loc, catending=None,verbose=False):
 
     create_temp_files(f_conv,f_params,conv_name,params_name,
                       config_name,psfconfig_name,
@@ -73,6 +73,11 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
     
     if not os.path.exists(outdir):
         os.makedirs(outdir)
+    
+    if verbose:
+        VERBOSE_TYPE = 'NORMAL'
+    else:
+        VERBOSE_TYPE = 'QUIET'
     
     PSFs = []
     if savepsffits:
@@ -87,10 +92,15 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                        f'-MAG_ZEROPOINT 25.0 '
                        f'-CATALOG_TYPE FITS_LDAC '
                        f'-FILTER_NAME {conv_name} '
+                       f'-VERBOSE_TYPE {VERBOSE_TYPE}'
                        f'-PARAMETERS_NAME {params_name} '
                        f'-CATALOG_NAME {cat_out_name_temp} '
                        f'{f}')
+            if verbose:
+                print('Executing command: %s\n' % command)
             rval = subprocess.check_call(command,shell=True)
+             if verbose:
+                print('Above Source Extractor completed successfully!\n')
         except subprocess.CalledProcessError as err:
             print('\nCould not run SExtractor with exit error %s\n'%err)
             print('Command used:\n%s\n'%command)
@@ -100,6 +110,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             if savepsffits:
                 command = (f"{psfex_loc} "
                            f"-PSF_DIR {outdir} "
+                           f"-VERBOSE_TYPE {VERBOSE_TYPE}"
                            f"-c {psfconfig_name} "
                            f"-CHECKIMAGE_TYPE PROTOTYPES "
                            f"-CHECKIMAGE_NAME  proto.fits "
@@ -108,12 +119,17 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             else:
                 command = (f"{psfex_loc} "
                            f"-PSF_DIR {outdir} "
+                           f"-VERBOSE_TYPE {VERBOSE_TYPE}"
                            f"-c {psfconfig_name} "
                            f"-CHECKIMAGE_TYPE NONE "
                            f"-CHECKIMAGE_NAME  NONE "
                            f"-PSF_SUFFIX .psf "
                            f"{cat_out_name_temp}")
-            subprocess.check_call(command, shell=True)        
+              if verbose:
+                print('Executing command: %s\n' % command)
+            subprocess.check_call(command, shell=True)
+              if verbose:
+                print('Above PSFex completed successfully!\n')
         except subprocess.CalledProcessError as err:
             print('Could not run psfex with exit error %s'%err)
         
