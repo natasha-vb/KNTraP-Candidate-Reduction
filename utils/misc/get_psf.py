@@ -99,7 +99,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             if verbose:
                 print('Executing command: %s\n' % command)
             rval = subprocess.check_call(command,shell=True)
-             if verbose:
+            if verbose:
                 print('Above Source Extractor completed successfully!\n')
         except subprocess.CalledProcessError as err:
             print('\nCould not run SExtractor with exit error %s\n'%err)
@@ -125,10 +125,10 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                            f"-CHECKIMAGE_NAME  NONE "
                            f"-PSF_SUFFIX .psf "
                            f"{cat_out_name_temp}")
-              if verbose:
+            if verbose:
                 print('Executing command: %s\n' % command)
             subprocess.check_call(command, shell=True)
-              if verbose:
+            if verbose:
                 print('Above PSFex completed successfully!\n')
         except subprocess.CalledProcessError as err:
             print('Could not run psfex with exit error %s'%err)
