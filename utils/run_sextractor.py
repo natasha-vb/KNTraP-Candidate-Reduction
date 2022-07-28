@@ -158,8 +158,8 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc='sex', psfex_loc='
             rval = subprocess.run(command.split(), check=True)
             catfiles.append(catalog_name)
             catted_fitsfiles.append(f)
-             if verbose:
-                    print(f'Success! Catalog saved: {catalog_name}')
+            if verbose:
+                print(f'Success! Catalog saved: {catalog_name}')
         except subprocess.CalledProcessError as err:
             print('\nCould not run SExtractor with exit error %s\n'%err)
             print('Command used:\n%s\n'%command)
