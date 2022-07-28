@@ -41,16 +41,15 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
             catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
         
         if verbose:
-            print('________________________________________')
             print(f'INPUT: {f}')
             print(f'INTENDED OUTPUT: {catalog_name}')
-            print('________________________________________')
 
         # Run SE then PSFEx on image
         if spreadmodel:
             try:
                 if verbose:
                     print('Currently measuring PSF using Source Extractor and PSFEx')
+                    print('--------------------------------------------------------')
                 [f_psf] = get_psf.get_psf([f], outdir=savecats_dir, savepsffits=False,
                                             sextractor_loc=sextractor_loc,
                                             psfex_loc=psfex_loc, catending=None, verbose=verbose)
@@ -132,10 +131,8 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc='sex', psfex_loc='
             catalog_name = savecats_dir + os.path.sep + fname.replace('.fits','.cat')
         
         if verbose:
-            print('___________________________________________')
             print(f'INPUT: {f}')
             print(f'INTENDED OUTPUT: {catalog_name}')
-            print('___________________________________________')
 
         # Grab matching PSF filename from science image
         psf_fname = catalog_name.replace('.im_1.diff.cat', '.psf')
