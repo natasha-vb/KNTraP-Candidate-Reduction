@@ -107,7 +107,8 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
 # Running SE on subtraction image
 def run_sextractor_subtractionimage(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                                     savecats_dir=None,  catending=None,
-                                    fwhm=1.2, detect_minarea=5, detect_thresh=1.5, verbose=False):
+                                    fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=ccd,
+                                     verbose=False):
 
     nnw_path = "./utils/default.nnw"
     conv_path = "./utils/default.conv" 
@@ -137,7 +138,7 @@ def run_sextractor_subtractionimage(fitsfiles, sextractor_loc='sex', psfex_loc='
             print(f'INTENDED OUTPUT: {catalog_name}')
 
         # Grab matching PSF filename from science image
-        psf_fname = catalog_name.replace('.im_1.diff.cat', '.psf')
+        psf_fname = catalog_name.replace(f'.im_{ccd}.diff.cat', '.psf')
 
         command =  f'{sextractor_loc} -c {config_path} '\
                    f'-CATALOG_NAME {catalog_name} '\
