@@ -147,7 +147,7 @@ if __name__ == "__main__":
                                                 spreadmodel=True, catending=catending,
                                                 fwhm=fwhm, detect_minarea=detect_minarea,
                                                 detect_thresh=detect_thresh, ccd=ccd,
-                                                diff_im=False, erbose=args.verbose)
+                                                diff_im=False, verbose=args.verbose)
         
         # Run SE on difference image
         if args.verbose:
@@ -155,7 +155,6 @@ if __name__ == "__main__":
             print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
             print('============================================')
         catending = f'{ccd}.diff'
-        ccd = [ccd]
         _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
                                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir,
                                                                 spreadmodel=False, catending=catending,
