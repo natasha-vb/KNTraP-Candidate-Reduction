@@ -49,7 +49,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         if spreadmodel:
             try:
                 if verbose:
-                    print('----- Currently measuring PSF using Source Extractor and PSFEx')
+                    print('----- Currently measuring PSF using Source Extractor and PSFEx\n')
                 [f_psf] = get_psf.get_psf([f], outdir=savecats_dir, savepsffits=False,
                                             sextractor_loc=sextractor_loc,
                                             psfex_loc=psfex_loc, catending=None, verbose=verbose)
