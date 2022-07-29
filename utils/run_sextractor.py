@@ -43,7 +43,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         
         if verbose:
             print(f'INPUT: {f}')
-            print(f'INTENDED OUTPUT: {catalog_name}')
+            print(f'INTENDED OUTPUT: {catalog_name}\n')
 
         # Run SE then PSFEx on science/ template image
         if spreadmodel:

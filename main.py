@@ -134,7 +134,7 @@ if __name__ == "__main__":
         detect_thresh = 1.5  #default setting
 
         if args.verbose:
-            print('SAVE CATALOG DIRECTORY: ', savecats_dir)
+            print('SAVE CATALOG DIRECTORY: %s\n', % savecats_dir)
 
         # Run SE on science image
         if args.verbose:
