@@ -136,6 +136,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             print('Could not run psfex with exit error %s'%err)
         
         # remove_temp_files([cat_out_name_temp])
+        ### ^^ perhaps move this line to the very end?? 
 
         f_filestub = Path(ntpath.basename(f)).stem
 

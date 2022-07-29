@@ -170,4 +170,5 @@ if __name__ == "__main__":
                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir,
                                                 catending=catending, fwhm=fwhm, 
                                                 detect_minarea=detect_minarea, 
-                                                detect_thresh=detect_thresh, verbose=args.verbose)
+                                                detect_thresh=detect_thresh, ccd=ccd,
+                                                verbose=args.verbose)
