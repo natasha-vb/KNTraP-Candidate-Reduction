@@ -134,7 +134,7 @@ if __name__ == "__main__":
         detect_thresh = 1.5  #default setting
 
         if args.verbose:
-            print('SAVE CATALOG DIRECTORY: ', savecats_dir)
+            print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
 
         # Run SE on science image
         if args.verbose:
@@ -145,8 +145,9 @@ if __name__ == "__main__":
         _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
                                                 spreadmodel=True, catending=catending,
-                                                fwhm=fwhm, detect_minarea=detect_minarea, 
-                                                detect_thresh=detect_thresh, verbose=args.verbose)
+                                                fwhm=fwhm, detect_minarea=detect_minarea,
+                                                detect_thresh=detect_thresh, ccd=ccd,
+                                                diff_im=False, verbose=args.verbose)
         
         # Run SE on difference image
         if args.verbose:
@@ -154,11 +155,12 @@ if __name__ == "__main__":
             print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
             print('============================================')
         catending = f'{ccd}.diff'
-        _,_ = run_sextractor.run_sextractor_subtractionimage(diff_list, sextractor_loc=sextractor_loc, 
+        _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
                                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-                                                                catending=catending, fwhm=fwhm, 
-                                                                detect_minarea=detect_minarea, 
-                                                                detect_thresh=detect_thresh, verbose=args.verbose)
+                                                                spreadmodel=False, catending=catending,
+                                                                fwhm=fwhm, detect_minarea=detect_minarea, 
+                                                                detect_thresh=detect_thresh, ccd=ccd,
+                                                                diff_im=True, verbose=args.verbose)
 
         # Run SE on template image
         if args.verbose:
@@ -168,6 +170,7 @@ if __name__ == "__main__":
         catending = f'{ccd}.tmpl'
         _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-                                                catending=catending, fwhm=fwhm, 
-                                                detect_minarea=detect_minarea, 
-                                                detect_thresh=detect_thresh, verbose=args.verbose)
+                                                spreadmodel=True, catending=catending,
+                                                fwhm=fwhm, detect_minarea=detect_minarea, 
+                                                detect_thresh=detect_thresh, ccd=ccd,
+                                                diff_im=False, verbose=args.verbose)
