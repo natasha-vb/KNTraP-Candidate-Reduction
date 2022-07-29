@@ -49,8 +49,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         if spreadmodel:
             try:
                 if verbose:
-                    print('Currently measuring PSF using Source Extractor and PSFEx')
-                    print('--------------------------------------------------------')
+                    print('----- Currently measuring PSF using Source Extractor and PSFEx')
                 [f_psf] = get_psf.get_psf([f], outdir=savecats_dir, savepsffits=False,
                                             sextractor_loc=sextractor_loc,
                                             psfex_loc=psfex_loc, catending=None, verbose=verbose)
@@ -90,8 +89,8 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                                 f'-PHOT_APERTURES 8 '\
                                 f'{f}'
                 if verbose:
-                    print('Currently running source extractor to output required catalog...')
-                    print('Executing command: %s\n' % command)
+                    print('----- Currently running source extractor to output required catalog...\n')
+                    print('----- Executing command: %s\n' % command)
                 try:
                     rval = subprocess.run(command.split(), check=True)
                     catfiles.append(catalog_name)
