@@ -13,12 +13,9 @@ import random
 
 from utils.misc import get_psf
 
-#### CAN PROBABLY COMBINE BOTH OF THESE FUNCTIONS INTO ONE
-#### HAVE ADDITIONAL FUNCTION INPUT, IM_TYPE = SCI, DIFF, OR TMPL
-
 def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                     savecats_dir=None , spreadmodel=True, catending=None,
-                    fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=ccd,
+                    fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=1,
                     diff_im=False, verbose=False):
     
     nnw_path = "./utils/default.nnw"
