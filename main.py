@@ -88,8 +88,8 @@ if __name__ == "__main__":
 
     for ccd in ccds:
         # Read in fits files
-        sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
-        diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
+        sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
+        diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
         tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits")
 
         # Sort files in order of date
@@ -174,3 +174,18 @@ if __name__ == "__main__":
                                                 fwhm=fwhm, detect_minarea=detect_minarea, 
                                                 detect_thresh=detect_thresh, ccd=ccd,
                                                 diff_im=False, verbose=args.verbose)
+
+    #   THINGS TO DO:
+        # READ IN UNFORCED DIFFLC FILES
+        # APPEND CAT DATA INTO DIFFLC FILE (SAVE AS NEW FILE)
+            # READ DETECTION DATE AND RA & DEC 
+            # MATCH WITH SOURCE IN SOURCE EXTRACTOR CATALOGUE
+            # PLACE DATA INTO CORRECT ROW AND NEW SE COLUMN
+        
+        # CROSSMATCHING
+            # FOR EACH DETECTION RUN PAN-STARRS, GAIA, SIMBAD XMATCH
+            # APPEND INFORMATION TO DIFFLC FILE
+
+        # CREATE MASTERLIST 
+        # APPEND DIFFLC DATA/ METADATA TO MASTERLIST
+            # CAND ID; FIELD; RA; DEC; NO. DETECTIONS; NO. GOOD DETECTIONS; XMATCH; PATH;
