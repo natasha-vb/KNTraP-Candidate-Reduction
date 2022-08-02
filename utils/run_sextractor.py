@@ -64,9 +64,10 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         if diff_im:
             # Grab matching PSF file from science image
             f_psf = glob.glob(f'./cats/{field}/{ccd}/*diff.im.psf')
-            print('PSF FILE NAME: %s\n' % f_psf)
+            if verbose:
+                print('PSF FILE NAME: %s\n' % f_psf)
             spreadmodel = True
-
+            
         # Run SE to get final catalogs
         if PSF_success[ii] == True:
             if spreadmodel:
