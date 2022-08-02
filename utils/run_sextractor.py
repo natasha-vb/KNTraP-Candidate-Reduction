@@ -10,6 +10,7 @@ import ntpath, shutil
 import time
 import string    
 import random
+import glob
 
 from utils.misc import get_psf
 
@@ -66,44 +67,44 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
             spreadmodel = True
     
         # Run SE to get final catalogs
-            if PSF_success[ii] == True:
-                if spreadmodel:
-                    command =   f'{sextractor_loc} -c {config_path} '\
-                                f'-CATALOG_NAME {catalog_name} '\
-                                f'-CATALOG_TYPE ASCII_HEAD '\
-                                f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
-                                f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
-                                f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
-                                f'-VERBOSE_TYPE {VERBOSE_TYPE} '\
-                                f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
-                                f'{f}'
-                else:
-                    command =  f'{sextractor_loc} -c {config_path} '\
-                                f'-CATALOG_NAME {catalog_name} '\
-                                f'-CATALOG_TYPE ASCII_HEAD '\
-                                f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
-                                f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
-                                f'-VERBOSE_TYPE {VERBOSE_TYPE} '\
-                                f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
-                                f'-CHECKIMAGE_TYPE SEGMENTATION,APERTURES -CHECKIMAGE_NAME seg.fits,aper.fits '\
-                                f'-PHOT_APERTURES 8 '\
-                                f'{f}'
+        if PSF_success[ii] == True:
+            if spreadmodel:
+                command =   f'{sextractor_loc} -c {config_path} '\
+                            f'-CATALOG_NAME {catalog_name} '\
+                            f'-CATALOG_TYPE ASCII_HEAD '\
+                            f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
+                            f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
+                            f'-PSF_NAME {f_psf} -PSF_NMAX 1 -PATTERN_TYPE GAUSS-LAGUERRE '\
+                            f'-VERBOSE_TYPE {VERBOSE_TYPE} '\
+                            f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
+                            f'{f}'
+            else:
+                command =  f'{sextractor_loc} -c {config_path} '\
+                            f'-CATALOG_NAME {catalog_name} '\
+                            f'-CATALOG_TYPE ASCII_HEAD '\
+                            f'-PARAMETERS_NAME {params_path} -FILTER_NAME {conv_path} '\
+                            f'-STARNNW_NAME {nnw_path} -PIXEL_SCALE 0  -MAG_ZEROPOINT 25.0 '\
+                            f'-VERBOSE_TYPE {VERBOSE_TYPE} '\
+                            f'-SEEING_FWHM {fwhm} -DETECT_MINAREA {detect_minarea} -DETECT_THRESH {detect_thresh} '\
+                            f'-CHECKIMAGE_TYPE SEGMENTATION,APERTURES -CHECKIMAGE_NAME seg.fits,aper.fits '\
+                            f'-PHOT_APERTURES 8 '\
+                            f'{f}'
+            if verbose:
+                print('----- Currently running source extractor to output required catalog...\n')
+                print('----- Executing command: %s\n' % command)
+            try:
+                rval = subprocess.run(command.split(), check=True)
+                catfiles.append(catalog_name)
+                catted_fitsfiles.append(f)
+                # if spreadmodel:
+                #     os.remove(f_psf)
                 if verbose:
-                    print('----- Currently running source extractor to output required catalog...\n')
-                    print('----- Executing command: %s\n' % command)
-                try:
-                    rval = subprocess.run(command.split(), check=True)
-                    catfiles.append(catalog_name)
-                    catted_fitsfiles.append(f)
-                    # if spreadmodel:
-                    #     os.remove(f_psf)
-                    if verbose:
-                        print(f'Success! Catalog saved: {catalog_name}')
-                except subprocess.CalledProcessError as err:
-                    print('\nCould not run SExtractor with exit error %s\n'%err)
-                    print('Command used:\n%s\n'%command)
-            
-            if diff_im:
-                spreadmodel=False
+                    print(f'Success! Catalog saved: {catalog_name}')
+            except subprocess.CalledProcessError as err:
+                print('\nCould not run SExtractor with exit error %s\n'%err)
+                print('Command used:\n%s\n'%command)
+        
+        if diff_im:
+            spreadmodel=False
 
     return catfiles, catted_fitsfiles
