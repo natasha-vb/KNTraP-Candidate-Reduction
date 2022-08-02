@@ -63,11 +63,12 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         
         if diff_im:
             # Grab matching PSF file from science image
-            f_psf = glob.glob(f'./cats/{field}/{ccd}/*diff.im.psf')
+            f_psf = catalog_name.replace(f'.im_{ccd}.sci.cat', '.psf')
+            # f_psf = glob.glob(f'./cats/{field}/{ccd}/*diff.im.psf')
             if verbose:
                 print('PSF FILE NAME: %s\n' % f_psf)
             spreadmodel = True
-            
+
         # Run SE to get final catalogs
         if PSF_success[ii] == True:
             if spreadmodel:
@@ -98,8 +99,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                 rval = subprocess.run(command.split(), check=True)
                 catfiles.append(catalog_name)
                 catted_fitsfiles.append(f)
-                # if spreadmodel:
-                #     os.remove(f_psf)
+
                 if verbose:
                     print(f'Success! Catalog saved: {catalog_name}')
             except subprocess.CalledProcessError as err:
