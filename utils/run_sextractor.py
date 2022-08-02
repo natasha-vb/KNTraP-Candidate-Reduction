@@ -62,7 +62,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         
         if diff_im:
             # Grab matching PSF filename from science image
-            f_psf = catalog_name.replace(f'.im_{ccd}.diff.cat', '.psf')
+            f_psf = catalog_name.replace(f'_{ccd}.diff.cat', '.psf')
             spreadmodel = True
     
         # Run SE to get final catalogs
