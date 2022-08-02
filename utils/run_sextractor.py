@@ -101,7 +101,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                 catted_fitsfiles.append(f)
 
                 if verbose:
-                    print(f'Success! Catalog saved: {catalog_name}')
+                    print(f'Success! Catalog saved: {catalog_name}\n')
             except subprocess.CalledProcessError as err:
                 print('\nCould not run SExtractor with exit error %s\n'%err)
                 print('Command used:\n%s\n'%command)
