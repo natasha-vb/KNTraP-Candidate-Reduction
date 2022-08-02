@@ -136,7 +136,6 @@ if __name__ == "__main__":
         if args.verbose:
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
 
-        field = [args.field]
         # Run SE on science image
         if args.verbose:
             print('=========================================')
@@ -147,7 +146,7 @@ if __name__ == "__main__":
                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
                                                 spreadmodel=True, catending=catending,
                                                 fwhm=fwhm, detect_minarea=detect_minarea,
-                                                detect_thresh=detect_thresh, ccd=ccd, field=field,
+                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                 diff_im=False, verbose=args.verbose)
         
         # Run SE on difference image
@@ -157,11 +156,11 @@ if __name__ == "__main__":
             print('============================================')
         catending = f'{ccd}.diff'
         _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
-                                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-                                                                spreadmodel=False, catending=catending,
-                                                                fwhm=fwhm, detect_minarea=detect_minarea, 
-                                                                detect_thresh=detect_thresh, ccd=ccd, field=field,
-                                                                diff_im=True, verbose=args.verbose)
+                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+                                                spreadmodel=False, catending=catending,
+                                                fwhm=fwhm, detect_minarea=detect_minarea, 
+                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+                                                diff_im=True, verbose=args.verbose)
 
         # Run SE on template image
         if args.verbose:
@@ -173,7 +172,7 @@ if __name__ == "__main__":
                                                 psfex_loc=psfex_loc, savecats_dir=savecats_dir,
                                                 spreadmodel=True, catending=catending,
                                                 fwhm=fwhm, detect_minarea=detect_minarea, 
-                                                detect_thresh=detect_thresh, ccd=ccd, field=field,
+                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                 diff_im=False, verbose=args.verbose)
 
     #   THINGS TO DO:
