@@ -63,7 +63,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         
         if diff_im:
             # Grab matching PSF file from science image
-            f_psf = catalog_name.replace(f'.im_{ccd}.sci.cat', '.psf')
+            f_psf = catalog_name.replace(f'.diff.cat', '.psf')
             # f_psf = glob.glob(f'./cats/{field}/{ccd}/*diff.im.psf')
             if verbose:
                 print('PSF FILE NAME: %s\n' % f_psf)
