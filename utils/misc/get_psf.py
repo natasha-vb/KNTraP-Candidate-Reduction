@@ -101,7 +101,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             rval = subprocess.check_call(command,shell=True)
             if verbose:
                 print('Above Source Extractor completed successfully!\n')
-                print('PSF SE OUTPUT FILE: %s\n' % cat_out_name_temp)
+                print('PSFex SE OUTPUT FILE: %s\n' % cat_out_name_temp)
         except subprocess.CalledProcessError as err:
             print('\nCould not run SExtractor with exit error %s\n'%err)
             print('Command used:\n%s\n'%command)
@@ -130,7 +130,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                 print('Executing command: %s\n' % command)
             subprocess.check_call(command, shell=True)
             if verbose:
-                print('Above PSFex completed successfully!\n')
+                print('Above PSFEx completed successfully!\n')
         except subprocess.CalledProcessError as err:
             print('Could not run psfex with exit error %s'%err)
         
@@ -156,7 +156,9 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
         PSFs.append(f_psfbinary)
 
     remove_temp_files([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
-    print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)
+
+    if verbose:
+        print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)
 
     if savepsffits:
         return PSFs, PSFfits
