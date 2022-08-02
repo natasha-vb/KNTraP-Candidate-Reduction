@@ -16,8 +16,8 @@ from utils.misc import get_psf
 
 def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                     savecats_dir=None , spreadmodel=True, catending=None,
-                    fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=1,
-                    diff_im=False, verbose=False):
+                    fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=1, 
+                    field='257A', diff_im=False, verbose=False):
     
     nnw_path = "./utils/default.nnw"
     conv_path = "./utils/default.conv" 
@@ -63,7 +63,9 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         
         if diff_im:
             # Grab matching PSF filename from science image
-            f_psf = catalog_name.replace(f'.diff.im.psfcat', 'diff.sci.psf')
+            # f_psf = catalog_name.replace(f'.diff.im.psfcat', 'diff.sci.psf')'
+            f_psf = glob.glob(f'../../workspace/{field}_tmpl/{ccd}/*diff.im.psfcat')
+            print('PSF FILE NAME:', f_psf)
             spreadmodel = True
     
         # Run SE to get final catalogs
