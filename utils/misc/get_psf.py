@@ -38,13 +38,13 @@ psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin
 def create_temp_files(f_conv, f_params, conv_name, params_name,
                         config_name, psfconfig_name,
                         sextractor_loc = sextractor_loc,
-                        psfex_loc = psfex_loc)
+                        psfex_loc = psfex_loc):
     
     fp = open(params_name, "w")
     fp.write(f_params)
     fp.close()
 
-    fp.open(conv_name, "w")
+    fp = open(conv_name, "w")
     fp.write(f_conv)
     fp.close
 
@@ -64,7 +64,7 @@ def remove_temp_files(fs):
 
 def get_psf(fitsfiles, outdir='./', savepsffits=False,
             sextractor_loc = sextractor_loc,
-            psfex_loc = psfex_loc):
+            psfex_loc = psfex_loc, catending=None,verbose=False):
 
     create_temp_files(f_conv,f_params,conv_name,params_name,
                       config_name,psfconfig_name,
@@ -73,6 +73,11 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
     
     if not os.path.exists(outdir):
         os.makedirs(outdir)
+    
+    if verbose:
+        VERBOSE_TYPE = 'NORMAL'
+    else:
+        VERBOSE_TYPE = 'QUIET'
     
     PSFs = []
     if savepsffits:
@@ -87,10 +92,16 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                        f'-MAG_ZEROPOINT 25.0 '
                        f'-CATALOG_TYPE FITS_LDAC '
                        f'-FILTER_NAME {conv_name} '
+                       f'-VERBOSE_TYPE {VERBOSE_TYPE} '
                        f'-PARAMETERS_NAME {params_name} '
                        f'-CATALOG_NAME {cat_out_name_temp} '
                        f'{f}')
+            if verbose:
+                print('----- Executing command: %s\n' % command)
             rval = subprocess.check_call(command,shell=True)
+            if verbose:
+                print('Above Source Extractor completed successfully!\n')
+                print('PSFEx SE OUTPUT FILE: %s\n' % cat_out_name_temp)
         except subprocess.CalledProcessError as err:
             print('\nCould not run SExtractor with exit error %s\n'%err)
             print('Command used:\n%s\n'%command)
@@ -101,6 +112,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                 command = (f"{psfex_loc} "
                            f"-PSF_DIR {outdir} "
                            f"-c {psfconfig_name} "
+                           f"-VERBOSE_TYPE {VERBOSE_TYPE} "
                            f"-CHECKIMAGE_TYPE PROTOTYPES "
                            f"-CHECKIMAGE_NAME  proto.fits "
                            f"-PSF_SUFFIX .psf "
@@ -109,11 +121,16 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                 command = (f"{psfex_loc} "
                            f"-PSF_DIR {outdir} "
                            f"-c {psfconfig_name} "
+                           f"-VERBOSE_TYPE {VERBOSE_TYPE} "
                            f"-CHECKIMAGE_TYPE NONE "
                            f"-CHECKIMAGE_NAME  NONE "
                            f"-PSF_SUFFIX .psf "
                            f"{cat_out_name_temp}")
-            subprocess.check_call(command, shell=True)        
+            if verbose:
+                print('Executing command: %s\n' % command)
+            subprocess.check_call(command, shell=True)
+            if verbose:
+                print('Above PSFEx completed successfully!\n')
         except subprocess.CalledProcessError as err:
             print('Could not run psfex with exit error %s'%err)
         
@@ -131,10 +148,17 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
 
             os.remove(proto_file)
         
-        f_psfbinary = outdir+'/'+f_filestub+'.psf'
+        if catending:
+            f_psfbinary = outdir+'/'+f_filestub+'_'+catending+'.psf'
+        else:
+            f_psfbinary = outdir+'/'+f_filestub+'.psf'
+            
         PSFs.append(f_psfbinary)
 
     remove_temp_files([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
+
+    if verbose:
+        print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)
 
     if savepsffits:
         return PSFs, PSFfits
