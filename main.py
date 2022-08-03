@@ -1,4 +1,4 @@
-# Main sections based on KNTraP code by Anais Moller
+# Sections based on KNTraP code by Anais Moller
 
 import pandas as pd
 import numpy as np
