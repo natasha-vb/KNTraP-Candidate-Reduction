@@ -177,7 +177,7 @@ if __name__ == "__main__":
         
 
         # Read in unforced diff light curve files pathnames 
-        difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/.unforced.difflc.txt')        
+        difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
         
         if args.verbose:
                 print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
