@@ -180,9 +180,9 @@ if __name__ == "__main__":
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
         
         if args.verbose:
-                for ii, f in enumerate(difflc_files):
-                    print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
-                    print(difflc_files[ii])
+            print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
+            for ii, f in enumerate(difflc_files):
+                print(difflc_files[ii])
 
         for f in difflc_files:
             # Read in diff lc file as Pandas table
@@ -190,8 +190,11 @@ if __name__ == "__main__":
             det_dates = [df["dateobs"]]
 
             if args.verbose:
-                print('DETECTION DATES: \n')
+                print('DETECTION DATES:')
                 print(det_dates)
+            
+            # how tf do you convert these dates into something niceeeeeee 
+            # I think I also wanna grab the cand ID at some stage too ??
 
         
     #   THINGS TO DO:
