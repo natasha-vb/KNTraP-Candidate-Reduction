@@ -180,7 +180,7 @@ if __name__ == "__main__":
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
         
         if args.verbose:
-                for ii, f in difflc_files:
+                for ii, f in enumerate(difflc_files):
                     print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
                     print(difflc_files[ii])
 
