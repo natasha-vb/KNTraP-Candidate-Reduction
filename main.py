@@ -137,43 +137,56 @@ if __name__ == "__main__":
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
 
         # Run SE on science image
-        if args.verbose:
-            print('=========================================')
-            print('RUNNING SOURCE EXTRACTOR ON SCIENCE IMAGE')
-            print('=========================================')
-        catending = f'{ccd}.sci'
-        _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
-                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
-                                                spreadmodel=True, catending=catending,
-                                                fwhm=fwhm, detect_minarea=detect_minarea,
-                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-                                                diff_im=False, verbose=args.verbose)
+        # if args.verbose:
+        #     print('=========================================')
+        #     print('RUNNING SOURCE EXTRACTOR ON SCIENCE IMAGE')
+        #     print('=========================================')
+        # catending = f'{ccd}.sci'
+        # _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
+        #                                         psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
+        #                                         spreadmodel=True, catending=catending,
+        #                                         fwhm=fwhm, detect_minarea=detect_minarea,
+        #                                         detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+        #                                         diff_im=False, verbose=args.verbose)
         
         # Run SE on difference image
-        if args.verbose:
-            print('============================================')
-            print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
-            print('============================================')
-        catending = f'{ccd}.diff'
-        _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
-                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-                                                spreadmodel=False, catending=catending,
-                                                fwhm=fwhm, detect_minarea=detect_minarea, 
-                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-                                                diff_im=True, verbose=args.verbose)
+        # if args.verbose:
+        #     print('============================================')
+        #     print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
+        #     print('============================================')
+        # catending = f'{ccd}.diff'
+        # _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
+        #                                         psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+        #                                         spreadmodel=False, catending=catending,
+        #                                         fwhm=fwhm, detect_minarea=detect_minarea, 
+        #                                         detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+        #                                         diff_im=True, verbose=args.verbose)
 
         # Run SE on template image
-        if args.verbose:
-            print('==========================================')
-            print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
-            print('==========================================')
-        catending = f'{ccd}.tmpl'
-        _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
-                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-                                                spreadmodel=True, catending=catending,
-                                                fwhm=fwhm, detect_minarea=detect_minarea, 
-                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-                                                diff_im=False, verbose=args.verbose)
+        # if args.verbose:
+        #     print('==========================================')
+        #     print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
+        #     print('==========================================')
+        # catending = f'{ccd}.tmpl'
+        # _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
+        #                                         psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+        #                                         spreadmodel=True, catending=catending,
+        #                                         fwhm=fwhm, detect_minarea=detect_minarea, 
+        #                                         detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+        #                                         diff_im=False, verbose=args.verbose)
+        
+        # Read in unforced diff light curve files pathnames 
+        difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/.unforced.difflc.txt')
+
+        for f in difflc_files:
+
+            # Read in diff lc file as Pandas table
+            df = read_file(f)
+
+            det_dates = [df["dateobs"]]
+            print('DETECTION DATES: ', det_dates)
+
+        
 
     #   THINGS TO DO:
     #     READ IN UNFORCED DIFFLC FILES
@@ -188,4 +201,7 @@ if __name__ == "__main__":
 
     #     CREATE MASTERLIST 
     #     APPEND DIFFLC DATA/ METADATA TO MASTERLIST
-    #         CAND ID; FIELD; RA; DEC; NO. DETECTIONS; NO. GOOD DETECTIONS; XMATCH; PATH;
+    #         CAND ID; FIELD; RA; DEC; NO. DETECTIONS; NO. CONSECUTIVE DETECTIONS; NO. GOOD DETECTIONS; XMATCH; PATH; 
+
+
+         
