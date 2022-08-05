@@ -183,7 +183,7 @@ if __name__ == "__main__":
             
             if verbose:
                 print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
-                print(difflc_files[ii])
+                print(f[ii])
 
             # Read in diff lc file as Pandas table
             df = read_file(f)
