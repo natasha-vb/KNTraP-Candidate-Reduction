@@ -180,16 +180,18 @@ if __name__ == "__main__":
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
         
         if args.verbose:
-                print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
-                print(difflc_files)
+                for ii, f in difflc_files:
+                    print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
+                    print(difflc_files[ii])
 
-        for ii, f in enumerate(difflc_files):
+        for f in difflc_files:
             # Read in diff lc file as Pandas table
             df = read_file(f)
             det_dates = [df["dateobs"]]
 
             if args.verbose:
-                print('DETECTION DATES: ', det_dates)
+                print('DETECTION DATES: \n')
+                print(det_dates)
 
         
     #   THINGS TO DO:
