@@ -175,7 +175,7 @@ if __name__ == "__main__":
         #                                         detect_thresh=detect_thresh, ccd=ccd, field=args.field,
         #                                         diff_im=False, verbose=args.verbose)
         
-        
+
         # Read in unforced diff light curve files pathnames 
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/.unforced.difflc.txt')        
 
@@ -183,7 +183,7 @@ if __name__ == "__main__":
             
             if verbose:
                 print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
-                print(diffc_files[ii])
+                print(difflc_files[ii])
 
             # Read in diff lc file as Pandas table
             df = read_file(f)
