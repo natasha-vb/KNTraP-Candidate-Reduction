@@ -178,23 +178,20 @@ if __name__ == "__main__":
 
         # Read in unforced diff light curve files pathnames 
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/.unforced.difflc.txt')        
+        
+        if verbose:
+                print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
+                print(difflc_files)
 
         for ii, f in enumerate(difflc_files):
-            
-            if verbose:
-                print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
-                print(f[ii])
-
             # Read in diff lc file as Pandas table
             df = read_file(f)
-
             det_dates = [df["dateobs"]]
 
             if verbose:
                 print('DETECTION DATES: ', det_dates)
 
         
-
     #   THINGS TO DO:
     #     READ IN UNFORCED DIFFLC FILES
     #     APPEND CAT DATA INTO DIFFLC FILE (SAVE AS NEW FILE)
