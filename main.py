@@ -198,6 +198,7 @@ if __name__ == "__main__":
         for f in difflc_files:
             df = read_file(f)
             cand_id = f.replace("cand","")[-25:-20]
+            cand_id = cand_id.replace("_","")
             df.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
 
             # Finding detection dates and converting them to YYMMDD format
