@@ -62,7 +62,7 @@ if __name__ == "__main__":
             default="./cats",
             help="Path to SE catalogue outputs"
     )
-     parser.add_argument(
+    parser.add_argument(
             "--lc_path_out",
             type=str,
             default="./lc_files",
