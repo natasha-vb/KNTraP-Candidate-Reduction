@@ -9,7 +9,7 @@ import numpy as np
 import ntpath
 from pathlib import Path
 
-# create temporary SE files for psf
+# Create temporary SE files for psf
 conv_name = "./temp_default.conv"
 params_name = "./temp_params.txt"
 config_name = "./temp_default.sex"

@@ -57,11 +57,17 @@ if __name__ == "__main__":
             help="Selected CCD"
     )
     parser.add_argument(
-            "--path_out",
+            "--cats_path_out",
             type=str,
             default="./cats",
-            help="Path to outputs"
+            help="Path to SE catalogue outputs"
     )
+     parser.add_argument(
+            "--lc_path_out",
+            type=str,
+            default="./lc_files",
+            help="Path to appended light curve files"
+     )
     parser.add_argument(
             "--test",
             action="store_true",
@@ -74,7 +80,8 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    os.makedirs(args.path_out, exist_ok=True)  
+    os.makedirs(args.cats_path_out, exist_ok=True)  
+    os.makedirs(args.lc_path_out, exist_ok=True)
 
     if args.test:
         print('-------------------------------------------')
@@ -178,23 +185,32 @@ if __name__ == "__main__":
 
         # Read in unforced diff light curve files pathnames 
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
-        
+
+        lc_outdir = (f"./lc_files/{args.field}/{ccd}")
+        if not os.path.exists(lc_outdir):
+            os.makedirs(lc_outdir)
+
         if args.verbose:
             print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
             for ii, f in enumerate(difflc_files):
                 print(difflc_files[ii])
 
         for f in difflc_files:
-            # Read in diff lc file as Pandas table
             df = read_file(f)
-            det_dates = [df["dateobs"]]
+            cand_id = f.replace("cand","")[-25:-20]
+            df.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
+
+            # Finding detection dates and converting them to YYMMDD format
+            det_dates = df["dateobs"]
+            for ii, d in enumerate(det_dates):
+                det_dates[ii] = d.replace("-", "")[2:8]
 
             if args.verbose:
+                print('CANDIDATE ID: ')
+                print(cand_id)
+
                 print('DETECTION DATES:')
                 print(det_dates)
-            
-            # how tf do you convert these dates into something niceeeeeee 
-            # I think I also wanna grab the cand ID at some stage too ??
 
         
     #   THINGS TO DO:
