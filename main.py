@@ -10,6 +10,8 @@ from pathlib import Path
 from astropy.table import Table
 from astropy.io import fits
 import astropy.io.ascii as ascii
+from astropy.coordinates import SkyCoord
+from astropy import units as u
 
 from utils import run_sextractor
 
@@ -232,7 +234,7 @@ if __name__ == "__main__":
         # Read in unforced diff light curve files pathnames 
         if args.verbose:
             print('=========================================================')
-            print('MATCHING SOURCE EXTRACTOR SOURCES TO CANDIDATE DETECTIONS')
+            print('MATCHING CANDIDATE DETECTIONS TO SOURCE EXTRACTOR SOURCES')
             print('=========================================================')
         
         lc_outdir = (f"./lc_files/{args.field}/{ccd}")
@@ -262,13 +264,19 @@ if __name__ == "__main__":
             for ii, d in enumerate(det_dates):
                 det_dates[ii] = d.replace("-", "")[2:8]
             df["dateobs"] = det_dates
-
+            
+            # Converting ra and dec to degrees
+            coo = SkyCoord(df["ra"].astype(str),
+                           df["dec"].astype(str),
+                           unit=(u.hourangle, u.deg))
+            df["ra"] = coo.ra.degree
+            df["dec"] = coo.dec.degree
+                        
             if args.verbose:
                 print('CANDIDATE ID: ', cand_id)
                 print('DETECTION DATES & COORDS:')
                 print(df[["dateobs", "ra", "dec"]])
             
-            ### will have to convert coords at some stage idk which to what format though
             for ii, d in enumerate(det_dates):
                 date = df["dateobs"][ii]
                 ra = df["ra"][ii]
