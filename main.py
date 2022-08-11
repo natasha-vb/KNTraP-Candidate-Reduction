@@ -13,52 +13,6 @@ import astropy.io.ascii as ascii
 
 from utils import run_sextractor
 
-def cat_match(date, ra, dec, filt, field='args.field', ccd=ccd):
-    match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
-    df_cattmp = pd.DataFrame()
-
-    for m in match_list():
-        cat = ascii.read(m)
-        df_cat = pd.DataFrame(cat.as_array())
-    
-        err = 0.001
-        match = df_cat[(df_cat["X_WORLD" < (ra+err)]) & (df_cat["X_WORLD" > (ra-err)])
-                        (df_cat["Y_WORLD" < (dec+err)]) & (df_cat["Y_WORLD" < (dec-err)])]
-        
-        if len(match) > 1:
-            print("More than 1 SExtractor source match found for coordinates ", ra, ",", dec)
-            continue
-        if len(match) == 0:
-            print("No SExtractor source matches for coordinates ", ra, ",", dec)
-            continue
-
-        ps = re.compile("sci")
-        m_sci = ps.match(m)
-        pt = re.compile("tmpl")
-        m_tmpl = pt.match(m)
-        if m_sci:
-            column_ending = "SCI"
-        elif m_tmpl:
-            column_ending = "TMPL"
-        else:
-            column_ending = "DIFF"
-
-        df_cattmp[f"MAG_AUTO_{column_ending}"]     = match["MAG_AUTO"]
-        df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = match["MAGERR_AUTO"]
-        df_cattmp[f"X_WORLD_{column_ending}"]      = match["X_WORLD"]
-        df_cattmp[f"Y_WORLD_{column_ending}"]      = match["Y_WORLD"]
-        df_cattmp[f"X_IMAGE_{column_ending}"]      = match["X_IMAGE"]
-        df_cattmp[f"Y_IMAGE_{column_ending}"]      = match["Y_IMAGE"]
-        df_cattmp[f"CLASS_STAR_{column_ending}"]   = match["CLASS_STAR"]
-        df_cattmp[f"ELLIPTICITY_{column_ending}"]  = match["ELLIPTICITY"]
-        df_cattmp[f"FWHM_WORLD_{column_ending}"]   = match["FWHM_WORLD"]
-        df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = match["FWHM_IMAGE"]
-        df_cattmp[f"SPREAD_MODEL_{column_ending}"] = match["SPREAD_MODEL"]
-        df_cattmp[f"FLAG_{column_ending}"]         = match["FLAG"]
-    
-    return df_cattmp
-
-
 def read_file(fname):
     try:
         df_tmp = Table.read(fname, format="ascii").to_pandas()
@@ -129,6 +83,51 @@ if __name__ == "__main__":
 
     os.makedirs(args.cats_path_out, exist_ok=True)  
     os.makedirs(args.lc_path_out, exist_ok=True)
+
+    def cat_match(date, ra, dec, filt, field=args.field, ccd=ccd):
+            match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
+            df_cattmp = pd.DataFrame()
+
+            for m in match_list():
+                cat = ascii.read(m)
+                df_cat = pd.DataFrame(cat.as_array())
+            
+                err = 0.001
+                match = df_cat[(df_cat["X_WORLD" < (ra+err)]) & (df_cat["X_WORLD" > (ra-err)])
+                                (df_cat["Y_WORLD" < (dec+err)]) & (df_cat["Y_WORLD" < (dec-err)])]
+                
+                if len(match) > 1:
+                    print("More than 1 SExtractor source match found for coordinates ", ra, ",", dec)
+                    continue
+                if len(match) == 0:
+                    print("No SExtractor source matches for coordinates ", ra, ",", dec)
+                    continue
+
+                ps = re.compile("sci")
+                m_sci = ps.match(m)
+                pt = re.compile("tmpl")
+                m_tmpl = pt.match(m)
+                if m_sci:
+                    column_ending = "SCI"
+                elif m_tmpl:
+                    column_ending = "TMPL"
+                else:
+                    column_ending = "DIFF"
+
+                df_cattmp[f"MAG_AUTO_{column_ending}"]     = match["MAG_AUTO"]
+                df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = match["MAGERR_AUTO"]
+                df_cattmp[f"X_WORLD_{column_ending}"]      = match["X_WORLD"]
+                df_cattmp[f"Y_WORLD_{column_ending}"]      = match["Y_WORLD"]
+                df_cattmp[f"X_IMAGE_{column_ending}"]      = match["X_IMAGE"]
+                df_cattmp[f"Y_IMAGE_{column_ending}"]      = match["Y_IMAGE"]
+                df_cattmp[f"CLASS_STAR_{column_ending}"]   = match["CLASS_STAR"]
+                df_cattmp[f"ELLIPTICITY_{column_ending}"]  = match["ELLIPTICITY"]
+                df_cattmp[f"FWHM_WORLD_{column_ending}"]   = match["FWHM_WORLD"]
+                df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = match["FWHM_IMAGE"]
+                df_cattmp[f"SPREAD_MODEL_{column_ending}"] = match["SPREAD_MODEL"]
+                df_cattmp[f"FLAG_{column_ending}"]         = match["FLAG"]
+            
+            return df_cattmp
 
     if args.test:
         print('-------------------------------------------')
@@ -281,7 +280,6 @@ if __name__ == "__main__":
                 df_out = pd.merge(df, match_cat_table, by='id_column', how='left')      
 
             df.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
-
 
     #   THINGS TO DO:
     #     READ IN UNFORCED DIFFLC FILES
