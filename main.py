@@ -5,11 +5,58 @@ import numpy as np
 import glob
 import argparse
 import os
+import re 
 from pathlib import Path
 from astropy.table import Table
 from astropy.io import fits
+import astropy.io.ascii as ascii
 
 from utils import run_sextractor
+
+def cat_match(date, ra, dec, filt):
+    match_list = glob.glob(f'./cats/{args.field}/{ccd}/*.{date}.*_{filt}_*.cat')
+    df_cattmp = pd.DataFrame()
+
+    for m in match_list():
+        cat = ascii.read(m)
+        df_cat = pd.DataFrame(cat.as_array())
+    
+        err = 0.001
+        match = df_cat[(df_cat["X_WORLD" < (ra+err)]) & (df_cat["X_WORLD" > (ra-err)])
+                        (df_cat["Y_WORLD" < (dec+err)]) & (df_cat["Y_WORLD" < (dec-err)])]
+        
+        if len(match) > 1:
+            #######
+        if len(match) == 0:
+            print("No SExtractor source matches for coordinates ", ra, ",", dec)
+            continue
+
+        ps = re.compile("sci")
+        m_sci = ps.match(m)
+        pt = re.compile("tmpl")
+        m_tmpl = pt.match(m)
+        if m_sci:
+            column_ending = "SCI"
+        elif m_tmpl:
+            column_ending = "TMPL"
+        else:
+            column_ending = "DIFF"
+
+        df_cattmp[f"MAG_AUTO_{column_ending}"]     = match["MAG_AUTO"]
+        df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = match["MAGERR_AUTO"]
+        df_cattmp[f"X_WORLD_{column_ending}"]      = match["X_WORLD"]
+        df_cattmp[f"Y_WORLD_{column_ending}"]      = match["Y_WORLD"]
+        df_cattmp[f"X_IMAGE_{column_ending}"]      = match["X_IMAGE"]
+        df_cattmp[f"Y_IMAGE_{column_ending}"]      = match["Y_IMAGE"]
+        df_cattmp[f"CLASS_STAR_{column_ending}"]   = match["CLASS_STAR"]
+        df_cattmp[f"ELLIPTICITY_{column_ending}"]  = match["ELLIPTICITY"]
+        df_cattmp[f"FWHM_WORLD_{column_ending}"]   = match["FWHM_WORLD"]
+        df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = match["FWHM_IMAGE"]
+        df_cattmp[f"SPREAD_MODEL_{column_ending}"] = match["SPREAD_MODEL"]
+        df_cattmp[f"FLAG_{column_ending}"]         = match["FLAG"]
+    
+    return df_cattmp
+
 
 def read_file(fname):
     try:
@@ -40,7 +87,6 @@ def read_file(fname):
         print("File corrupted or empty", fname)
         df_tmp = pd.DataFrame()
         return df_tmp
-
 
 if __name__ == "__main__":
 
@@ -184,11 +230,20 @@ if __name__ == "__main__":
         
 
         # Read in unforced diff light curve files pathnames 
-        difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
-
+        if args.verbose:
+            print('=========================================================')
+            print('MATCHING SOURCE EXTRACTOR SOURCES TO CANDIDATE DETECTIONS')
+            print('=========================================================')
+        
         lc_outdir = (f"./lc_files/{args.field}/{ccd}")
         if not os.path.exists(lc_outdir):
             os.makedirs(lc_outdir)
+
+        difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
+
+        if args.test:
+            difflc_files = difflc_files[0]
+            print("TESTING ON A SINGLE CANDIDATE\n")
 
         if args.verbose:
             print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
@@ -197,23 +252,36 @@ if __name__ == "__main__":
 
         for f in difflc_files:
             df = read_file(f)
-            cand_id = f.replace("cand","")[-25:-20]
-            cand_id = cand_id.replace("_","")
-            df.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
+
+            # Reading in candidate ID from file name, by finding the last group of digits in string
+            p = re.compile(r'\d+')
+            cand_id = p.findall(f)[-1]
 
             # Finding detection dates and converting them to YYMMDD format
             det_dates = df["dateobs"]
             for ii, d in enumerate(det_dates):
                 det_dates[ii] = d.replace("-", "")[2:8]
+            df["dateobs"] = det_dates
 
             if args.verbose:
-                print('CANDIDATE ID: ')
-                print(cand_id)
+                print('CANDIDATE ID: ', cand_id)
+                print('DETECTION DATES & COORDS:')
+                print(df[["dateobs", "ra", "dec"]])
+            
+            ### will have to convert coords at some stage idk which to what format though
+            for ii in len(det_dates):
+                date = df["dateobs"][ii]
+                ra = df["ra"][ii]
+                dec = df["dec"][ii]
+                filt = df["filt"][ii]
 
-                print('DETECTION DATES:')
-                print(det_dates)
+                match_cat_table = cat_match(date, ra, dec, filt)
 
-        
+                df_out = pd.merge(df, match_cat_table, by='id_column', how='left')      
+
+            df.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
+
+
     #   THINGS TO DO:
     #     READ IN UNFORCED DIFFLC FILES
     #     APPEND CAT DATA INTO DIFFLC FILE (SAVE AS NEW FILE)
