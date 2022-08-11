@@ -17,7 +17,7 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
         match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
         df_cattmp = pd.DataFrame()
 
-        for m in match_list():
+        for m in match_list:
             cat = ascii.read(m)
             df_cat = pd.DataFrame(cat.as_array())
         
