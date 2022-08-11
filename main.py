@@ -269,7 +269,7 @@ if __name__ == "__main__":
                 print(df[["dateobs", "ra", "dec"]])
             
             ### will have to convert coords at some stage idk which to what format though
-            for ii in len(det_dates):
+            for ii, d in enumerate(det_dates):
                 date = df["dateobs"][ii]
                 ra = df["ra"][ii]
                 dec = df["dec"][ii]
