@@ -13,7 +13,7 @@ import astropy.io.ascii as ascii
 
 from utils import run_sextractor
 
-def cat_match(date, ra, dec, filt, field=args.field, ccd=ccd):
+def cat_match(date, ra, dec, filt, field='args.field', ccd=ccd):
     match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
     df_cattmp = pd.DataFrame()
 
