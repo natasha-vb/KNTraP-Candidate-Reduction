@@ -22,8 +22,8 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
             df_cat = pd.DataFrame(cat.as_array())
         
             err = 0.001
-            match = df_cat[(df_cat["X_WORLD" < (ra+err)]) & (df_cat["X_WORLD" > (ra-err)])
-                            (df_cat["Y_WORLD" < (dec+err)]) & (df_cat["Y_WORLD" < (dec-err)])]
+            match = df_cat[(df_cat["X_WORLD"] < (ra+err)) & (df_cat["X_WORLD"] > (ra-err))
+                            (df_cat["Y_WORLD"] < (dec+err)) & (df_cat["Y_WORLD"] < (dec-err))]
             
             if len(match) > 1:
                 print("More than 1 SExtractor source match found for coordinates ", ra, ",", dec)
