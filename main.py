@@ -242,7 +242,7 @@ if __name__ == "__main__":
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
 
         if args.test:
-            difflc_files = difflc_files[0]
+            difflc_files = [difflc_files[0]]
             print("TESTING ON A SINGLE CANDIDATE\n")
 
         if args.verbose:
