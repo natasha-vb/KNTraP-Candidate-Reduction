@@ -26,7 +26,8 @@ def cat_match(date, ra, dec, filt):
                         (df_cat["Y_WORLD" < (dec+err)]) & (df_cat["Y_WORLD" < (dec-err)])]
         
         if len(match) > 1:
-            #######
+            print("More than 1 SExtractor source match found for coordinates ", ra, ",", dec)
+            continue
         if len(match) == 0:
             print("No SExtractor source matches for coordinates ", ra, ",", dec)
             continue
