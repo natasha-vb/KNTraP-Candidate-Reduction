@@ -283,7 +283,7 @@ if __name__ == "__main__":
                 dec = df["dec"][ii]
                 filt = df["filt"][ii]
 
-                match_cat_table = cat_match(date, ra, dec, filt)
+                match_cat_table = cat_match(date, ra, dec, filt, field=args.field, ccd=ccd)
 
                 df_out = pd.merge(df, match_cat_table, by='id_column', how='left')      
 
