@@ -89,7 +89,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
         # Run SE on image
         try:
             command = (f'{sextractor_loc} -c {config_name} '
-                       f'-MAG_ZEROPOINT 25.0 '
+                       f'-MAG_ZEROPOINT 29.2 '
                        f'-CATALOG_TYPE FITS_LDAC '
                        f'-FILTER_NAME {conv_name} '
                        f'-VERBOSE_TYPE {VERBOSE_TYPE} '

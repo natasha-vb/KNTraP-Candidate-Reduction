@@ -22,41 +22,48 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
         for m in match_list:
             cat = ascii.read(m)
             df_cat = pd.DataFrame(cat.as_array())
-        
-            err = 0.001
-            match = df_cat[(df_cat["X_WORLD"] < (ra+err)) & (df_cat["X_WORLD"] > (ra-err))
-                            (df_cat["Y_WORLD"] < (dec+err)) & (df_cat["Y_WORLD"] > (dec-err))]
+
+            # Matching detection coordinates to SE catalogue
+            coords_det = SkyCoord(ra=[ra], dec=[dec],unit='deg')
+            coords_cat = SkyCoord(ra=df_cat["X_WORLD"], dec=df_cat["Y_WORLD"],unit='deg')
+
+            idx, d2d, d3d = coords_det.match_to_catalog_3d(coords_cat)
+
+            # Separation constraint (~ 1 arcsec) ### might not match with only 1 arcsec, try 2 arcsecs
+            sep_constraint = d2d < (2 * u.arcsec)
+
+            df_cat_matched = df_cat.iloc[idx[sep_constraint]]
             
-            if len(match) > 1:
-                print("More than 1 SExtractor source match found for coordinates ", ra, ",", dec)
-                continue
-            if len(match) == 0:
-                print("No SExtractor source matches for coordinates ", ra, ",", dec)
-                continue
+            if df_cat_matched.empty:
+                df_cat_matched[["MAG_AUTO", "MAGERR_AUTO", "X_WORLD", "Y_WORLD", 
+                                "X_IMAGE", "Y_IMAGE", "CLASS_STAR", "ELLIPTICITY",
+                                "FWHM_WORLD", "FWHM_IMAGE", "SPREAD_MODEL", "FLAG"]] = [" "]
 
             ps = re.compile("sci")
-            m_sci = ps.match(m)
+            m_sci = ps.search(m)
             pt = re.compile("tmpl")
-            m_tmpl = pt.match(m)
+            m_tmpl = pt.search(m)
             if m_sci:
                 column_ending = "SCI"
             elif m_tmpl:
                 column_ending = "TMPL"
             else:
                 column_ending = "DIFF"
+            
+            df_cat_matched = df_cat_matched.reset_index(drop=False)
 
-            df_cattmp[f"MAG_AUTO_{column_ending}"]     = match["MAG_AUTO"]
-            df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = match["MAGERR_AUTO"]
-            df_cattmp[f"X_WORLD_{column_ending}"]      = match["X_WORLD"]
-            df_cattmp[f"Y_WORLD_{column_ending}"]      = match["Y_WORLD"]
-            df_cattmp[f"X_IMAGE_{column_ending}"]      = match["X_IMAGE"]
-            df_cattmp[f"Y_IMAGE_{column_ending}"]      = match["Y_IMAGE"]
-            df_cattmp[f"CLASS_STAR_{column_ending}"]   = match["CLASS_STAR"]
-            df_cattmp[f"ELLIPTICITY_{column_ending}"]  = match["ELLIPTICITY"]
-            df_cattmp[f"FWHM_WORLD_{column_ending}"]   = match["FWHM_WORLD"]
-            df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = match["FWHM_IMAGE"]
-            df_cattmp[f"SPREAD_MODEL_{column_ending}"] = match["SPREAD_MODEL"]
-            df_cattmp[f"FLAG_{column_ending}"]         = match["FLAG"]
+            df_cattmp[f"MAG_AUTO_{column_ending}"]     = df_cat_matched["MAG_AUTO"]
+            df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = df_cat_matched["MAGERR_AUTO"]
+            df_cattmp[f"X_WORLD_{column_ending}"]      = df_cat_matched["X_WORLD"]
+            df_cattmp[f"Y_WORLD_{column_ending}"]      = df_cat_matched["Y_WORLD"]
+            df_cattmp[f"X_IMAGE_{column_ending}"]      = df_cat_matched["X_IMAGE"]
+            df_cattmp[f"Y_IMAGE_{column_ending}"]      = df_cat_matched["Y_IMAGE"]
+            df_cattmp[f"CLASS_STAR_{column_ending}"]   = df_cat_matched["CLASS_STAR"]
+            df_cattmp[f"ELLIPTICITY_{column_ending}"]  = df_cat_matched["ELLIPTICITY"]
+            df_cattmp[f"FWHM_WORLD_{column_ending}"]   = df_cat_matched["FWHM_WORLD"]
+            df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = df_cat_matched["FWHM_IMAGE"]
+            df_cattmp[f"SPREAD_MODEL_{column_ending}"] = df_cat_matched["SPREAD_MODEL"]
+            df_cattmp[f"FLAG_{column_ending}"]         = df_cat_matched["FLAG"]
         
         return df_cattmp
 
@@ -260,7 +267,8 @@ if __name__ == "__main__":
             cand_id = p.findall(f)[-1]
 
             # Finding detection dates and converting them to YYMMDD format
-            det_dates = df["dateobs"]
+            # look into datetime
+            det_dates = df["dateobs"].values 
             for ii, d in enumerate(det_dates):
                 det_dates[ii] = d.replace("-", "")[2:8]
             df["dateobs"] = det_dates
@@ -285,7 +293,7 @@ if __name__ == "__main__":
 
                 match_cat_table = cat_match(date, ra, dec, filt, field=args.field, ccd=ccd)
 
-                df_out = pd.merge(df, match_cat_table, by='id_column', how='left')      
+                df_out = pd.merge(df, match_cat_table, by='id_column', how='left')  ### merge by columns ID, date, filt
 
             df.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
 
@@ -295,14 +303,13 @@ if __name__ == "__main__":
     #         READ DETECTION DATE AND RA & DEC 
     #         MATCH WITH SOURCE IN SOURCE EXTRACTOR CATALOGUE
     #         PLACE DATA INTO CORRECT ROW AND NEW SE COLUMN
-        
-    #     CROSSMATCHING
-    #         FOR EACH DETECTION RUN PAN-STARRS, GAIA, SIMBAD XMATCH
-    #         APPEND INFORMATION TO DIFFLC FILE
 
     #     CREATE MASTERLIST 
     #     APPEND DIFFLC DATA/ METADATA TO MASTERLIST
     #         CAND ID; FIELD; RA; DEC; NO. DETECTIONS; NO. CONSECUTIVE DETECTIONS; NO. GOOD DETECTIONS; XMATCH; PATH; 
 
+    #     CROSSMATCHING
+    #         FOR EACH DETECTION RUN PAN-STARRS, GAIA, SIMBAD XMATCH
+    #         APPEND INFORMATION TO MASTERLIST
 
          
