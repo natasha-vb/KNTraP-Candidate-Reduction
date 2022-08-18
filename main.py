@@ -50,7 +50,7 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
 
             if df_cat_matched.empty:
                 for col in df_cat_matched.columns:
-                    if col = "NUMBER":
+                    if col == "NUMBER":
                         continue
                     df[col].values[:] = [" "]
                 
