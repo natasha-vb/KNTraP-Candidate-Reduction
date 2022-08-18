@@ -49,10 +49,10 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
             df_cat_matched = df_cat.iloc[idx[sep_constraint]]
 
             if df_cat_matched.empty:
-                for col in df_cat_matched.columns:
-                    if col == "NUMBER":
-                        continue
-                    df[col].values[:] = [" "]
+                # for col in df_cat_matched.columns:
+                #     if col == "NUMBER":
+                #         continue
+                #     df[col].values[:] = [" "]
                 
                 if verbose:
                     print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
