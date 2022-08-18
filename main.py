@@ -51,8 +51,8 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
             if df_cat_matched.empty:
                 df_cat_matched[["MAG_AUTO", "MAGERR_AUTO", "X_WORLD", "Y_WORLD", 
                                 "X_IMAGE", "Y_IMAGE", "CLASS_STAR", "ELLIPTICITY",
-                                "FWHM_WORLD", "FWHM_IMAGE", "SPREAD_MODEL", "FLAGS"]] = [" "], [" "], [" "], [" "], [" "], [" "],
-                                                                                        [" "], [" "], [" "], [" "], [" "], [" "]
+                                "FWHM_WORLD", "FWHM_IMAGE", "SPREAD_MODEL", "FLAGS"]] = [[" "], [" "], [" "], [" "], [" "], [" "], 
+                                                                                         [" "], [" "], [" "], [" "], [" "], [" "]]
                 
                 if verbose:
                     print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
@@ -70,7 +70,7 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
             df_cattmp[f"FWHM_WORLD_{column_ending}"]   = df_cat_matched["FWHM_WORLD"]
             df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = df_cat_matched["FWHM_IMAGE"]
             df_cattmp[f"SPREAD_MODEL_{column_ending}"] = df_cat_matched["SPREAD_MODEL"]
-            df_cattmp[f"FLAGS_{column_ending}"]         = df_cat_matched["FLAGS"]
+            df_cattmp[f"FLAGS_{column_ending}"]        = df_cat_matched["FLAGS"]
         
         return df_cattmp
 
