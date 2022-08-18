@@ -50,7 +50,9 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
 
             if df_cat_matched.empty:
                 for col in df_cat_matched.columns:
-                    df[col].values[:] = [""]
+                    if col = "NUMBER":
+                        continue
+                    df[col].values[:] = [" "]
                 
                 if verbose:
                     print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
@@ -261,7 +263,7 @@ if __name__ == "__main__":
             print("TESTING ON A SINGLE CANDIDATE\n")
 
         if args.verbose:
-            print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
+            print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:\n')
             for ii, f in enumerate(difflc_files):
                 print(difflc_files[ii])
 
