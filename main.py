@@ -19,6 +19,9 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
         match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
         df_cattmp = pd.DataFrame()
 
+        df_cattmp["dateobs"] = [f"{date}"]
+        df_cattmp["filt"]    = [f"{filt}"]
+
         for m in match_list:
             cat = ascii.read(m)
             df_cat = pd.DataFrame(cat.as_array())
@@ -39,6 +42,8 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
                                 "X_IMAGE", "Y_IMAGE", "CLASS_STAR", "ELLIPTICITY",
                                 "FWHM_WORLD", "FWHM_IMAGE", "SPREAD_MODEL", "FLAGS"]] = [" "]
 
+            df_cat_matched = df_cat_matched.reset_index(drop=False)
+
             ps = re.compile("sci")
             m_sci = ps.search(m)
             pt = re.compile("tmpl")
@@ -50,8 +55,6 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
             else:
                 column_ending = "DIFF"
             
-            df_cat_matched = df_cat_matched.reset_index(drop=False)
-
             df_cattmp[f"MAG_AUTO_{column_ending}"]     = df_cat_matched["MAG_AUTO"]
             df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = df_cat_matched["MAGERR_AUTO"]
             df_cattmp[f"X_WORLD_{column_ending}"]      = df_cat_matched["X_WORLD"]
@@ -293,9 +296,11 @@ if __name__ == "__main__":
 
                 match_cat_table = cat_match(date, ra, dec, filt, field=args.field, ccd=ccd)
 
-                df_out = pd.merge(df, match_cat_table, by='id_column', how='left')  ### merge by columns ID, date, filt
+                df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])  ### merge by columns dateobs, filt
 
-            df.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
+            df_out.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
+
+    
 
     #   THINGS TO DO:
     #     READ IN UNFORCED DIFFLC FILES
