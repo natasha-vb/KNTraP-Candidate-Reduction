@@ -1,18 +1,13 @@
 import pandas as pd
 import numpy as np
 import glob
-import argparse
-import os
 import re 
-from pathlib import Path
-from astropy.table import Table
 from astropy.io import fits
 import astropy.io.ascii as ascii
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 
-
-def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
+def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
         match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
         df_cattmp = pd.DataFrame()
 

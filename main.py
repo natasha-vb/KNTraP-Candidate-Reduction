@@ -79,6 +79,11 @@ if __name__ == "__main__":
             help="Process one set of images only"
     )
     parser.add_argument(
+            "--skip_se",
+            action="store_true",
+            help="Skip Source Extractor process"
+    )
+    parser.add_argument(
             "--verbose", "--v",
             action="store_true",
             help="Making code more verbose"
@@ -148,44 +153,47 @@ if __name__ == "__main__":
         if args.verbose:
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
 
-        # Run SE on science image
-        if args.verbose:
-            print('=========================================')
-            print('RUNNING SOURCE EXTRACTOR ON SCIENCE IMAGE')
-            print('=========================================')
-        catending = f'{ccd}.sci'
-        _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
-                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
-                                                spreadmodel=True, catending=catending,
-                                                fwhm=fwhm, detect_minarea=detect_minarea,
-                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-                                                diff_im=False, verbose=args.verbose)
-        
-        # Run SE on difference image
-        if args.verbose:
-            print('============================================')
-            print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
-            print('============================================')
-        catending = f'{ccd}.diff'
-        _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
-                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-                                                spreadmodel=False, catending=catending,
-                                                fwhm=fwhm, detect_minarea=detect_minarea, 
-                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-                                                diff_im=True, verbose=args.verbose)
+         if arg.skip_se:
+            continue
+        else:
+            # Run SE on science image
+            if args.verbose:
+                print('=========================================')
+                print('RUNNING SOURCE EXTRACTOR ON SCIENCE IMAGE')
+                print('=========================================')
+            catending = f'{ccd}.sci'
+            _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
+                                                    psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
+                                                    spreadmodel=True, catending=catending,
+                                                    fwhm=fwhm, detect_minarea=detect_minarea,
+                                                    detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+                                                    diff_im=False, verbose=args.verbose)
+            
+            # Run SE on difference image
+            if args.verbose:
+                print('============================================')
+                print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
+                print('============================================')
+            catending = f'{ccd}.diff'
+            _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
+                                                    psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+                                                    spreadmodel=False, catending=catending,
+                                                    fwhm=fwhm, detect_minarea=detect_minarea, 
+                                                    detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+                                                    diff_im=True, verbose=args.verbose)
 
-        # Run SE on template image
-        if args.verbose:
-            print('==========================================')
-            print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
-            print('==========================================')
-        catending = f'{ccd}.tmpl'
-        _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
-                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-                                                spreadmodel=True, catending=catending,
-                                                fwhm=fwhm, detect_minarea=detect_minarea, 
-                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-                                                diff_im=False, verbose=args.verbose)
+            # Run SE on template image
+            if args.verbose:
+                print('==========================================')
+                print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
+                print('==========================================')
+            catending = f'{ccd}.tmpl'
+            _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
+                                                    psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+                                                    spreadmodel=True, catending=catending,
+                                                    fwhm=fwhm, detect_minarea=detect_minarea, 
+                                                    detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+                                                    diff_im=False, verbose=args.verbose)
         
 
         # Read in unforced diff light curve files pathnames 
@@ -241,7 +249,7 @@ if __name__ == "__main__":
                 dec = df["dec"][ii]
                 filt = df["filt"][ii]
 
-                match_cat_table = cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
+                match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
                 df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])  ### merge by columns dateobs, filt
 
