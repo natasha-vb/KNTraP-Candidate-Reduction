@@ -213,7 +213,7 @@ if __name__ == "__main__":
             print("TESTING ON A SINGLE CANDIDATE\n")
 
         if args.verbose:
-            print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:\n')
+            print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
             for ii, f in enumerate(difflc_files):
                 print(difflc_files[ii])
 
@@ -239,9 +239,11 @@ if __name__ == "__main__":
             df["dec"] = coo.dec.degree
                         
             if args.verbose:
+                print('-------------------------------')
                 print('CANDIDATE ID: ', cand_id)
                 print('DETECTION DATES & COORDS:')
                 print(df[["dateobs", "ra", "dec"]])
+                print('-------------------------------')
             
             for ii, d in enumerate(det_dates):
                 date = df["dateobs"][ii]
