@@ -51,7 +51,8 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
             if df_cat_matched.empty:
                 df_cat_matched[["MAG_AUTO", "MAGERR_AUTO", "X_WORLD", "Y_WORLD", 
                                 "X_IMAGE", "Y_IMAGE", "CLASS_STAR", "ELLIPTICITY",
-                                "FWHM_WORLD", "FWHM_IMAGE", "SPREAD_MODEL", "FLAGS"]] = [" "]
+                                "FWHM_WORLD", "FWHM_IMAGE", "SPREAD_MODEL", "FLAGS"]] = [" "], [" "], [" "], [" "], [" "], [" "],
+                                                                                        [" "], [" "], [" "], [" "], [" "], [" "]
                 
                 if verbose:
                     print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
@@ -102,6 +103,7 @@ def read_file(fname):
         print("File corrupted or empty", fname)
         df_tmp = pd.DataFrame()
         return df_tmp
+
 
 if __name__ == "__main__":
 
