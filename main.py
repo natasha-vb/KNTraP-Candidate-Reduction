@@ -153,9 +153,7 @@ if __name__ == "__main__":
         if args.verbose:
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
 
-        if args.skip_se:
-            continue
-        else:
+        if not args.skip_se:
             # Run SE on science image
             if args.verbose:
                 print('=========================================')
