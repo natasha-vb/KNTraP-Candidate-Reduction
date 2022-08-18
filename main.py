@@ -253,7 +253,11 @@ if __name__ == "__main__":
 
                 df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])  ### merge by columns dateobs, filt
 
-            df_out.to_csv(f'{lc_outdir}/cand{cand_id}.unforced.difflc.app.txt')
+            app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
+            df_out.to_csv(f'{lc_outdir}/{app_lc_name}')
+            
+            if verbose:
+                print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
 
     
 
