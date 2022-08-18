@@ -26,24 +26,6 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
             cat = ascii.read(m)
             df_cat = pd.DataFrame(cat.as_array())
 
-            # Matching detection coordinates to SE catalogue
-            coords_det = SkyCoord(ra=[ra], dec=[dec],unit='deg')
-            coords_cat = SkyCoord(ra=df_cat["X_WORLD"], dec=df_cat["Y_WORLD"],unit='deg')
-
-            idx, d2d, d3d = coords_det.match_to_catalog_3d(coords_cat)
-
-            # Separation constraint (~ 1 arcsec) ### might not match with only 1 arcsec, try 2 arcsecs
-            sep_constraint = d2d < (2 * u.arcsec)
-
-            df_cat_matched = df_cat.iloc[idx[sep_constraint]]
-            
-            if df_cat_matched.empty:
-                df_cat_matched[["MAG_AUTO", "MAGERR_AUTO", "X_WORLD", "Y_WORLD", 
-                                "X_IMAGE", "Y_IMAGE", "CLASS_STAR", "ELLIPTICITY",
-                                "FWHM_WORLD", "FWHM_IMAGE", "SPREAD_MODEL", "FLAGS"]] = [" "]
-
-            df_cat_matched = df_cat_matched.reset_index(drop=False)
-
             ps = re.compile("sci")
             m_sci = ps.search(m)
             pt = re.compile("tmpl")
@@ -54,6 +36,27 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1'):
                 column_ending = "TMPL"
             else:
                 column_ending = "DIFF"
+
+            # Matching detection coordinates to SE catalogue
+            coords_det = SkyCoord(ra=[ra], dec=[dec],unit='deg')
+            coords_cat = SkyCoord(ra=df_cat["X_WORLD"], dec=df_cat["Y_WORLD"],unit='deg')
+
+            idx, d2d, d3d = coords_det.match_to_catalog_3d(coords_cat)
+
+            # Separation constraint (~ 1 arcsec) ### might not match with only 1 arcsec, try 2 arcsecs
+            sep_constraint = d2d < (2 * u.arcsec)
+
+            df_cat_matched = df_cat.iloc[idx[sep_constraint]]
+
+            if df_cat_matched.empty:
+                df_cat_matched[["MAG_AUTO", "MAGERR_AUTO", "X_WORLD", "Y_WORLD", 
+                                "X_IMAGE", "Y_IMAGE", "CLASS_STAR", "ELLIPTICITY",
+                                "FWHM_WORLD", "FWHM_IMAGE", "SPREAD_MODEL", "FLAGS"]] = [" "]
+                
+                if verbose:
+                    print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
+
+            df_cat_matched = df_cat_matched.reset_index(drop=False)
             
             df_cattmp[f"MAG_AUTO_{column_ending}"]     = df_cat_matched["MAG_AUTO"]
             df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = df_cat_matched["MAGERR_AUTO"]
@@ -202,43 +205,43 @@ if __name__ == "__main__":
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
 
         # Run SE on science image
-        # if args.verbose:
-        #     print('=========================================')
-        #     print('RUNNING SOURCE EXTRACTOR ON SCIENCE IMAGE')
-        #     print('=========================================')
-        # catending = f'{ccd}.sci'
-        # _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
-        #                                         psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
-        #                                         spreadmodel=True, catending=catending,
-        #                                         fwhm=fwhm, detect_minarea=detect_minarea,
-        #                                         detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-        #                                         diff_im=False, verbose=args.verbose)
+        if args.verbose:
+            print('=========================================')
+            print('RUNNING SOURCE EXTRACTOR ON SCIENCE IMAGE')
+            print('=========================================')
+        catending = f'{ccd}.sci'
+        _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
+                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
+                                                spreadmodel=True, catending=catending,
+                                                fwhm=fwhm, detect_minarea=detect_minarea,
+                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+                                                diff_im=False, verbose=args.verbose)
         
         # Run SE on difference image
-        # if args.verbose:
-        #     print('============================================')
-        #     print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
-        #     print('============================================')
-        # catending = f'{ccd}.diff'
-        # _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
-        #                                         psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-        #                                         spreadmodel=False, catending=catending,
-        #                                         fwhm=fwhm, detect_minarea=detect_minarea, 
-        #                                         detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-        #                                         diff_im=True, verbose=args.verbose)
+        if args.verbose:
+            print('============================================')
+            print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
+            print('============================================')
+        catending = f'{ccd}.diff'
+        _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
+                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+                                                spreadmodel=False, catending=catending,
+                                                fwhm=fwhm, detect_minarea=detect_minarea, 
+                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+                                                diff_im=True, verbose=args.verbose)
 
         # Run SE on template image
-        # if args.verbose:
-        #     print('==========================================')
-        #     print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
-        #     print('==========================================')
-        # catending = f'{ccd}.tmpl'
-        # _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
-        #                                         psfex_loc=psfex_loc, savecats_dir=savecats_dir,
-        #                                         spreadmodel=True, catending=catending,
-        #                                         fwhm=fwhm, detect_minarea=detect_minarea, 
-        #                                         detect_thresh=detect_thresh, ccd=ccd, field=args.field,
-        #                                         diff_im=False, verbose=args.verbose)
+        if args.verbose:
+            print('==========================================')
+            print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
+            print('==========================================')
+        catending = f'{ccd}.tmpl'
+        _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
+                                                psfex_loc=psfex_loc, savecats_dir=savecats_dir,
+                                                spreadmodel=True, catending=catending,
+                                                fwhm=fwhm, detect_minarea=detect_minarea, 
+                                                detect_thresh=detect_thresh, ccd=ccd, field=args.field,
+                                                diff_im=False, verbose=args.verbose)
         
 
         # Read in unforced diff light curve files pathnames 
