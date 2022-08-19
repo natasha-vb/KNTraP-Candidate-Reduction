@@ -216,6 +216,8 @@ if __name__ == "__main__":
                 print(difflc_files[ii])
 
         for f in difflc_files:
+            ### if len > 1 then continue...
+            ### make list of files len < 1 
             df = read_file(f)
 
             # Reading in candidate ID from file name, by finding the last group of digits in string
@@ -223,7 +225,6 @@ if __name__ == "__main__":
             cand_id = p.findall(f)[-1]
 
             # Finding detection dates and converting them to YYMMDD format
-            # look into datetime
             det_dates = df["dateobs"].values 
             for ii, d in enumerate(det_dates):
                 det_dates[ii] = d.replace("-", "")[2:8]
@@ -251,15 +252,19 @@ if __name__ == "__main__":
 
                 match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
-                df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])  ### merge by columns dateobs, filt
+                df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
+
+            ## SORT BY DATE
 
             app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
             df_out.to_csv(f'{lc_outdir}/{app_lc_name}')
-            
+
             if verbose:
                 print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
+        
+        # Creating masterlist
+        masterlist = pd.DataFrame()
 
-    
 
     #   THINGS TO DO:
     #     READ IN UNFORCED DIFFLC FILES
