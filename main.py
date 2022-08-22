@@ -146,9 +146,9 @@ if __name__ == "__main__":
         savecats_dir = f"./cats/{args.field}/{ccd}"
         sextractor_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/sextractor/2.19.5/bin/sex"
         psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin/psfex"
-        fwhm = 1.2           #default setting
-        detect_minarea = 5   #default setting
-        detect_thresh = 1.5  #default setting
+        fwhm = 1.2           #default setting 1.2
+        detect_minarea = 5   #default setting 5
+        detect_thresh = 0.8  #default setting 1.5
 
         if args.verbose:
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
