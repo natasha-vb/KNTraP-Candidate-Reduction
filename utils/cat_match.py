@@ -42,7 +42,7 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
 
             if df_cat_matched.empty:
                 # Replace empty catalog match dataframe values with NaNs
-                df.replace(r'^\s*$', np.nan, regex=True)
+                df_cat_matched.replace(r'^\s*$', np.nan, regex=True)
 
                 if verbose:
                     print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
