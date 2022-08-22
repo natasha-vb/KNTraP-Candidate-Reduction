@@ -12,6 +12,7 @@ from astropy.io import fits
 import astropy.io.ascii as ascii
 from astropy.coordinates import SkyCoord
 from astropy import units as u
+import statistics
 
 from utils import run_sextractor
 from utils import cat_match
@@ -45,6 +46,18 @@ def read_file(fname):
         print("File corrupted or empty", fname)
         df_tmp = pd.DataFrame()
         return df_tmp
+
+def conseq_count(date_list):
+    conseq_list = []
+    for i in range(len(date_list) - 1):
+        if date_list[i] + 1 == date_list[i+1]
+            count += 1
+        elif date_list[i] + 1 == date_list[i]
+            count = count
+        else:
+            conseq_list.append(count)
+            count = 1
+    return conseq_list
 
 
 if __name__ == "__main__":
@@ -215,6 +228,7 @@ if __name__ == "__main__":
             for ii, f in enumerate(difflc_files):
                 print(difflc_files[ii])
         
+        masterlist = pd.DataFrame()
         empty_lc_files = []
 
         for f in difflc_files:
@@ -233,8 +247,8 @@ if __name__ == "__main__":
                 
                 # Converting ra and dec to degrees
                 coo = SkyCoord(df["ra"].astype(str),
-                            df["dec"].astype(str),
-                            unit=(u.hourangle, u.deg))
+                               df["dec"].astype(str),
+                               unit=(u.hourangle, u.deg))
                 df["ra"] = coo.ra.degree
                 df["dec"] = coo.dec.degree
                             
@@ -273,9 +287,36 @@ if __name__ == "__main__":
 
             if args.verbose:
                 print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
+            
+
+            ###################
+            # find ave. ra and dec
+            # finding number of detections
+            # finding "good" detections
+            # finding conseq detections
+            ###################
+
+            ra_ave = statistics.mean(df["ra"])
+            dec_ave = statistics.mean(df["dec"])
+            n_det = len(df_out.index)
+
+            n_conseq_det = conseq_count(df_out["dateobs"])
+            
+
+            masterlist_tmp = pd.DataFrame()
+            masterlist_tmp["CAND_ID"] = cand_id
+            masterlist_tmp["FIELD"] = args.field
+            masterlist_tmp["CCD"] = ccd
+            masterlist_tmp["RA_AVERAGE"] = ra_ave
+            masterlist_tmp["DEC_AVERAGE"] = dec_ave
+            masterlist_tmp["N_DETECTIONS"] = n_det
+            masterlist_tmp["N_CONSECUTIVE_DETECTIONS"] = n_conseq_det
+            masterlist_tmp["N_GOOD_DETECTIONS"] = 
+            masterlist_tmp["LC_PATH"] = f
+
+            masterlist.append(masterlist_tmp)
         
-        # Creating masterlist
-        masterlist = pd.DataFrame()
+       
 
 
     #   THINGS TO DO:
