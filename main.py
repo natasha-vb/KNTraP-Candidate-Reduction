@@ -296,25 +296,25 @@ if __name__ == "__main__":
             # finding conseq detections
             ###################
 
-            ra_ave = statistics.mean(df["ra"])
-            dec_ave = statistics.mean(df["dec"])
-            n_det = len(df_out.index)
+            # ra_ave = statistics.mean(df["ra"])
+            # dec_ave = statistics.mean(df["dec"])
+            # n_det = len(df_out.index)
 
-            n_conseq_det = conseq_count(df_out["dateobs"])
+            # n_conseq_det = conseq_count(df_out["dateobs"])
             
 
-            masterlist_tmp = pd.DataFrame()
-            masterlist_tmp["CAND_ID"] = cand_id
-            masterlist_tmp["FIELD"] = args.field
-            masterlist_tmp["CCD"] = ccd
-            masterlist_tmp["RA_AVERAGE"] = ra_ave
-            masterlist_tmp["DEC_AVERAGE"] = dec_ave
-            masterlist_tmp["N_DETECTIONS"] = n_det
-            masterlist_tmp["N_CONSECUTIVE_DETECTIONS"] = n_conseq_det
-            masterlist_tmp["N_GOOD_DETECTIONS"] = 
-            masterlist_tmp["LC_PATH"] = f
+            # masterlist_tmp = pd.DataFrame()
+            # masterlist_tmp["CAND_ID"] = cand_id
+            # masterlist_tmp["FIELD"] = args.field
+            # masterlist_tmp["CCD"] = ccd
+            # masterlist_tmp["RA_AVERAGE"] = ra_ave
+            # masterlist_tmp["DEC_AVERAGE"] = dec_ave
+            # masterlist_tmp["N_DETECTIONS"] = n_det
+            # masterlist_tmp["N_CONSECUTIVE_DETECTIONS"] = n_conseq_det
+            # # masterlist_tmp["N_GOOD_DETECTIONS"] = 
+            # masterlist_tmp["LC_PATH"] = f
 
-            masterlist.append(masterlist_tmp)
+            # masterlist.append(masterlist_tmp)
         
        
 
