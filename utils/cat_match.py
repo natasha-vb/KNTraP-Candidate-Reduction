@@ -41,9 +41,9 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
             df_cat_matched = df_cat.iloc[idx[sep_constraint]]
 
             if df_cat_matched.empty:
-                # for col in df_cat_matched.columns:
-                #     df[col].values[:] = [""]
-                
+                # Replace empty catalog match dataframe values with NaNs
+                df.replace(r'^\s*$', np.nan, regex=True)
+
                 if verbose:
                     print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
 

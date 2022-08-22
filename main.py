@@ -214,52 +214,64 @@ if __name__ == "__main__":
             print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
             for ii, f in enumerate(difflc_files):
                 print(difflc_files[ii])
+        
+        empty_lc_files = []
 
         for f in difflc_files:
-            ### if len > 1 then continue...
-            ### make list of files len < 1 
-            df = read_file(f)
+            if len(f) > 1:
+                df = read_file(f)
 
-            # Reading in candidate ID from file name, by finding the last group of digits in string
-            p = re.compile(r'\d+')
-            cand_id = p.findall(f)[-1]
+                # Reading in candidate ID from file name, by finding the last group of digits in string
+                p = re.compile(r'\d+')
+                cand_id = p.findall(f)[-1]
 
-            # Finding detection dates and converting them to YYMMDD format
-            det_dates = df["dateobs"].values 
-            for ii, d in enumerate(det_dates):
-                det_dates[ii] = d.replace("-", "")[2:8]
-            df["dateobs"] = det_dates
-            
-            # Converting ra and dec to degrees
-            coo = SkyCoord(df["ra"].astype(str),
-                           df["dec"].astype(str),
-                           unit=(u.hourangle, u.deg))
-            df["ra"] = coo.ra.degree
-            df["dec"] = coo.dec.degree
-                        
+                # Finding detection dates and converting them to YYMMDD format
+                det_dates = df["dateobs"].values 
+                for ii, d in enumerate(det_dates):
+                    det_dates[ii] = d.replace("-", "")[2:8]
+                df["dateobs"] = det_dates
+                
+                # Converting ra and dec to degrees
+                coo = SkyCoord(df["ra"].astype(str),
+                            df["dec"].astype(str),
+                            unit=(u.hourangle, u.deg))
+                df["ra"] = coo.ra.degree
+                df["dec"] = coo.dec.degree
+                            
+                if args.verbose:
+                    print('-------------------------------')
+                    print('CANDIDATE ID: ', cand_id)
+                    print('DETECTION DATES & COORDS:')
+                    print(df[["dateobs", "ra", "dec"]])
+                    print('-------------------------------')
+                
+                for ii, d in enumerate(det_dates):
+                    date = df["dateobs"][ii]
+                    ra = df["ra"][ii]
+                    dec = df["dec"][ii]
+                    filt = df["filt"][ii]
+
+                    # Matching detection coordinates to source in SE catalogs
+                    match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
+
+                    df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
+
+            else:
+                # Listing all empty light curve files, can be checked out later
+                print("LIGHT CURVE FILE IS EMPTY: ", f)
+                empty_lc_files.append(f)
+
             if args.verbose:
-                print('-------------------------------')
-                print('CANDIDATE ID: ', cand_id)
-                print('DETECTION DATES & COORDS:')
-                print(df[["dateobs", "ra", "dec"]])
-                print('-------------------------------')
-            
-            for ii, d in enumerate(det_dates):
-                date = df["dateobs"][ii]
-                ra = df["ra"][ii]
-                dec = df["dec"][ii]
-                filt = df["filt"][ii]
+                print("EMPTY LIGHT CURVE FILES:")
+                print(empty_lc_files)
 
-                match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
-
-                df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
-
-            ## SORT BY DATE
+            # Sort df_out by date
+            df_out.sort_values(by=['dateobs'])
 
             app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
             df_out.to_csv(f'{lc_outdir}/{app_lc_name}')
 
-            if verbose:
+            if args.verbose:
                 print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
         
         # Creating masterlist
@@ -267,12 +279,6 @@ if __name__ == "__main__":
 
 
     #   THINGS TO DO:
-    #     READ IN UNFORCED DIFFLC FILES
-    #     APPEND CAT DATA INTO DIFFLC FILE (SAVE AS NEW FILE)
-    #         READ DETECTION DATE AND RA & DEC 
-    #         MATCH WITH SOURCE IN SOURCE EXTRACTOR CATALOGUE
-    #         PLACE DATA INTO CORRECT ROW AND NEW SE COLUMN
-
     #     CREATE MASTERLIST 
     #     APPEND DIFFLC DATA/ METADATA TO MASTERLIST
     #         CAND ID; FIELD; RA; DEC; NO. DETECTIONS; NO. CONSECUTIVE DETECTIONS; NO. GOOD DETECTIONS; XMATCH; PATH; 
