@@ -50,9 +50,9 @@ def read_file(fname):
 def conseq_count(date_list):
     conseq_list = []
     for i in range(len(date_list) - 1):
-        if date_list[i] + 1 == date_list[i+1]
+        if date_list[i] + 1 == date_list[i+1]:
             count += 1
-        elif date_list[i] + 1 == date_list[i]
+        elif date_list[i] + 1 == date_list[i]:
             count = count
         else:
             conseq_list.append(count)
