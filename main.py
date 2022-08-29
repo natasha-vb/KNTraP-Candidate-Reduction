@@ -309,7 +309,7 @@ if __name__ == "__main__":
 
             masterlist.append(masterlist_tmp)
 
-        masterlist.to_csv(f'./masterlists/masterlist_{args.field}_{ccd}.csv')
+    masterlist.to_csv(f'./masterlists/masterlist_{args.field}_{ccd}.csv')
 
     if args.verbose:
         print("MASTERLIST:")
