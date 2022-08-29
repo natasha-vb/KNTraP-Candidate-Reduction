@@ -324,6 +324,7 @@ if __name__ == "__main__":
             print("EMPTY LIGHT CURVE FILES:")
             print(empty_lc_files)
 
+    ###########################  NEED TO TEST THIS SECTION:
     masterlist_list = glob.glob(f'{masterlist_outdir}/*')
     masterlist_allccds = pd.DataFrame()
     for i, m in enumerate(masterlist_list):
@@ -332,16 +333,10 @@ if __name__ == "__main__":
     masterlist_allccds_path = (f'{masterlist_outdir}./masterlist_{args.field}_allccds.csv')
     masterlist_allccds.to_csv(masterlist_allccds_path)
 
+    ml_file = pd.read_csv(masterlist_allccds_path)
+
+
     ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
 
+
 ### MAKE MASTERLIST COMPILING ALL FIELDS?
-
-    #   THINGS TO DO:
-    #     CREATE MASTERLIST 
-    #     APPEND DIFFLC DATA/ METADATA TO MASTERLIST
-    #         CAND ID; FIELD; RA; DEC; NO. DETECTIONS; NO. CONSECUTIVE DETECTIONS; NO. GOOD DETECTIONS; XMATCH; PATH; 
-
-    #     CROSSMATCHING
-    #         FOR EACH DETECTION RUN PAN-STARRS, GAIA, SIMBAD XMATCH
-    #         APPEND INFORMATION TO MASTERLIST
-
