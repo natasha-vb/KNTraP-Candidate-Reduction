@@ -110,6 +110,7 @@ if __name__ == "__main__":
 
     os.makedirs(args.cats_path_out, exist_ok=True)  
     os.makedirs(args.lc_path_out, exist_ok=True)
+    os.makedirs('./masterlists', exist_ok=True)
 
     if args.test:
         print('-------------------------------------------')
@@ -308,6 +309,7 @@ if __name__ == "__main__":
             masterlist_tmp["LC_PATH"] = f
 
             masterlist.append(masterlist_tmp)
+
 
     masterlist.to_csv(f'./masterlists/masterlist_{args.field}_{ccd}.csv')
 
