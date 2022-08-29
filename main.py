@@ -47,18 +47,23 @@ def read_file(fname):
         df_tmp = pd.DataFrame()
         return df_tmp
 
-def conseq_count(date_list):
+def conseq_count(dates):
+    date_list = date.to_list()
+    for i, d in enumerate(date_list):
+        date_list[i] = int(date_list[i])
+
     conseq_list = []
+    count = 1
     for i in range(len(date_list) - 1):
         if date_list[i] + 1 == date_list[i+1]:
             count += 1
         elif date_list[i] + 1 == date_list[i]:
             count = count
         else:
-            conseq_list.append(count)
             count = 1
-    return conseq_list
-
+        conseq_list.append(count)
+    conseq_list_filt = list(filter(lambda a: a != 1, conseq_list))
+    return conseq_list_filt
 
 if __name__ == "__main__":
 
@@ -275,10 +280,6 @@ if __name__ == "__main__":
                 print("LIGHT CURVE FILE IS EMPTY: ", f)
                 empty_lc_files.append(f)
 
-            if args.verbose:
-                print("EMPTY LIGHT CURVE FILES:")
-                print(empty_lc_files)
-
             # Sort df_out by date
             df_out.sort_values(by=['dateobs'])
 
@@ -287,36 +288,29 @@ if __name__ == "__main__":
 
             if args.verbose:
                 print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
-            
 
-            ###################
-            # find ave. ra and dec
-            # finding number of detections
-            # finding "good" detections
-            # finding conseq detections
-            ###################
+            ra_ave = statistics.mean(df["ra"])
+            dec_ave = statistics.mean(df["dec"])
+            n_det = len(df_out.index)
+            n_conseq_det = conseq_count(df_out["dateobs"])
+            # n_good_det = 
 
-            # ra_ave = statistics.mean(df["ra"])
-            # dec_ave = statistics.mean(df["dec"])
-            # n_det = len(df_out.index)
+            masterlist_tmp = pd.DataFrame()
+            masterlist_tmp["CAND_ID"] = cand_id
+            masterlist_tmp["FIELD"] = args.field
+            masterlist_tmp["CCD"] = ccd
+            masterlist_tmp["RA_AVERAGE"] = ra_ave
+            masterlist_tmp["DEC_AVERAGE"] = dec_ave
+            masterlist_tmp["N_DETECTIONS"] = n_det
+            masterlist_tmp["N_CONSECUTIVE_DETECTIONS"] = n_conseq_det
+            # masterlist_tmp["N_GOOD_DETECTIONS"] = 
+            masterlist_tmp["LC_PATH"] = f
 
-            # n_conseq_det = conseq_count(df_out["dateobs"])
-            
-
-            # masterlist_tmp = pd.DataFrame()
-            # masterlist_tmp["CAND_ID"] = cand_id
-            # masterlist_tmp["FIELD"] = args.field
-            # masterlist_tmp["CCD"] = ccd
-            # masterlist_tmp["RA_AVERAGE"] = ra_ave
-            # masterlist_tmp["DEC_AVERAGE"] = dec_ave
-            # masterlist_tmp["N_DETECTIONS"] = n_det
-            # masterlist_tmp["N_CONSECUTIVE_DETECTIONS"] = n_conseq_det
-            # # masterlist_tmp["N_GOOD_DETECTIONS"] = 
-            # masterlist_tmp["LC_PATH"] = f
-
-            # masterlist.append(masterlist_tmp)
+            masterlist.append(masterlist_tmp)
         
-       
+    if args.verbose:
+                print("EMPTY LIGHT CURVE FILES:")
+                print(empty_lc_files)
 
 
     #   THINGS TO DO:
