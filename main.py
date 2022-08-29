@@ -110,7 +110,6 @@ if __name__ == "__main__":
 
     os.makedirs(args.cats_path_out, exist_ok=True)  
     os.makedirs(args.lc_path_out, exist_ok=True)
-    os.makedirs('./masterlists', exist_ok=True)
 
     if args.test:
         print('-------------------------------------------')
@@ -223,6 +222,10 @@ if __name__ == "__main__":
         if not os.path.exists(lc_outdir):
             os.makedirs(lc_outdir)
 
+        masterlist_outdir = (f'./masterlist/{args.field}')
+        if not os.path.exists(masterlist_outdir):
+            os.makedirs(masterlist_outdir)
+
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
 
         if args.test:
@@ -309,20 +312,10 @@ if __name__ == "__main__":
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
 
-            # masterlist_tmp = ["CAND_ID"] = cand_id
-            # masterlist_tmp["FIELD"] = args.field
-            # masterlist_tmp["CCD"] = ccd
-            # masterlist_tmp["RA_AVERAGE"] = ra_ave
-            # masterlist_tmp["DEC_AVERAGE"] = dec_ave
-            # masterlist_tmp["N_DETECTIONS"] = n_det
-            # masterlist_tmp["N_CONSECUTIVE_DETECTIONS"] = n_conseq_det
-            # # masterlist_tmp["N_GOOD_DETECTIONS"] = 
-            # masterlist_tmp["LC_PATH"] = f
-
             masterlist = masterlist.append(masterlist_tmp)
             del(masterlist_tmp)
 
-        masterlist.to_csv(f'./masterlists/masterlist_{args.field}_{ccd}.csv')
+        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv')
 
         if args.verbose:
             print("MASTERLIST:")
@@ -331,6 +324,17 @@ if __name__ == "__main__":
             print("EMPTY LIGHT CURVE FILES:")
             print(empty_lc_files)
 
+    masterlist_list = glob.glob(f'{masterlist_outdir}/*')
+    masterlist_allccds = pd.DataFrame()
+    for i, m in enumerate(masterlist_list):
+        masterlist_allccds = masterlist_allccds.append(masterlist_list[i])
+
+    masterlist_allccds_path = (f'{masterlist_outdir}./masterlist_{args.field}_allccds.csv')
+    masterlist_allccds.to_csv(masterlist_allccds_path)
+
+    ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
+
+### MAKE MASTERLIST COMPILING ALL FIELDS?
 
     #   THINGS TO DO:
     #     CREATE MASTERLIST 
@@ -341,4 +345,3 @@ if __name__ == "__main__":
     #         FOR EACH DETECTION RUN PAN-STARRS, GAIA, SIMBAD XMATCH
     #         APPEND INFORMATION TO MASTERLIST
 
-         
