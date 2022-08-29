@@ -60,8 +60,8 @@ def conseq_count(dates):
         elif date_list[i] + 1 == date_list[i]:
             count = count
         else:
+            conseq_list.append(count)
             count = 1
-        conseq_list.append(count)
     conseq_list_filt = list(filter(lambda a: a != 1, conseq_list))
     return conseq_list_filt
 
