@@ -282,43 +282,54 @@ if __name__ == "__main__":
                 print("LIGHT CURVE FILE IS EMPTY: ", f)
                 empty_lc_files.append(f)
 
-            # Sort df_out by date ###DO THIS EARLIER
-            # df_out.sort_values(by=['dateobs'])
-
             app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
             df_out.to_csv(f'{lc_outdir}/{app_lc_name}')
 
             if args.verbose:
                 print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
 
+            # Calculating masterlist data 
             ra_ave = statistics.mean(df["ra"])
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
             n_conseq_det = conseq_count(df_out["dateobs"])
             # n_good_det = 
 
-            masterlist_tmp = pd.DataFrame()
-            masterlist_tmp["CAND_ID"] = cand_id
-            masterlist_tmp["FIELD"] = args.field
-            masterlist_tmp["CCD"] = ccd
-            masterlist_tmp["RA_AVERAGE"] = ra_ave
-            masterlist_tmp["DEC_AVERAGE"] = dec_ave
-            masterlist_tmp["N_DETECTIONS"] = n_det
-            masterlist_tmp["N_CONSECUTIVE_DETECTIONS"] = n_conseq_det
-            # masterlist_tmp["N_GOOD_DETECTIONS"] = 
-            masterlist_tmp["LC_PATH"] = f
+            # Placing data into temp masterlist
+            masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
+                                           "FIELD": [args.field],
+                                           "CCD": [ccd],
+                                           "RA_AVERAGE": [ra_ave],
+                                           "DEC_AVERAGE": [dec_ave],
+                                           "N_DETECTIONS": [n_det],
+                                           "N_CONSECUTIVE_DETECTIONS": [n_conseq_det],
+                                        #    "N_GOOD_DETECTIONS": []
+                                           "LC_PATH": [f]})
+             if args.verbose:
+                print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
+                print(masterlist_tmp)
 
-            masterlist.append(masterlist_tmp)
+            # masterlist_tmp = ["CAND_ID"] = cand_id
+            # masterlist_tmp["FIELD"] = args.field
+            # masterlist_tmp["CCD"] = ccd
+            # masterlist_tmp["RA_AVERAGE"] = ra_ave
+            # masterlist_tmp["DEC_AVERAGE"] = dec_ave
+            # masterlist_tmp["N_DETECTIONS"] = n_det
+            # masterlist_tmp["N_CONSECUTIVE_DETECTIONS"] = n_conseq_det
+            # # masterlist_tmp["N_GOOD_DETECTIONS"] = 
+            # masterlist_tmp["LC_PATH"] = f
 
+            masterlist = masterlist.append(masterlist_tmp)
+            os.remove(masterlist_tmp)
 
-    masterlist.to_csv(f'./masterlists/masterlist_{args.field}_{ccd}.csv')
+        masterlist.to_csv(f'./masterlists/masterlist_{args.field}_{ccd}.csv')
 
-    if args.verbose:
-        print("MASTERLIST:")
-        print(masterlist)
-        print()
-        print("EMPTY LIGHT CURVE FILES:")
-        print(empty_lc_files)
+        if args.verbose:
+            print("MASTERLIST:")
+            print(masterlist)
+            print()
+            print("EMPTY LIGHT CURVE FILES:")
+            print(empty_lc_files)
 
 
     #   THINGS TO DO:
