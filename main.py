@@ -305,7 +305,7 @@ if __name__ == "__main__":
                                            "N_CONSECUTIVE_DETECTIONS": [n_conseq_det],
                                         #    "N_GOOD_DETECTIONS": []
                                            "LC_PATH": [f]})
-             if args.verbose:
+            if args.verbose:
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
 
