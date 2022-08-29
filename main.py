@@ -48,7 +48,7 @@ def read_file(fname):
         return df_tmp
 
 def conseq_count(dates):
-    date_list = date.to_list()
+    date_list = dates.to_list()
     for i, d in enumerate(date_list):
         date_list[i] = int(date_list[i])
 
