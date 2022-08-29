@@ -320,7 +320,7 @@ if __name__ == "__main__":
             # masterlist_tmp["LC_PATH"] = f
 
             masterlist = masterlist.append(masterlist_tmp)
-            os.remove(masterlist_tmp)
+            del(masterlist_tmp)
 
         masterlist.to_csv(f'./masterlists/masterlist_{args.field}_{ccd}.csv')
 
