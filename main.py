@@ -249,6 +249,7 @@ if __name__ == "__main__":
                 for ii, d in enumerate(det_dates):
                     det_dates[ii] = d.replace("-", "")[2:8]
                 df["dateobs"] = det_dates
+                df = df.sort_values(by="dateobs")
                 
                 # Converting ra and dec to degrees
                 coo = SkyCoord(df["ra"].astype(str),
@@ -280,8 +281,8 @@ if __name__ == "__main__":
                 print("LIGHT CURVE FILE IS EMPTY: ", f)
                 empty_lc_files.append(f)
 
-            # Sort df_out by date
-            df_out.sort_values(by=['dateobs'])
+            # Sort df_out by date ###DO THIS EARLIER
+            # df_out.sort_values(by=['dateobs'])
 
             app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
             df_out.to_csv(f'{lc_outdir}/{app_lc_name}')
@@ -307,10 +308,15 @@ if __name__ == "__main__":
             masterlist_tmp["LC_PATH"] = f
 
             masterlist.append(masterlist_tmp)
-        
+
+        masterlist.to_csv(f'./masterlists/masterlist_{args.field}_{ccd}.csv')
+
     if args.verbose:
-                print("EMPTY LIGHT CURVE FILES:")
-                print(empty_lc_files)
+        print("MASTERLIST:")
+        print(masterlist)
+        print()
+        print("EMPTY LIGHT CURVE FILES:")
+        print(empty_lc_files)
 
 
     #   THINGS TO DO:
