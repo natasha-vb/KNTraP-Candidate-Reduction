@@ -16,6 +16,7 @@ import statistics
 
 from utils import run_sextractor
 from utils import cat_match
+from utils import find_good_detections
 
 def read_file(fname):
     try:
@@ -296,7 +297,7 @@ if __name__ == "__main__":
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
             n_conseq_det = conseq_count(df_out["dateobs"])
-            # n_good_det = 
+            n_good_det = find_good_detections(df_out)
 
             # Placing data into temp masterlist
             masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
@@ -312,9 +313,11 @@ if __name__ == "__main__":
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
 
+            # Putting temp masterlist data into ccd masterlist
             masterlist = masterlist.append(masterlist_tmp)
             del(masterlist_tmp)
 
+        # Saving masterlist to csv 
         masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv')
 
         if args.verbose:
@@ -324,19 +327,18 @@ if __name__ == "__main__":
             print("EMPTY LIGHT CURVE FILES:")
             print(empty_lc_files)
 
-    ###########################  NEED TO TEST THIS SECTION:
+    # Combining all ccd masterlists to make masterlist for field
     masterlist_list = glob.glob(f'{masterlist_outdir}/*')
     masterlist_allccds = pd.DataFrame()
     for i, m in enumerate(masterlist_list):
-        masterlist_allccds = masterlist_allccds.append(masterlist_list[i])
+        ml = pd.read_csv(masterlist_list[i])
+        masterlist_allccds = masterlist_allccds.append(ml)
 
     masterlist_allccds_path = (f'{masterlist_outdir}./masterlist_{args.field}_allccds.csv')
     masterlist_allccds.to_csv(masterlist_allccds_path)
 
-    ml_file = pd.read_csv(masterlist_allccds_path)
-
-
     ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
+    ml_file = pd.read_csv(masterlist_allccds_path)
 
 
 ### MAKE MASTERLIST COMPILING ALL FIELDS?
