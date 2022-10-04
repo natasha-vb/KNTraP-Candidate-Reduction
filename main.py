@@ -290,7 +290,7 @@ if __name__ == "__main__":
                                                                      0.8 if row["dateobs"] == 220220 else
                                                                      1.1 if row["dateobs"] == 220221 else
                                                                      1.5 if row["dateobs"] == 220222 else
-                                                                    'NaN', axis=1)
+                                                                    1.22222, axis=1)
 
                     print(df_out[["dateobs","av_seeing"]])       
                     # True/ False for a "good" detection 
