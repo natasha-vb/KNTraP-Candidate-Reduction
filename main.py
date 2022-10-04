@@ -1,5 +1,4 @@
-# Sections based on KNTraP code by Anais Moller
-
+from tabnanny import verbose
 import pandas as pd
 import numpy as np
 import glob
@@ -16,7 +15,6 @@ import statistics
 
 from utils import run_sextractor
 from utils import cat_match
-from utils import find_good_detections
 
 def read_file(fname):
     try:
@@ -48,23 +46,24 @@ def read_file(fname):
         df_tmp = pd.DataFrame()
         return df_tmp
 
-def conseq_count(dates):
-    date_list = dates.to_list()
-    for i, d in enumerate(date_list):
-        date_list[i] = int(date_list[i])
+# def conseq_count(dates):
+    ###### REPLACE ALL THIS WITH NP.WHERE STUFF
+    # date_list = dates.to_list()
+    # for i, d in enumerate(date_list):
+    #     date_list[i] = int(date_list[i])
 
-    conseq_list = []
-    count = 1
-    for i in range(len(date_list) - 1):
-        if date_list[i] + 1 == date_list[i+1]:
-            count += 1
-        elif date_list[i] + 1 == date_list[i]:
-            count = count
-        else:
-            conseq_list.append(count)
-            count = 1
-    conseq_list_filt = list(filter(lambda a: a != 1, conseq_list))
-    return conseq_list_filt
+    # conseq_list = []
+    # count = 1
+    # for i in range(len(date_list) - 1):
+    #     if date_list[i] + 1 == date_list[i+1]:
+    #         count += 1
+    #     elif date_list[i] + 1 == date_list[i]:
+    #         count = count
+    #     else:
+    #         conseq_list.append(count)
+    #         count = 1
+    # conseq_list_filt = list(filter(lambda a: a != 1, conseq_list))
+    # return conseq_list_filt
 
 if __name__ == "__main__":
 
@@ -268,7 +267,7 @@ if __name__ == "__main__":
                     print('CANDIDATE ID: ', cand_id)
                     print('DETECTION DATES & COORDS:')
                     print(df[["dateobs", "ra", "dec"]])
-                    print('-------------------------------')
+                    
                 
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
@@ -280,6 +279,32 @@ if __name__ == "__main__":
                     match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
                     df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
+
+                    # Adding column for average seeing for each night
+                    df_out["av_seeing"] = df_out.apply(lambda row: 1.125 if row["dateobs"] == 220212 else 
+                                                                   1.425 if row["dateobs"] == 220213 else
+                                                                   1.225 if row["dateobs"] == 220214 else
+                                                                    1.15 if row["dateobs"] == 220215 else
+                                                                   1.075 if row["dateobs"] == 220216 else
+                                                                    0.95 if row["dateobs"] == 220217 else
+                                                                     1.3 if row["dateobs"] == 220218 else
+                                                                   0.975 if row["dateobs"] == 220219 else
+                                                                     0.8 if row["dateobs"] == 220220 else
+                                                                     1.1 if row["dateobs"] == 220221 else
+                                                                     1.5 if row["dateobs"] == 220222 else
+                                                                    'NaN', axis=1)
+                                                                
+                    # True/ False for a "good" detection 
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPCITY_DIFF"] < 0.7 and
+                                                                                row["FWHM_IMAGE_DIFF"] < 0.2(row["av_seeing"]/0.26) and
+                                                                                row["SPREAD_MODEL_DIFF"] > -0.2 and
+                                                                                row["SPREAD_MODEL_DIFF"] < 0.2 else
+                                                                                False, axis=1)
+                    
+                    if args.verbose:
+                        print('GOOD DETECTIONS?')
+                        print(df_out[["dateobs","seeing","good_detection"]])
+                        print('-------------------------------')
 
             else:
                 # Listing all empty light curve files, can be checked out later
@@ -296,8 +321,8 @@ if __name__ == "__main__":
             ra_ave = statistics.mean(df["ra"])
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
-            n_conseq_det = conseq_count(df_out["dateobs"])
-            n_good_det = find_good_detections(df_out)
+            # n_conseq_det = conseq_count(df_out["dateobs"])
+            # n_good_det = find_good_detections(df_out)
 
             # Placing data into temp masterlist
             masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
@@ -306,7 +331,7 @@ if __name__ == "__main__":
                                            "RA_AVERAGE": [ra_ave],
                                            "DEC_AVERAGE": [dec_ave],
                                            "N_DETECTIONS": [n_det],
-                                           "N_CONSECUTIVE_DETECTIONS": [n_conseq_det],
+                                        #    "N_CONSECUTIVE_DETECTIONS": [n_conseq_det],
                                         #    "N_GOOD_DETECTIONS": []
                                            "LC_PATH": [f]})
             if args.verbose:
