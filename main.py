@@ -294,8 +294,9 @@ if __name__ == "__main__":
                         print(df_out[["dateobs", "ra", "dec", "av_seeing"]])
 
                     print(df_out)
-                    print(df_out['dateobs'])
-                    print(df_out['MAG_AUTO_DIFF'])
+                    print("PRINTING COLUMNS")
+                    for col in df_out.columns:
+                        print(col)
 
                     # True/ False for a "good" detection 
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
