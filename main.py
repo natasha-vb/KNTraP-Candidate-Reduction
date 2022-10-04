@@ -211,7 +211,6 @@ if __name__ == "__main__":
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=False, verbose=args.verbose)
         
-
         # Read in unforced diff light curve files pathnames 
         if args.verbose:
             print('=========================================================')
@@ -252,7 +251,7 @@ if __name__ == "__main__":
                 det_dates = df["dateobs"].values 
                 for ii, d in enumerate(det_dates):
                     det_dates[ii] = d.replace("-", "")[2:8]
-                df["dateobs"] = det_dates
+                df["dateobs"] = float(det_dates)
                 df = df.sort_values(by="dateobs")
                 
                 # Converting ra and dec to degrees
@@ -268,7 +267,6 @@ if __name__ == "__main__":
                     print('DETECTION DATES & COORDS:')
                     print(df[["dateobs", "ra", "dec"]])
                     
-                
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
                     ra = df["ra"][ii]
