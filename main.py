@@ -292,8 +292,9 @@ if __name__ == "__main__":
                         print('CANDIDATE ID: ', cand_id)
                         print('DETECTION DATES, COORDS & SEEING:')
                         print(df_out[["dateobs", "ra", "dec", "av_seeing"]])
-                    
+
                     print(df_out)
+                    print(df_out['ELLIPTICITY_DIFF'])
 
                     # True/ False for a "good" detection 
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
