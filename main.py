@@ -5,6 +5,7 @@ import glob
 import argparse
 import os
 import re 
+import ipdb 
 from pathlib import Path
 from astropy.table import Table
 from astropy.io import fits
@@ -260,12 +261,6 @@ if __name__ == "__main__":
                                unit=(u.hourangle, u.deg))
                 df["ra"] = coo.ra.degree
                 df["dec"] = coo.dec.degree
-                            
-                if args.verbose:
-                    print('-------------------------------')
-                    print('CANDIDATE ID: ', cand_id)
-                    print('DETECTION DATES & COORDS:')
-                    print(df[["dateobs", "ra", "dec"]])
                     
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
@@ -293,7 +288,15 @@ if __name__ == "__main__":
                                                                      1.5 if row["dateobs"] == 220222 else
                                                                     1.22222, axis=1)
 
-                    print(df_out[["dateobs","av_seeing"]])       
+                    if args.verbose:
+                        print('-------------------------------')
+                        print('CANDIDATE ID: ', cand_id)
+                        print('DETECTION DATES, COORDS & SEEING:')
+                        print(df[["dateobs", "ra", "dec", "av_seeing"]])
+                    
+                    print(df_out)
+                    ipdb.set_trace()
+
                     # True/ False for a "good" detection 
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
                                                                                 row["FWHM_IMAGE_DIFF"] < 0.2*(row["av_seeing"]/0.26) and
