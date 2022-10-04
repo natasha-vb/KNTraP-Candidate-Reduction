@@ -267,7 +267,7 @@ if __name__ == "__main__":
                     print(df[["dateobs", "ra", "dec"]])
                     
                 for ii, d in enumerate(det_dates):
-                    df["dateobs"][ii] = float(df["dateobs"][ii])
+                    df["dateobs"][ii] = float(df["dateobs"][ii]).values
                     date = df["dateobs"][ii]
                     ra = df["ra"][ii]
                     dec = df["dec"][ii]
