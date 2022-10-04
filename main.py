@@ -5,7 +5,6 @@ import glob
 import argparse
 import os
 import re 
-import ipdb 
 from pathlib import Path
 from astropy.table import Table
 from astropy.io import fits
@@ -295,7 +294,6 @@ if __name__ == "__main__":
                         print(df[["dateobs", "ra", "dec", "av_seeing"]])
                     
                     print(df_out)
-                    ipdb.set_trace()
 
                     # True/ False for a "good" detection 
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
