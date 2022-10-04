@@ -268,7 +268,7 @@ if __name__ == "__main__":
                     
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
-                    df["dateobs"][ii] = float(date)
+                    df["dateobs"][ii] = float(date).values
                     ra = df["ra"][ii]
                     dec = df["dec"][ii]
                     filt = df["filt"][ii]
@@ -302,7 +302,7 @@ if __name__ == "__main__":
                     
                     if args.verbose:
                         print('GOOD DETECTIONS?')
-                        print(df_out[["dateobs","seeing","good_detection"]])
+                        print(df_out[["dateobs","av_seeing","good_detection"]])
                         print('-------------------------------')
 
             else:
