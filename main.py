@@ -294,6 +294,7 @@ if __name__ == "__main__":
                         print(df_out[["dateobs", "ra", "dec", "av_seeing"]])
 
                     print(df_out)
+                    print(df_out['dateobs'])
                     print(df_out['MAG_AUTO_DIFF'])
 
                     # True/ False for a "good" detection 
