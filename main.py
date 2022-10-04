@@ -293,7 +293,8 @@ if __name__ == "__main__":
                                                                      1.1 if row["dateobs"] == 220221 else
                                                                      1.5 if row["dateobs"] == 220222 else
                                                                     'NaN', axis=1)
-                                                                
+
+                    print(df_out[["dateobs","av_seeing"]])       
                     # True/ False for a "good" detection 
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
                                                                                 row["FWHM_IMAGE_DIFF"] < 0.2*(row["av_seeing"]/0.26) and
