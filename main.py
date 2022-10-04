@@ -291,7 +291,7 @@ if __name__ == "__main__":
                         print('-------------------------------')
                         print('CANDIDATE ID: ', cand_id)
                         print('DETECTION DATES, COORDS & SEEING:')
-                        print(df[["dateobs", "ra", "dec", "av_seeing"]])
+                        print(df_out[["dateobs", "ra", "dec", "av_seeing"]])
                     
                     print(df_out)
 
