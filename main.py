@@ -284,7 +284,7 @@ if __name__ == "__main__":
                                                                      0.8 if row["dateobs"] == 220220 else
                                                                      1.1 if row["dateobs"] == 220221 else
                                                                      1.5 if row["dateobs"] == 220222 else
-                                                                    1.22222, axis=1) ## ave seeing all nights = 1.147727
+                                                                    1.22222, axis=1) ## ave seeing all nights = 1.1477272727
 
                     if args.verbose:
                         print('-----------------------------------------')
@@ -293,8 +293,8 @@ if __name__ == "__main__":
                         print(df_out[["dateobs", "ra", "dec", "av_seeing"]])
 
                     # True/ False for a "good" detection 
-                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
-                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["av_seeing"]/0.26) and
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1 and
+                                                                                row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.2 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.2 else
                                                                                 False, axis=1)
@@ -320,7 +320,7 @@ if __name__ == "__main__":
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
             # n_conseq_det = conseq_count(df_out["dateobs"])
-            # n_good_det = find_good_detections(df_out)
+            n_good_det = len(df_out[df_out["good_detection"] == 'True'])
 
             # Placing data into temp masterlist
             masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
@@ -330,7 +330,7 @@ if __name__ == "__main__":
                                            "DEC_AVERAGE": [dec_ave],
                                            "N_DETECTIONS": [n_det],
                                         #    "N_CONSECUTIVE_DETECTIONS": [n_conseq_det],
-                                        #    "N_GOOD_DETECTIONS": []
+                                           "N_GOOD_DETECTIONS": [n_good_det],
                                            "LC_PATH": [f]})
             if args.verbose:
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
@@ -344,11 +344,12 @@ if __name__ == "__main__":
         masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv')
 
         if args.verbose:
-            print("MASTERLIST:")
+            print("M A S T E R L I S T :")
             print(masterlist)
             print()
             print("EMPTY LIGHT CURVE FILES:")
             print(empty_lc_files)
+            print('=============================================================================\n')
 
     # Combining all ccd masterlists to make masterlist for field
     masterlist_list = glob.glob(f'{masterlist_outdir}/*')
