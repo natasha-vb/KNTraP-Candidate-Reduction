@@ -69,7 +69,7 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
             print('~~~~~~~~~~~~~~~~~~~~~')
             print('PRINTING DF CAT TEMP:')
             print(df_cattmp)
-            print(df_cattmp['ELLIPTICITY_DIFF'])
+            print(df_cattmp[f'ELLIPTICITY_{column_ending}'])
             print('~~~~~~~~~~~~~~~~~~~~~')
 
         return df_cattmp
