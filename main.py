@@ -263,7 +263,6 @@ if __name__ == "__main__":
                     
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
-                    # df["dateobs"][ii] = float(date)
                     ra = df["ra"][ii]
                     dec = df["dec"][ii]
                     filt = df["filt"][ii]
