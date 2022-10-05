@@ -293,16 +293,16 @@ if __name__ == "__main__":
                                                                     1.22222, axis=1) ## ave seeing all nights = 1.1477272727
 
                     # True/ False for a "good" detection 
-                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1 #and
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 #and
                                                                                 #row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
                                                                                 #row["SPREAD_MODEL_DIFF"] > -0.5 and
                                                                                 #row["SPREAD_MODEL_DIFF"] < 0.5 else
                                                                                 else False, axis=1)
                     
-                    if args.verbose:
-                        print('GOOD DETECTIONS?')
-                        print(df_out[["dateobs","filt","av_seeing","good_detection"]])
-                        print('-----------------------------------------')
+                if args.verbose:
+                    print('GOOD DETECTIONS?')
+                    print(df_out[["dateobs","filt","av_seeing","good_detection"]])
+                    print('-----------------------------------------')
 
             else:
                 # Listing all empty light curve files, can be checked out later
@@ -335,7 +335,8 @@ if __name__ == "__main__":
             if args.verbose:
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
-                print('=============================================================================\n')
+                print('===================================================================\
+                ====================================================\n')
 
             # Putting temp masterlist data into ccd masterlist
             masterlist = masterlist.append(masterlist_tmp)
@@ -345,7 +346,9 @@ if __name__ == "__main__":
         masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv')
 
         if args.verbose:
+            print('=====================')
             print("M A S T E R L I S T :")
+            print('=====================')
             print(masterlist)
             print()
             print("EMPTY LIGHT CURVE FILES:")
