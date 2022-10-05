@@ -10,9 +10,6 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
         match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
         df_cattmp = pd.DataFrame()
 
-        print('MATCH LIST')
-        print(match_list)
-
         df_cattmp["dateobs"] = [f"{date}"]
         df_cattmp["filt"]    = [f"{filt}"]
 
@@ -51,9 +48,6 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
 
             df_cat_matched = df_cat_matched.reset_index(drop=False)
             
-            print('DF_CAT_MATCHED:')
-            print(df_cat_matched)
-
             df_cattmp[f"MAG_AUTO_{column_ending}"]     = df_cat_matched["MAG_AUTO"]
             df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = df_cat_matched["MAGERR_AUTO"]
             df_cattmp[f"X_WORLD_{column_ending}"]      = df_cat_matched["X_WORLD"]
@@ -66,9 +60,5 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
             df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = df_cat_matched["FWHM_IMAGE"]
             df_cattmp[f"SPREAD_MODEL_{column_ending}"] = df_cat_matched["SPREAD_MODEL"]
             df_cattmp[f"FLAGS_{column_ending}"]        = df_cat_matched["FLAGS"]
-
-            print('DF_CATTMP COLUMNS:')
-            for col in df_cattmp.columns:
-                print(col)
         
         return df_cattmp

@@ -251,7 +251,7 @@ if __name__ == "__main__":
                 det_dates = df["dateobs"].values 
                 for ii, d in enumerate(det_dates):
                     det_dates[ii] = d.replace("-", "")[2:8]
-                    # det_dates[ii] = float(det_dates[ii])
+                    det_dates[ii] = int(det_dates[ii])
                 df = df.sort_values(by="dateobs")
                 
                 # Converting ra and dec to degrees
@@ -289,18 +289,13 @@ if __name__ == "__main__":
                                                                      0.8 if row["dateobs"] == 220220 else
                                                                      1.1 if row["dateobs"] == 220221 else
                                                                      1.5 if row["dateobs"] == 220222 else
-                                                                    1.22222, axis=1)
+                                                                    1.22222, axis=1) ## ave seeing all nights = 1.147727
 
                     if args.verbose:
-                        print('-------------------------------')
+                        print('-----------------------------------------')
                         print('CANDIDATE ID: ', cand_id)
-                        print('DETECTION DATES, COORDS & SEEING:')
+                        print('DETECTION DATES, COORDS & AVERAGE SEEING:')
                         print(df_out[["dateobs", "ra", "dec", "av_seeing"]])
-
-                    print(df_out)
-                    print("PRINTING DF_OUT COLUMNS")
-                    for col in df_out.columns:
-                        print(col)
 
                     # True/ False for a "good" detection 
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
@@ -311,7 +306,7 @@ if __name__ == "__main__":
                     
                     if args.verbose:
                         print('GOOD DETECTIONS?')
-                        print(df_out[["dateobs","av_seeing","good_detection"]])
+                        print(df_out[["dateobs","good_detection"]])
                         print('-------------------------------')
 
             else:
@@ -367,7 +362,7 @@ if __name__ == "__main__":
         ml = pd.read_csv(masterlist_list[i])
         masterlist_allccds = masterlist_allccds.append(ml)
 
-    masterlist_allccds_path = (f'{masterlist_outdir}./masterlist_{args.field}_allccds.csv')
+    masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}_allccds.csv')
     masterlist_allccds.to_csv(masterlist_allccds_path)
 
     ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
