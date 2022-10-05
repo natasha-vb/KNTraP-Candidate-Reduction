@@ -299,6 +299,7 @@ if __name__ == "__main__":
                                                                     1.22222, axis=1) ## ave seeing all nights = 1.1477272727
 
                     # True/ False for a "good" detection 
+                    print('DF_OUT ELLIPTICTY:')
                     print(df_out['ELLIPTICITY_DIFF'])
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 #and
                                                                                 #row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
