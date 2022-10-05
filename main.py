@@ -265,7 +265,7 @@ if __name__ == "__main__":
                     print('-----------------------------------------')
                     print('CANDIDATE ID: ', cand_id)
                     print('DETECTION DATES, COORDS:')
-                    print(df_out[["dateobs", "ra", "dec", ]])
+                    print(df[["dateobs", "ra", "dec"]])
 
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
