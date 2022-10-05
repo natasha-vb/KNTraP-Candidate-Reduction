@@ -260,7 +260,13 @@ if __name__ == "__main__":
                                unit=(u.hourangle, u.deg))
                 df["ra"] = coo.ra.degree
                 df["dec"] = coo.dec.degree
-                    
+                
+                if args.verbose:
+                    print('-----------------------------------------')
+                    print('CANDIDATE ID: ', cand_id)
+                    print('DETECTION DATES, COORDS:')
+                    print(df_out[["dateobs", "ra", "dec", ]])
+
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
                     ra = df["ra"][ii]
@@ -286,22 +292,16 @@ if __name__ == "__main__":
                                                                      1.5 if row["dateobs"] == 220222 else
                                                                     1.22222, axis=1) ## ave seeing all nights = 1.1477272727
 
-                    if args.verbose:
-                        print('-----------------------------------------')
-                        print('CANDIDATE ID: ', cand_id)
-                        print('DETECTION DATES, COORDS & AVERAGE SEEING:')
-                        print(df_out[["dateobs", "ra", "dec", "av_seeing"]])
-
                     # True/ False for a "good" detection 
-                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1 and
-                                                                                row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
-                                                                                row["SPREAD_MODEL_DIFF"] > -0.2 and
-                                                                                row["SPREAD_MODEL_DIFF"] < 0.2 else
-                                                                                False, axis=1)
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1 #and
+                                                                                #row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
+                                                                                #row["SPREAD_MODEL_DIFF"] > -0.5 and
+                                                                                #row["SPREAD_MODEL_DIFF"] < 0.5 else
+                                                                                else False, axis=1)
                     
                     if args.verbose:
                         print('GOOD DETECTIONS?')
-                        print(df_out[["dateobs","filt","good_detection"]])
+                        print(df_out[["dateobs","filt","av_seeing","good_detection"]])
                         print('-----------------------------------------')
 
             else:
@@ -335,6 +335,7 @@ if __name__ == "__main__":
             if args.verbose:
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
+                print('=============================================================================\n')
 
             # Putting temp masterlist data into ccd masterlist
             masterlist = masterlist.append(masterlist_tmp)
@@ -349,7 +350,6 @@ if __name__ == "__main__":
             print()
             print("EMPTY LIGHT CURVE FILES:")
             print(empty_lc_files)
-            print('=============================================================================\n')
 
     # Combining all ccd masterlists to make masterlist for field
     masterlist_list = glob.glob(f'{masterlist_outdir}/*')
