@@ -271,6 +271,11 @@ if __name__ == "__main__":
                     # Matching detection coordinates to source in SE catalogs
                     match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
+                    print(match_cat_table)
+                    print("PRINTING MATCH CAT COLUMNS")
+                    for col in match_cat_table.columns:
+                        print(col)
+
                     df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
 
                     # Adding column for average seeing for each night
@@ -294,7 +299,7 @@ if __name__ == "__main__":
                         print(df_out[["dateobs", "ra", "dec", "av_seeing"]])
 
                     print(df_out)
-                    print("PRINTING COLUMNS")
+                    print("PRINTING DF_OUT COLUMNS")
                     for col in df_out.columns:
                         print(col)
 
