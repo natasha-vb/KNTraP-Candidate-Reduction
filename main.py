@@ -275,6 +275,12 @@ if __name__ == "__main__":
 
                     # Matching detection coordinates to source in SE catalogs
                     match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
+                    
+                    print('~~~~~~~~~~~~~~~~~~~~')
+                    print('MATCH CAT TABLE:')
+                    print(match_cat_table)
+                    print(match_cat_table["ELLIPTICITY_DIFF"])
+                    print('~~~~~~~~~~~~~~~~~~~~')
 
                     df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
 

@@ -52,11 +52,6 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
                     print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
 
             df_cat_matched = df_cat_matched.reset_index(drop=False)
-            
-            print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            print('PRINTING DF CAT MATCHED AGAIN:')
-            print(df_cat_matched)
-            print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 
             df_cattmp[f"MAG_AUTO_{column_ending}"]     = df_cat_matched["MAG_AUTO"]
             df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = df_cat_matched["MAGERR_AUTO"]
@@ -74,6 +69,7 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
             print('~~~~~~~~~~~~~~~~~~~~~')
             print('PRINTING DF CAT TEMP:')
             print(df_cattmp)
+            print(df_cattmp['ELLIPTICITY_DIFF'])
             print('~~~~~~~~~~~~~~~~~~~~~')
 
         return df_cattmp
