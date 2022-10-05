@@ -10,6 +10,9 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
         match_list = glob.glob(f'../cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
         df_cattmp = pd.DataFrame()
 
+        print('MATCH LIST')
+        print(match_list)
+
         df_cattmp["dateobs"] = [f"{date}"]
         df_cattmp["filt"]    = [f"{filt}"]
 

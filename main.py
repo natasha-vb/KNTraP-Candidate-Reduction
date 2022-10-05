@@ -268,7 +268,7 @@ if __name__ == "__main__":
                     filt = df["filt"][ii]
 
                     # Matching detection coordinates to source in SE catalogs
-                    match_cat_table = cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
+                    match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
                     print(match_cat_table)
                     print("PRINTING MATCH CAT COLUMNS")
