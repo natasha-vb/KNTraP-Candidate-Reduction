@@ -270,11 +270,6 @@ if __name__ == "__main__":
                     # Matching detection coordinates to source in SE catalogs
                     match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
-                    print(match_cat_table)
-                    print("PRINTING MATCH CAT COLUMNS")
-                    for col in match_cat_table.columns:
-                        print(col)
-
                     df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
 
                     # Adding column for average seeing for each night
@@ -299,15 +294,15 @@ if __name__ == "__main__":
 
                     # True/ False for a "good" detection 
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
-                                                                                row["FWHM_IMAGE_DIFF"] < 0.2*(row["av_seeing"]/0.26) and
+                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["av_seeing"]/0.26) and
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.2 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.2 else
                                                                                 False, axis=1)
                     
                     if args.verbose:
                         print('GOOD DETECTIONS?')
-                        print(df_out[["dateobs","good_detection"]])
-                        print('-------------------------------')
+                        print(df_out[["dateobs","filt","good_detection"]])
+                        print('-----------------------------------------')
 
             else:
                 # Listing all empty light curve files, can be checked out later
