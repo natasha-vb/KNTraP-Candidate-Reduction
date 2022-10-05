@@ -251,7 +251,7 @@ if __name__ == "__main__":
                 det_dates = df["dateobs"].values 
                 for ii, d in enumerate(det_dates):
                     det_dates[ii] = d.replace("-", "")[2:8]
-                    det_dates[ii] = float(det_dates[ii])
+                    # det_dates[ii] = float(det_dates[ii])
                 df = df.sort_values(by="dateobs")
                 
                 # Converting ra and dec to degrees
