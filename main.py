@@ -337,7 +337,7 @@ if __name__ == "__main__":
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
                 print('===================================================================\
-                ====================================================\n')
+====================================================\n')
 
             # Putting temp masterlist data into ccd masterlist
             masterlist = masterlist.append(masterlist_tmp)
