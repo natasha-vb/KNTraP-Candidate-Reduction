@@ -294,7 +294,7 @@ if __name__ == "__main__":
                 empty_lc_files.append(f)
             
             # df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
-            df_out = df.merge(cat_matches, how='inner', on=['dateobs','filt'])
+            df_out = pd.merge(df, cat_matches, how='inner', on=['dateobs','filt'])
 
             print('DF_OUT:')
             print(df_out)
