@@ -285,7 +285,7 @@ if __name__ == "__main__":
                     print(match_cat_table["ELLIPTICITY_DIFF"],'\n')
                     print('CAT MATCHES:')
                     print(cat_matches)
-                    # print(cat_matches["ELLIPTICITY_DIFF"])
+                    print(cat_matches["ELLIPTICITY_DIFF"])
                     print('~~~~~~~~~~~~~~~~~~~~')
 
             else:
@@ -294,6 +294,10 @@ if __name__ == "__main__":
                 empty_lc_files.append(f)
             
             df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
+            print('DF_OUT:')
+            print(df_out)
+            print('DF_OUT ELLIPTICTY:')
+            print(df_out['ELLIPTICITY_DIFF'])
 
             # Adding column for average seeing for each night
             df_out["av_seeing"] = df_out.apply(lambda row: 1.125 if row["dateobs"] == 220212 else 
@@ -310,9 +314,7 @@ if __name__ == "__main__":
                                                             1.22222, axis=1) ## ave seeing all nights = 1.1477272727
 
             # True/ False for a "good" detection 
-            print('DF_OUT ELLIPTICTY:')
-            print(df_out['ELLIPTICITY_DIFF'])
-            
+           
             df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 #and
                                                                         #row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
                                                                         #row["SPREAD_MODEL_DIFF"] > -0.5 and
@@ -351,7 +353,7 @@ if __name__ == "__main__":
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
                 print('===================================================================\
-=============================================================\n')
+==============================================================\n')
 
             # Putting temp masterlist data into ccd masterlist
             masterlist = masterlist.append(masterlist_tmp)
