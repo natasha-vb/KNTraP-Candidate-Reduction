@@ -40,7 +40,7 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
             df_cat_matched = df_cat.iloc[idx[sep_constraint]]
 
             print('~~~~~~~~~~~~~~~~~~~~~~~~~')
-            print('PRINTING DF CAT MATCHED:')
+            print(f'PRINTING DF CAT MATCHED {column_ending}:')
             print(df_cat_matched)
             print('~~~~~~~~~~~~~~~~~~~~~~~~~')
 
