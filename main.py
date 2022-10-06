@@ -279,10 +279,10 @@ if __name__ == "__main__":
 
                     cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
-                    print('~~~~~~~~~~~~~~~~~~~~')
-                    print('MATCH CAT TABLE:')
-                    print(match_cat_table)
-                    print(match_cat_table["ELLIPTICITY_DIFF"],'\n')
+                    # print('~~~~~~~~~~~~~~~~~~~~')
+                    # print('MATCH CAT TABLE:')
+                    # print(match_cat_table)
+                    # print(match_cat_table["ELLIPTICITY_DIFF"],'\n')
                     print('CAT MATCHES:')
                     print(cat_matches)
                     print(cat_matches["ELLIPTICITY_DIFF"])
@@ -296,8 +296,10 @@ if __name__ == "__main__":
             print('DF:')
             print(df)
 
-            df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
+            # df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
             # df_out = pd.merge(df, cat_matches, how='outer', on=['dateobs','filt'])
+            cols = ['dateobs','filt']
+            df_out = df.join(cat_matches.set_index(cols), on=cols)
 
             print('DF_OUT:')
             print(df_out)
