@@ -298,8 +298,9 @@ if __name__ == "__main__":
 
             # df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
             # df_out = pd.merge(df, cat_matches, how='outer', on=['dateobs','filt'])
-            cols = ['dateobs','filt']
-            df_out = df.join(cat_matches.set_index(cols), on=cols)
+            df_out = pd.merge(df,cat_matches, how='left',left_on=['dateobs','filt'], right_on=['dateobs','filt'])
+            # cols = ['dateobs','filt']
+            # df_out = df.join(cat_matches.set_index(cols), on=cols)
 
             print('DF_OUT:')
             print(df_out)
