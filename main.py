@@ -277,7 +277,7 @@ if __name__ == "__main__":
                     # Matching detection coordinates to source in SE catalogs
                     match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
-                    cat_matches = pd.concat([cat_matches,match_cat_table])
+                    cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
                     print('~~~~~~~~~~~~~~~~~~~~')
                     print('MATCH CAT TABLE:')
