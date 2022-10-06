@@ -297,7 +297,7 @@ if __name__ == "__main__":
             print(df)
 
             # df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
-            df_out = pd.merge(df, cat_matches, how='cross', on=['dateobs','filt'])
+            df_out = pd.merge(df, cat_matches, how='outer', on=['dateobs','filt'])
 
             print('DF_OUT:')
             print(df_out)
