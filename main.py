@@ -285,7 +285,7 @@ if __name__ == "__main__":
                     print(match_cat_table["ELLIPTICITY_DIFF"],'\n')
                     print('CAT MATCHES:')
                     print(cat_matches)
-                    print(cat_matches["ELLIPTICITY_DIFF"])
+                    # print(cat_matches["ELLIPTICITY_DIFF"])
                     print('~~~~~~~~~~~~~~~~~~~~')
 
             else:
