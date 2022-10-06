@@ -292,9 +292,12 @@ if __name__ == "__main__":
                 # Listing all empty light curve files, can be checked out later
                 print("LIGHT CURVE FILE IS EMPTY: ", f)
                 empty_lc_files.append(f)
-            
+
+            print('DF:')
+            print(df)
+
             # df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
-            df_out = pd.merge(df, cat_matches, how='inner', on=['dateobs','filt'])
+            df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
 
             print('DF_OUT:')
             print(df_out)
