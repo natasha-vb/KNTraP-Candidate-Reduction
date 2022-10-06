@@ -267,6 +267,7 @@ if __name__ == "__main__":
                     print('DETECTION DATES & COORDS:')
                     print(df[["dateobs", "ra", "dec"]])
 
+                cat_matches = pd.DataFrame()
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
                     ra = df["ra"][ii]
@@ -275,47 +276,53 @@ if __name__ == "__main__":
 
                     # Matching detection coordinates to source in SE catalogs
                     match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
-                    
+
+                    cat_matches.append(match_cat_table)
+
                     print('~~~~~~~~~~~~~~~~~~~~')
                     print('MATCH CAT TABLE:')
                     print(match_cat_table)
-                    print(match_cat_table["ELLIPTICITY_DIFF"])
+                    print(match_cat_table["ELLIPTICITY_DIFF"],'\n')
+                    print('CAT MATCHES:')
+                    print(cat_matches)
+                    print(cat_matches["ELLIPTICITY_DIFF"])
                     print('~~~~~~~~~~~~~~~~~~~~')
-
-                    df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
-
-                    # Adding column for average seeing for each night
-                    df_out["av_seeing"] = df_out.apply(lambda row: 1.125 if row["dateobs"] == 220212 else 
-                                                                   1.425 if row["dateobs"] == 220213 else
-                                                                   1.225 if row["dateobs"] == 220214 else
-                                                                    1.15 if row["dateobs"] == 220215 else
-                                                                   1.075 if row["dateobs"] == 220216 else
-                                                                    0.95 if row["dateobs"] == 220217 else
-                                                                     1.3 if row["dateobs"] == 220218 else
-                                                                   0.975 if row["dateobs"] == 220219 else
-                                                                     0.8 if row["dateobs"] == 220220 else
-                                                                     1.1 if row["dateobs"] == 220221 else
-                                                                     1.5 if row["dateobs"] == 220222 else
-                                                                    1.22222, axis=1) ## ave seeing all nights = 1.1477272727
-
-                    # True/ False for a "good" detection 
-                    print('DF_OUT ELLIPTICTY:')
-                    print(df_out['ELLIPTICITY_DIFF'])
-                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 #and
-                                                                                #row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
-                                                                                #row["SPREAD_MODEL_DIFF"] > -0.5 and
-                                                                                #row["SPREAD_MODEL_DIFF"] < 0.5 else
-                                                                                else False, axis=1)
-                    
-                if args.verbose:
-                    print('GOOD DETECTIONS?')
-                    print(df_out[["dateobs","filt","av_seeing","good_detection"]])
-                    print('-----------------------------------------')
 
             else:
                 # Listing all empty light curve files, can be checked out later
                 print("LIGHT CURVE FILE IS EMPTY: ", f)
                 empty_lc_files.append(f)
+            
+            df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
+
+            # Adding column for average seeing for each night
+            df_out["av_seeing"] = df_out.apply(lambda row: 1.125 if row["dateobs"] == 220212 else 
+                                                            1.425 if row["dateobs"] == 220213 else
+                                                            1.225 if row["dateobs"] == 220214 else
+                                                            1.15 if row["dateobs"] == 220215 else
+                                                            1.075 if row["dateobs"] == 220216 else
+                                                            0.95 if row["dateobs"] == 220217 else
+                                                                1.3 if row["dateobs"] == 220218 else
+                                                            0.975 if row["dateobs"] == 220219 else
+                                                                0.8 if row["dateobs"] == 220220 else
+                                                                1.1 if row["dateobs"] == 220221 else
+                                                                1.5 if row["dateobs"] == 220222 else
+                                                            1.22222, axis=1) ## ave seeing all nights = 1.1477272727
+
+            # True/ False for a "good" detection 
+            print('DF_OUT ELLIPTICTY:')
+            print(df_out['ELLIPTICITY_DIFF'])
+            
+            df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 #and
+                                                                        #row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
+                                                                        #row["SPREAD_MODEL_DIFF"] > -0.5 and
+                                                                        #row["SPREAD_MODEL_DIFF"] < 0.5 else
+                                                                        else False, axis=1)
+
+            if args.verbose:
+                    print('GOOD DETECTIONS?')
+                    print(df_out[["dateobs","filt","av_seeing","good_detection"]])
+                    print('-----------------------------------------')
 
             app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
             df_out.to_csv(f'{lc_outdir}/{app_lc_name}')
@@ -344,7 +351,7 @@ if __name__ == "__main__":
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
                 print('===================================================================\
-====================================================\n')
+=============================================================\n')
 
             # Putting temp masterlist data into ccd masterlist
             masterlist = masterlist.append(masterlist_tmp)
