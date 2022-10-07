@@ -304,7 +304,7 @@ if __name__ == "__main__":
             import ipdb 
             ##### convert df['dateobs'] into string first 
             df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
-            ipdb.set_trace()
+            # ipdb.set_trace()
             # df_out = pd.merge(df, cat_matches, how='outer', on=['dateobs','filt'])
             # df_out = pd.merge(df,cat_matches, how='left',left_on=['dateobs','filt'], right_on=['dateobs','filt'])
             # cols = ['dateobs','filt']
