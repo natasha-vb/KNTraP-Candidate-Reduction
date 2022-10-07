@@ -247,12 +247,13 @@ if __name__ == "__main__":
                 p = re.compile(r'\d+')
                 cand_id = p.findall(f)[-1]
                 
+                import ipdb
                 ####### check ipdb here
                 # Finding detection dates and converting them to YYMMDD format
                 det_dates = df["dateobs"].values 
                 det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values ]
                 df['dateobs'] = det_dates
-                ipbd.set_trace()
+                ipdb.set_trace()
                 # for ii, d in enumerate(det_dates):      
                     # det_dates[ii] = d.replace("-", "")[2:8]
                     # det_dates[ii] = int(det_dates[ii])
