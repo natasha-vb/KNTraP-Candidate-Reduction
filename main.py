@@ -246,12 +246,16 @@ if __name__ == "__main__":
                 # Reading in candidate ID from file name, by finding the last group of digits in string
                 p = re.compile(r'\d+')
                 cand_id = p.findall(f)[-1]
-
+                
+                ####### check ipdb here
                 # Finding detection dates and converting them to YYMMDD format
                 det_dates = df["dateobs"].values 
-                for ii, d in enumerate(det_dates):
-                    det_dates[ii] = d.replace("-", "")[2:8]
-                    det_dates[ii] = int(det_dates[ii])
+                det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values ]
+                df['dateobs'] = det_dates
+                ipbd.set_trace()
+                # for ii, d in enumerate(det_dates):      
+                    # det_dates[ii] = d.replace("-", "")[2:8]
+                    # det_dates[ii] = int(det_dates[ii])
                 df = df.sort_values(by="dateobs")
                 
                 # Converting ra and dec to degrees
@@ -297,6 +301,7 @@ if __name__ == "__main__":
             print(df)
 
             import ipdb 
+            ##### convert df['dateobs'] into string first 
             df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
             ipdb.set_trace()
             # df_out = pd.merge(df, cat_matches, how='outer', on=['dateobs','filt'])
