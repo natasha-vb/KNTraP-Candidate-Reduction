@@ -231,6 +231,7 @@ if __name__ == "__main__":
                 
                 print('DF PRE DATE CONVERSION')
                 print(df['dateobs'])
+
                 # Finding detection dates and converting them to YYMMDD format
                 det_dates = df["dateobs"].values 
                 det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values ]
@@ -265,31 +266,18 @@ if __name__ == "__main__":
 
                     cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
-                    print('CAT MATCHES:')
-                    print(cat_matches)
-                    print(cat_matches["ELLIPTICITY_DIFF"])
-                    print('~~~~~~~~~~~~~~~~~~~~')
-
             else:
                 # Listing all empty light curve files, can be checked out later
                 print("LIGHT CURVE FILE IS EMPTY: ", f)
                 empty_lc_files.append(f)
 
-            print('DF:')
-            print(df)
-
             # Merging light curve (df) with matched SExtractor catalogue data (cat_matches)
             df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
-
-            print('DF_OUT:')
-            print(df_out)
-            print('DF_OUT ELLIPTICTY:')
-            print(df_out['ELLIPTICITY_DIFF'])
 
             # Adding column for average seeing for each night
             dic_dateobs_assig = {'220212':1.125, '220213':1.425, '220214':1.225, '220215':1.15, '220216':1.075, '220217':0.95, 
                                  '220218':1.3, '220219':0.975, '220220':0.8, '220221':1.1, '220222':1.5}
-            df_out.apply(lambda row: dic_dateobs_assig[row.dateobs])
+            df_out["av_seeing"] = df_out.apply(lambda row: dic_dateobs_assig[row.dateobs])
 
             # df_out["av_seeing"] = df_out.apply(lambda row: 1.125 if row["dateobs"] == 220212 else 
             #                                                1.425 if row["dateobs"] == 220213 else
