@@ -279,19 +279,6 @@ if __name__ == "__main__":
                                  '220218':1.3, '220219':0.975, '220220':0.8, '220221':1.1, '220222':1.5}
             df_out["av_seeing"] = df_out.apply(lambda row: dic_dateobs_assig[row.dateobs], axis=1)
 
-            # df_out["av_seeing"] = df_out.apply(lambda row: 1.125 if row["dateobs"] == 220212 else 
-            #                                                1.425 if row["dateobs"] == 220213 else
-            #                                                1.225 if row["dateobs"] == 220214 else
-            #                                                 1.15 if row["dateobs"] == 220215 else
-            #                                                1.075 if row["dateobs"] == 220216 else
-            #                                                 0.95 if row["dateobs"] == 220217 else
-            #                                                  1.3 if row["dateobs"] == 220218 else
-            #                                                0.975 if row["dateobs"] == 220219 else
-            #                                                  0.8 if row["dateobs"] == 220220 else
-            #                                                  1.1 if row["dateobs"] == 220221 else
-            #                                                  1.5 if row["dateobs"] == 220222 else
-            #                                                  1.22222, axis=1) ## ave seeing all nights = 1.1477272727
-
             # True/ False for a "good" detection
             df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 #and
                                                                         #row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
