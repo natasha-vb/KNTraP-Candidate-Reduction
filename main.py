@@ -1,20 +1,21 @@
-from tabnanny import verbose
-import pandas as pd
-import numpy as np
-import glob
 import argparse
+import glob
+import ipdb 
+import numpy as np
 import os
-import re 
+import pandas as pd
 from pathlib import Path
-from astropy.table import Table
-from astropy.io import fits
-import astropy.io.ascii as ascii
-from astropy.coordinates import SkyCoord
-from astropy import units as u
+import re 
 import statistics
 
-from utils import run_sextractor
+from astropy import units as u
+from astropy.coordinates import SkyCoord
+from astropy.io import fits
+import astropy.io.ascii as ascii
+from astropy.table import Table
+
 from utils import cat_match
+from utils import run_sextractor
 
 def read_file(fname):
     try:
@@ -45,25 +46,6 @@ def read_file(fname):
         print("File corrupted or empty", fname)
         df_tmp = pd.DataFrame()
         return df_tmp
-
-# def conseq_count(dates):
-    ###### REPLACE ALL THIS WITH NP.WHERE STUFF
-    # date_list = dates.to_list()
-    # for i, d in enumerate(date_list):
-    #     date_list[i] = int(date_list[i])
-
-    # conseq_list = []
-    # count = 1
-    # for i in range(len(date_list) - 1):
-    #     if date_list[i] + 1 == date_list[i+1]:
-    #         count += 1
-    #     elif date_list[i] + 1 == date_list[i]:
-    #         count = count
-    #     else:
-    #         conseq_list.append(count)
-    #         count = 1
-    # conseq_list_filt = list(filter(lambda a: a != 1, conseq_list))
-    # return conseq_list_filt
 
 if __name__ == "__main__":
 
@@ -247,18 +229,17 @@ if __name__ == "__main__":
                 p = re.compile(r'\d+')
                 cand_id = p.findall(f)[-1]
                 
-                import ipdb
-                ####### check ipdb here
+                print('DF PRE DATE CONVERSION')
+                print(df['dateobs'])
                 # Finding detection dates and converting them to YYMMDD format
                 det_dates = df["dateobs"].values 
                 det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values ]
                 df['dateobs'] = det_dates
-                # ipdb.set_trace()
-                # for ii, d in enumerate(det_dates):      
-                    # det_dates[ii] = d.replace("-", "")[2:8]
-                    # det_dates[ii] = int(det_dates[ii])
                 df = df.sort_values(by="dateobs")
                 
+                print('DF POST DATE CONVERSION')
+                print(df['dateobs'])
+
                 # Converting ra and dec to degrees
                 coo = SkyCoord(df["ra"].astype(str),
                                df["dec"].astype(str),
@@ -284,10 +265,6 @@ if __name__ == "__main__":
 
                     cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
-                    # print('~~~~~~~~~~~~~~~~~~~~')
-                    # print('MATCH CAT TABLE:')
-                    # print(match_cat_table)
-                    # print(match_cat_table["ELLIPTICITY_DIFF"],'\n')
                     print('CAT MATCHES:')
                     print(cat_matches)
                     print(cat_matches["ELLIPTICITY_DIFF"])
@@ -301,14 +278,8 @@ if __name__ == "__main__":
             print('DF:')
             print(df)
 
-            import ipdb 
-            ##### convert df['dateobs'] into string first 
+            # Merging light curve (df) with matched SExtractor catalogue data (cat_matches)
             df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
-            # ipdb.set_trace()
-            # df_out = pd.merge(df, cat_matches, how='outer', on=['dateobs','filt'])
-            # df_out = pd.merge(df,cat_matches, how='left',left_on=['dateobs','filt'], right_on=['dateobs','filt'])
-            # cols = ['dateobs','filt']
-            # df_out = df.join(cat_matches.set_index(cols), on=cols)
 
             print('DF_OUT:')
             print(df_out)
@@ -316,18 +287,22 @@ if __name__ == "__main__":
             print(df_out['ELLIPTICITY_DIFF'])
 
             # Adding column for average seeing for each night
-            df_out["av_seeing"] = df_out.apply(lambda row: 1.125 if row["dateobs"] == 220212 else 
-                                                           1.425 if row["dateobs"] == 220213 else
-                                                           1.225 if row["dateobs"] == 220214 else
-                                                            1.15 if row["dateobs"] == 220215 else
-                                                           1.075 if row["dateobs"] == 220216 else
-                                                            0.95 if row["dateobs"] == 220217 else
-                                                             1.3 if row["dateobs"] == 220218 else
-                                                           0.975 if row["dateobs"] == 220219 else
-                                                             0.8 if row["dateobs"] == 220220 else
-                                                             1.1 if row["dateobs"] == 220221 else
-                                                             1.5 if row["dateobs"] == 220222 else
-                                                             1.22222, axis=1) ## ave seeing all nights = 1.1477272727
+            dic_dateobs_assig = {'220212':1.125, '220213':1.425, '220214':1.225, '220215':1.15, '220216':1.075, '220217':0.95, 
+                                 '220218':1.3, '220219':0.975, '220220':0.8, '220221':1.1, '220222':1.5}
+            df_out.apply(lambda row: dic_dateobs_assig[row.dateobs])
+
+            # df_out["av_seeing"] = df_out.apply(lambda row: 1.125 if row["dateobs"] == 220212 else 
+            #                                                1.425 if row["dateobs"] == 220213 else
+            #                                                1.225 if row["dateobs"] == 220214 else
+            #                                                 1.15 if row["dateobs"] == 220215 else
+            #                                                1.075 if row["dateobs"] == 220216 else
+            #                                                 0.95 if row["dateobs"] == 220217 else
+            #                                                  1.3 if row["dateobs"] == 220218 else
+            #                                                0.975 if row["dateobs"] == 220219 else
+            #                                                  0.8 if row["dateobs"] == 220220 else
+            #                                                  1.1 if row["dateobs"] == 220221 else
+            #                                                  1.5 if row["dateobs"] == 220222 else
+            #                                                  1.22222, axis=1) ## ave seeing all nights = 1.1477272727
 
             # True/ False for a "good" detection
             df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 #and

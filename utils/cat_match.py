@@ -39,11 +39,6 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
 
             df_cat_matched = df_cat.iloc[idx[sep_constraint]]
 
-            # print('~~~~~~~~~~~~~~~~~~~~~~~~~')
-            # print(f'PRINTING DF CAT MATCHED {column_ending}:')
-            # print(df_cat_matched)
-            # print('~~~~~~~~~~~~~~~~~~~~~~~~~')
-
             if df_cat_matched.empty:
                 # Replace empty catalog match dataframe values with NaNs
                 df_cat_matched.replace(r'^\s*$', np.nan, regex=True)
@@ -65,11 +60,5 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
             df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = df_cat_matched["FWHM_IMAGE"]
             df_cattmp[f"SPREAD_MODEL_{column_ending}"] = df_cat_matched["SPREAD_MODEL"]
             df_cattmp[f"FLAGS_{column_ending}"]        = df_cat_matched["FLAGS"]
-
-            # print('~~~~~~~~~~~~~~~~~~~~~')
-            # print('PRINTING DF CAT TEMP:')
-            # print(df_cattmp)
-            # print(df_cattmp[f'ELLIPTICITY_{column_ending}'])
-            # print('~~~~~~~~~~~~~~~~~~~~~')
 
         return df_cattmp
