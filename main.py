@@ -253,7 +253,7 @@ if __name__ == "__main__":
                 det_dates = df["dateobs"].values 
                 det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values ]
                 df['dateobs'] = det_dates
-                ipdb.set_trace()
+                # ipdb.set_trace()
                 # for ii, d in enumerate(det_dates):      
                     # det_dates[ii] = d.replace("-", "")[2:8]
                     # det_dates[ii] = int(det_dates[ii])
