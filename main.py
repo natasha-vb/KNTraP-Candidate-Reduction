@@ -296,7 +296,7 @@ if __name__ == "__main__":
             print('DF:')
             print(df)
 
-            import ipbd 
+            import ipdb 
             df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
             ipdb.set_trace()
             # df_out = pd.merge(df, cat_matches, how='outer', on=['dateobs','filt'])
