@@ -302,7 +302,7 @@ if __name__ == "__main__":
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
             # n_conseq_det = conseq_count(df_out["dateobs"])
-            n_good_det = len(df_out["good_detection"] == 'True')
+            n_good_det = len(df_out[df_out["good_detection"] == True])
 
             # Placing data into temp masterlist
             masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
