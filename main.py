@@ -229,8 +229,8 @@ if __name__ == "__main__":
                 p = re.compile(r'\d+')
                 cand_id = p.findall(f)[-1]
                 
-                print('DF PRE DATE CONVERSION')
-                print(df['dateobs'])
+                # print('DF PRE DATE CONVERSION')
+                # print(df['dateobs'])
 
                 # Finding detection dates and converting them to YYMMDD format
                 det_dates = df["dateobs"].values 
@@ -238,8 +238,8 @@ if __name__ == "__main__":
                 df['dateobs'] = det_dates
                 df = df.sort_values(by="dateobs")
                 
-                print('DF POST DATE CONVERSION')
-                print(df['dateobs'])
+                # print('DF POST DATE CONVERSION')
+                # print(df['dateobs'])
 
                 # Converting ra and dec to degrees
                 coo = SkyCoord(df["ra"].astype(str),
