@@ -1,0 +1,17 @@
+from configparser import NoSectionError
+import pandas as pd 
+import numpy as np
+
+def conseq_count(lcfile):
+    
+    # constructing dataframe of all nights 
+    df = pd.DataFrame({'date':[220212,220213,220214,220215,220216,220217,220218,220219,220220,220221,220222], 
+                       'filt_i':'i', 
+                       'detection_i': False,
+                       'good_i': False,
+                       'filt_g': 'g',
+                       'detection_g': False,
+                       'good_g': False
+                       })
+    
+    
