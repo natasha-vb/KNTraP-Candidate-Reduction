@@ -346,7 +346,7 @@ if __name__ == "__main__":
     ml_file = pd.read_csv(masterlist_allccds_path)
     
     ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
-    ml_xmatch.to_csv(f'{masterlist_allccds_path}/masterlist_{args.field}_allccds_xmatch.csv')
+    ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv')
 
 
 ### MAKE MASTERLIST COMPILING ALL FIELDS?
