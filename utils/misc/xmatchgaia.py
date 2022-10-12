@@ -72,9 +72,9 @@ def xmatch(id, ra, dec, extcatalog, distmaxarcsec):
     data = r.content.decode().split("\n")[1:-1]
     header = r.content.decode().split("\n")[0].split(",")
 
-    h = open('gaia_text.csv', 'w')
-    h.write(r.text)
-    h.close()
+    # h = open('gaia_text.csv', 'w')
+    # h.write(r.text)
+    # h.close()
 
     return data, header
 

@@ -52,9 +52,9 @@ def xmatch(id, ra, dec, distmaxarcsec):
     data = r.content.decode().split("\n")[1:-1]
     header = r.content.decode().split("\n")[0].split(",")
     
-    h = open('simbad_text.csv', 'w')
-    h.write(r.text)
-    h.close()
+    # h = open('simbad_text.csv', 'w')
+    # h.write(r.text)
+    # h.close()
 
     return data, header
 

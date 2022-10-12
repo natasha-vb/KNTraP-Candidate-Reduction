@@ -347,6 +347,9 @@ if __name__ == "__main__":
     
     ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv')
+    
+    print('XMATCHED MASTERLIST COLUMNS:')
+    print(ml_xmatch.columns)
 
 
 ### MAKE MASTERLIST COMPILING ALL FIELDS?
