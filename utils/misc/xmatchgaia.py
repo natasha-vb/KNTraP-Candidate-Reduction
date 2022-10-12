@@ -5,7 +5,6 @@ import csv
 import logging
 import requests
 
-
 def refine_search_gaia(id, ra, dec, id_out, source, ragaia, decgaia, plx, plxerr, gmag, angDist):
     out = []
 

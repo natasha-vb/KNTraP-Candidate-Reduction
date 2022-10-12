@@ -6,9 +6,6 @@ from utils.misc import xmatchsimbad
 from utils.misc import xmatchgaia
 from utils.misc import xmatchps1
 
-from astropy import units as u
-from astropy.coordinates import SkyCoord
-
 def crossmatch(candfile, verbose=False):
 
     # SIMBAD crossmatch
@@ -44,8 +41,10 @@ def crossmatch(candfile, verbose=False):
     candfile["ps1_objID"] = df_ps1["angDist"]
 
     if verbose:
+        field = candfile['FIELD'][0]
+
         print('===================')
-        print('CROSSMATCH RESULTS:')
+        print(f'FIELD {field} CROSSMATCH RESULTS:')
         print('-------------------')
         print('SIMBAD:')
         print(candfile[["CAND_ID","simbad_type","simbad_ctlg","simbad_sptype","simbad_redshift"]])
