@@ -8,7 +8,7 @@ def consecutive_count(lcfile, verbose=False):
     
     # Putting relevant columns from light curve file into temp dataframe
     lc = pd.DataFrame()
-    lc['dateobs'] = lcfile['dateobs']
+    lc['dateobs'] = lcfile['dateobs'].astype(int)
     lc['filt'] = lcfile['filt']
     lc['good'] = lcfile['good_detection']
 
