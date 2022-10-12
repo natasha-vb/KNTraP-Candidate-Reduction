@@ -297,7 +297,7 @@ if __name__ == "__main__":
             ra_ave = statistics.mean(df["ra"])
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
-            # n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
+            n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
             n_good_det = len(df_out[df_out["good_detection"] == True])
 
             # Placing data into temp masterlist
