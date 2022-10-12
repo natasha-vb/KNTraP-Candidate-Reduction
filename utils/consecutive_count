@@ -1,7 +1,7 @@
 import pandas as pd 
 import numpy as np
 
-def conseq_count(lcfile, verbose=False):
+def consecutive_count(lcfile, verbose=False):
     
     # Constructing dataframe of all nights 
     df = pd.DataFrame({'dateobs':[220212,220213,220214,220215,220216,220217,220218,220219,220220,220221,220222]})
