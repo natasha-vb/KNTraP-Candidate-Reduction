@@ -1,4 +1,5 @@
 import argparse
+from dataclasses import field
 import glob
 import ipdb 
 import numpy as np
@@ -16,6 +17,7 @@ from astropy.table import Table
 
 from utils import cat_match
 from utils import conseq_count
+from utils import crossmatch
 from utils import run_sextractor
 
 def read_file(fname):
@@ -296,7 +298,7 @@ if __name__ == "__main__":
             ra_ave = statistics.mean(df["ra"])
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
-            n_conseq_det = conseq_count.conseq_count(df_out, verbose=True)
+            # n_conseq_det = conseq_count.conseq_count(df_out, verbose=True)
             n_good_det = len(df_out[df_out["good_detection"] == True])
 
             # Placing data into temp masterlist
@@ -343,6 +345,9 @@ if __name__ == "__main__":
 
     ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
     ml_file = pd.read_csv(masterlist_allccds_path)
+    
+    ml_xmatch = crossmatch.crossmatch(ml_file, candID = cand_id,verbose=True)
+    ml_xmatch.to_csv(f'{masterlist_allccds_path}/masterlist_{args.field}_allccds_xmatch.csv')
 
 
 ### MAKE MASTERLIST COMPILING ALL FIELDS?
