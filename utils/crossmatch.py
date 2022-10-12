@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd 
 import os
 
-from misc import xmatchsimbad
-from misc import xmatchgaia
-from misc import xmatchps1
+from utils.misc import xmatchsimbad
+from utils.misc import xmatchgaia
+from utils.misc import xmatchps1
 
 from astropy import units as u
 from astropy.coordinates import SkyCoord
