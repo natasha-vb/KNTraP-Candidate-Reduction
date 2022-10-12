@@ -15,6 +15,7 @@ import astropy.io.ascii as ascii
 from astropy.table import Table
 
 from utils import cat_match
+from utils import conseq_count
 from utils import run_sextractor
 
 def read_file(fname):
@@ -228,18 +229,12 @@ if __name__ == "__main__":
                 # Reading in candidate ID from file name, by finding the last group of digits in string
                 p = re.compile(r'\d+')
                 cand_id = p.findall(f)[-1]
-                
-                # print('DF PRE DATE CONVERSION')
-                # print(df['dateobs'])
 
                 # Finding detection dates and converting them to YYMMDD format
                 det_dates = df["dateobs"].values 
                 det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values ]
                 df['dateobs'] = det_dates
                 df = df.sort_values(by="dateobs")
-                
-                # print('DF POST DATE CONVERSION')
-                # print(df['dateobs'])
 
                 # Converting ra and dec to degrees
                 coo = SkyCoord(df["ra"].astype(str),
@@ -301,7 +296,7 @@ if __name__ == "__main__":
             ra_ave = statistics.mean(df["ra"])
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
-            # n_conseq_det = conseq_count(df_out["dateobs"])
+            n_conseq_det = conseq_count.conseq_count(df_out, verbose=True)
             n_good_det = len(df_out[df_out["good_detection"] == True])
 
             # Placing data into temp masterlist
