@@ -23,7 +23,7 @@ def consecutive_count(lcfile, verbose=False):
 
     del dfmerge['filt'], dfmerge['good']
 
-    dfm = dfmerge.groupby(['date']).sum()
+    dfm = dfmerge.groupby(['dateobs']).sum()
 
     if verbose:
         print('Detections over all nights')
