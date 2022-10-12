@@ -40,8 +40,20 @@ def crossmatch(candfile, verbose=False):
                                                       ctlg="vizier:II/349/ps1",
                                                       distmaxarcsec=5)
 
-   
     candfile["ps1_objID"] = df_ps1["ObjectID_PS1"]
-    candfile["ps1_angDist"] = df_ps1["angDist"]
+    candfile["ps1_objID"] = df_ps1["angDist"]
+
+    if verbose:
+        print('===================')
+        print('CROSSMATCH RESULTS:')
+        print('-------------------')
+        print('SIMBAD:')
+        print(candfile[["CAND_ID","simbad_type","simbad_ctlg","simbad_sptype","simbad_redshift"]])
+        print('-------------------')
+        print('GAIA:')
+        print(candfile[["CAND_ID","gaia_DR3_parallax","gaia_DR3_parallaxerr","gaia_sigma"]])
+        print('-------------------')
+        print('PAN_STARRS 1:')
+        print(candfile[["CAND_ID","ps1_objID","ps1_objID"]])
 
     return candfile
