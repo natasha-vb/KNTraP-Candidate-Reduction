@@ -345,7 +345,7 @@ if __name__ == "__main__":
     ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
     ml_file = pd.read_csv(masterlist_allccds_path)
     
-    ml_xmatch = crossmatch.crossmatch(ml_file, candID = cand_id,verbose=True)
+    ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     ml_xmatch.to_csv(f'{masterlist_allccds_path}/masterlist_{args.field}_allccds_xmatch.csv')
 
 

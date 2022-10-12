@@ -23,9 +23,9 @@ def crossmatch(candfile, verbose=False):
 
     # GAIA Crossmatch
     (source_dr3, ragaia_dr3, decgaia_dr3, plx_dr3, plxerr_dr3, gmag_dr3, angdist_dr3) = xmatchgaia.cross_match_gaia( 
-                                                                                        candfile["ID"].to_list(),
-                                                                                        candfile["RAaverage"].to_list(),
-                                                                                        candfile["DECaverage"].to_list(),
+                                                                                        candfile["CAND_ID"].to_list(),
+                                                                                        candfile["RA_AVERAGE"].to_list(),
+                                                                                        candfile["DEC_AVERAGE"].to_list(),
                                                                                         ctlg="vizier:I/355/gaiadr3")
     
     candfile["gaia_DR3_parallax"] = plx_dr3
@@ -34,9 +34,9 @@ def crossmatch(candfile, verbose=False):
                               candfile["gaia_DR3_parallaxerr"][candfile["gaia_DR3_parallaxerr"] != "Unknown"].astype(float))
     
     # Pan-STARRS 1 crossmatch
-    df_ps1 = xmatchps1.cross_match_alerts_raw_generic(candfile["ID"].to_list(),
-                                                      candfile["RAaverage"].to_list(),
-                                                      candfile["DECaverage"].to_list(),
+    df_ps1 = xmatchps1.cross_match_alerts_raw_generic(candfile["CAND_ID"].to_list(),
+                                                      candfile["RA_AVERAGE"].to_list(),
+                                                      candfile["DEC_AVERAGE"].to_list(),
                                                       ctlg="vizier:II/349/ps1",
                                                       distmaxarcsec=5)
 
