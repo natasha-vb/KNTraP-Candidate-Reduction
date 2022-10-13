@@ -317,7 +317,7 @@ if __name__ == "__main__":
 ==============================================================\n')
 
             # Putting temp masterlist data into ccd masterlist
-            masterlist = masterlist.append(masterlist_tmp)
+            masterlist = masterlist.append(masterlist_tmp, sort=False)
             del(masterlist_tmp)
 
         # Saving masterlist to csv 
@@ -337,19 +337,21 @@ if __name__ == "__main__":
     masterlist_allccds = pd.DataFrame()
     for i, m in enumerate(masterlist_list):
         ml = pd.read_csv(masterlist_list[i])
-        masterlist_allccds = masterlist_allccds.append(ml)
+        masterlist_allccds = masterlist_allccds.append(ml,sort=False)
 
     masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}_allccds.csv')
     masterlist_allccds.to_csv(masterlist_allccds_path, index=False)
 
-    ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
+    # Crossmatching candidates with Simbad, Gaia, and Pan-STARRS 1 catalogues
     ml_file = pd.read_csv(masterlist_allccds_path)
     
     ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
-    ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv')
+    ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv', index=False)
     
     print('XMATCHED MASTERLIST COLUMNS:')
     print(ml_xmatch.columns)
 
+    #### SEPARATE CANDIDATES INTO TIERS?? MAKE PRIORITY LIST
 
-### MAKE MASTERLIST COMPILING ALL FIELDS?
+
+### MAKE PRIORITY MASTERLIST COMPILING ALL FIELDS?
