@@ -1,22 +1,23 @@
-# Sections based on KNTraP code by Anais Moller
-
-import pandas as pd
-import numpy as np
-import glob
 import argparse
+import glob
+import ipdb 
+import numpy as np
 import os
-import re 
+import pandas as pd
 from pathlib import Path
-from astropy.table import Table
-from astropy.io import fits
-import astropy.io.ascii as ascii
-from astropy.coordinates import SkyCoord
-from astropy import units as u
+import re 
 import statistics
 
-from utils import run_sextractor
+from astropy import units as u
+from astropy.coordinates import SkyCoord
+from astropy.io import fits
+import astropy.io.ascii as ascii
+from astropy.table import Table
+
 from utils import cat_match
-from utils import find_good_detections
+from utils import consecutive_count
+from utils import crossmatch
+from utils import run_sextractor
 
 def read_file(fname):
     try:
@@ -47,24 +48,6 @@ def read_file(fname):
         print("File corrupted or empty", fname)
         df_tmp = pd.DataFrame()
         return df_tmp
-
-def conseq_count(dates):
-    date_list = dates.to_list()
-    for i, d in enumerate(date_list):
-        date_list[i] = int(date_list[i])
-
-    conseq_list = []
-    count = 1
-    for i in range(len(date_list) - 1):
-        if date_list[i] + 1 == date_list[i+1]:
-            count += 1
-        elif date_list[i] + 1 == date_list[i]:
-            count = count
-        else:
-            conseq_list.append(count)
-            count = 1
-    conseq_list_filt = list(filter(lambda a: a != 1, conseq_list))
-    return conseq_list_filt
 
 if __name__ == "__main__":
 
@@ -212,7 +195,6 @@ if __name__ == "__main__":
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=False, verbose=args.verbose)
         
-
         # Read in unforced diff light curve files pathnames 
         if args.verbose:
             print('=========================================================')
@@ -251,25 +233,24 @@ if __name__ == "__main__":
 
                 # Finding detection dates and converting them to YYMMDD format
                 det_dates = df["dateobs"].values 
-                for ii, d in enumerate(det_dates):
-                    det_dates[ii] = d.replace("-", "")[2:8]
-                df["dateobs"] = det_dates
+                det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values ]
+                df['dateobs'] = det_dates
                 df = df.sort_values(by="dateobs")
-                
+
                 # Converting ra and dec to degrees
                 coo = SkyCoord(df["ra"].astype(str),
                                df["dec"].astype(str),
                                unit=(u.hourangle, u.deg))
                 df["ra"] = coo.ra.degree
                 df["dec"] = coo.dec.degree
-                            
+                
                 if args.verbose:
-                    print('-------------------------------')
+                    print('-----------------------------------------')
                     print('CANDIDATE ID: ', cand_id)
                     print('DETECTION DATES & COORDS:')
                     print(df[["dateobs", "ra", "dec"]])
-                    print('-------------------------------')
-                
+
+                cat_matches = pd.DataFrame()
                 for ii, d in enumerate(det_dates):
                     date = df["dateobs"][ii]
                     ra = df["ra"][ii]
@@ -279,12 +260,32 @@ if __name__ == "__main__":
                     # Matching detection coordinates to source in SE catalogs
                     match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
-                    df_out = pd.merge(df, match_cat_table, how='left', on=['dateobs','filt'])
+                    cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
             else:
                 # Listing all empty light curve files, can be checked out later
                 print("LIGHT CURVE FILE IS EMPTY: ", f)
                 empty_lc_files.append(f)
+
+            # Merging light curve (df) with matched SExtractor catalogue data (cat_matches)
+            df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
+
+            # Adding column for average seeing for each night
+            dic_dateobs_assig = {'220212':1.125, '220213':1.425, '220214':1.225, '220215':1.15, '220216':1.075, '220217':0.95, 
+                                 '220218':1.3, '220219':0.975, '220220':0.8, '220221':1.1, '220222':1.5}
+            df_out["av_seeing"] = df_out.apply(lambda row: dic_dateobs_assig[row.dateobs], axis=1)
+
+            # True/ False for a "good" detection
+            df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 and
+                                                                        row["FWHM_IMAGE_DIFF"] < 10  and      #2*(row["av_seeing"]/0.26)
+                                                                        row["SPREAD_MODEL_DIFF"] > -0.5 and
+                                                                        row["SPREAD_MODEL_DIFF"] < 0.5 else
+                                                                        False, axis=1)
+
+            if args.verbose:
+                    print('GOOD DETECTIONS?')
+                    print(df_out[["dateobs","filt","av_seeing","good_detection"]])
+                    print('-----------------------------------------')
 
             app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
             df_out.to_csv(f'{lc_outdir}/{app_lc_name}')
@@ -296,8 +297,8 @@ if __name__ == "__main__":
             ra_ave = statistics.mean(df["ra"])
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
-            n_conseq_det = conseq_count(df_out["dateobs"])
-            n_good_det = find_good_detections(df_out)
+            n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
+            n_good_det = len(df_out[df_out["good_detection"] == True])
 
             # Placing data into temp masterlist
             masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
@@ -306,22 +307,26 @@ if __name__ == "__main__":
                                            "RA_AVERAGE": [ra_ave],
                                            "DEC_AVERAGE": [dec_ave],
                                            "N_DETECTIONS": [n_det],
-                                           "N_CONSECUTIVE_DETECTIONS": [n_conseq_det],
-                                        #    "N_GOOD_DETECTIONS": []
+                                        #    "N_CONSECUTIVE_DETECTIONS": [n_conseq_det],
+                                           "N_GOOD_DETECTIONS": [n_good_det],
                                            "LC_PATH": [f]})
             if args.verbose:
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
+                print('===================================================================\
+==============================================================\n')
 
             # Putting temp masterlist data into ccd masterlist
             masterlist = masterlist.append(masterlist_tmp)
             del(masterlist_tmp)
 
         # Saving masterlist to csv 
-        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv')
+        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv', index=False)
 
         if args.verbose:
-            print("MASTERLIST:")
+            print('=====================')
+            print("M A S T E R L I S T :")
+            print('=====================')
             print(masterlist)
             print()
             print("EMPTY LIGHT CURVE FILES:")
@@ -334,11 +339,17 @@ if __name__ == "__main__":
         ml = pd.read_csv(masterlist_list[i])
         masterlist_allccds = masterlist_allccds.append(ml)
 
-    masterlist_allccds_path = (f'{masterlist_outdir}./masterlist_{args.field}_allccds.csv')
-    masterlist_allccds.to_csv(masterlist_allccds_path)
+    masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}_allccds.csv')
+    masterlist_allccds.to_csv(masterlist_allccds_path, index=False)
 
     ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
     ml_file = pd.read_csv(masterlist_allccds_path)
+    
+    ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
+    ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv')
+    
+    print('XMATCHED MASTERLIST COLUMNS:')
+    print(ml_xmatch.columns)
 
 
 ### MAKE MASTERLIST COMPILING ALL FIELDS?

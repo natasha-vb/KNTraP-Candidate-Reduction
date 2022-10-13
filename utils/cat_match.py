@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import glob
 import re 
-from astropy.io import fits
 import astropy.io.ascii as ascii
 from astropy.coordinates import SkyCoord
 from astropy import units as u
@@ -48,7 +47,7 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
                     print(f'NO DETECTION MATCH FOUND IN {column_ending} CATALOG:', m)
 
             df_cat_matched = df_cat_matched.reset_index(drop=False)
-            
+
             df_cattmp[f"MAG_AUTO_{column_ending}"]     = df_cat_matched["MAG_AUTO"]
             df_cattmp[f"MAGERR_AUTO_{column_ending}"]  = df_cat_matched["MAGERR_AUTO"]
             df_cattmp[f"X_WORLD_{column_ending}"]      = df_cat_matched["X_WORLD"]
@@ -61,5 +60,5 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
             df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = df_cat_matched["FWHM_IMAGE"]
             df_cattmp[f"SPREAD_MODEL_{column_ending}"] = df_cat_matched["SPREAD_MODEL"]
             df_cattmp[f"FLAGS_{column_ending}"]        = df_cat_matched["FLAGS"]
-        
+
         return df_cattmp
