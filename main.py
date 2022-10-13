@@ -321,7 +321,7 @@ if __name__ == "__main__":
             del(masterlist_tmp)
 
         # Saving masterlist to csv 
-        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv')
+        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv', index=False)
 
         if args.verbose:
             print('=====================')
@@ -336,14 +336,14 @@ if __name__ == "__main__":
     masterlist_list = glob.glob(f'{masterlist_outdir}/*')
     masterlist_allccds = pd.DataFrame()
     for i, m in enumerate(masterlist_list):
-        ml = pd.read_csv(masterlist_list[i], index=False)
+        ml = pd.read_csv(masterlist_list[i])
         masterlist_allccds = masterlist_allccds.append(ml)
 
     masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}_allccds.csv')
-    masterlist_allccds.to_csv(masterlist_allccds_path)
+    masterlist_allccds.to_csv(masterlist_allccds_path, index=False)
 
     ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
-    ml_file = pd.read_csv(masterlist_allccds_path, index=False)
+    ml_file = pd.read_csv(masterlist_allccds_path)
     
     ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv')
