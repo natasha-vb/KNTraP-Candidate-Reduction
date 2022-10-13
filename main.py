@@ -15,7 +15,8 @@ import astropy.io.ascii as ascii
 from astropy.table import Table
 
 from utils import cat_match
-from utils import conseq_count
+from utils import consecutive_count
+from utils import crossmatch
 from utils import run_sextractor
 
 def read_file(fname):
@@ -296,7 +297,7 @@ if __name__ == "__main__":
             ra_ave = statistics.mean(df["ra"])
             dec_ave = statistics.mean(df["dec"])
             n_det = len(df_out.index)
-            n_conseq_det = conseq_count.conseq_count(df_out, verbose=True)
+            n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
             n_good_det = len(df_out[df_out["good_detection"] == True])
 
             # Placing data into temp masterlist
@@ -320,7 +321,7 @@ if __name__ == "__main__":
             del(masterlist_tmp)
 
         # Saving masterlist to csv 
-        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv')
+        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv', index=False)
 
         if args.verbose:
             print('=====================')
@@ -339,10 +340,16 @@ if __name__ == "__main__":
         masterlist_allccds = masterlist_allccds.append(ml)
 
     masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}_allccds.csv')
-    masterlist_allccds.to_csv(masterlist_allccds_path)
+    masterlist_allccds.to_csv(masterlist_allccds_path, index=False)
 
     ### DO CROSSMATCHING FOR MASTERLIST_ALLCCDS 
     ml_file = pd.read_csv(masterlist_allccds_path)
+    
+    ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
+    ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv')
+    
+    print('XMATCHED MASTERLIST COLUMNS:')
+    print(ml_xmatch.columns)
 
 
 ### MAKE MASTERLIST COMPILING ALL FIELDS?

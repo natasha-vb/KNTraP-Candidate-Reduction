@@ -1,14 +1,14 @@
 import pandas as pd 
 import numpy as np
 
-def conseq_count(lcfile, verbose=False):
+def consecutive_count(lcfile, verbose=False):
     
     # Constructing dataframe of all nights 
     df = pd.DataFrame({'dateobs':[220212,220213,220214,220215,220216,220217,220218,220219,220220,220221,220222]})
     
     # Putting relevant columns from light curve file into temp dataframe
     lc = pd.DataFrame()
-    lc['dateobs'] = lcfile['dateobs']
+    lc['dateobs'] = lcfile['dateobs'].astype(int)
     lc['filt'] = lcfile['filt']
     lc['good'] = lcfile['good_detection']
 
@@ -23,7 +23,7 @@ def conseq_count(lcfile, verbose=False):
 
     del dfmerge['filt'], dfmerge['good']
 
-    dfm = dfmerge.groupby(['date']).sum()
+    dfm = dfmerge.groupby(['dateobs']).sum()
 
     if verbose:
         print('Detections over all nights')
