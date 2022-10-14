@@ -41,7 +41,6 @@ def crossmatch(candfile, verbose=False):
     candfile["ps1_objID"] = df_ps1["angDist"]
 
     if verbose:
-
         print('===================')
         print('FIELD CROSSMATCH RESULTS:')
         print('-------------------')

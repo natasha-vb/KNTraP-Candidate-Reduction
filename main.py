@@ -307,8 +307,14 @@ if __name__ == "__main__":
                                            "RA_AVERAGE": [ra_ave],
                                            "DEC_AVERAGE": [dec_ave],
                                            "N_DETECTIONS": [n_det],
-                                        #    "N_CONSECUTIVE_DETECTIONS": [n_conseq_det],
                                            "N_GOOD_DETECTIONS": [n_good_det],
+                                           "N_CONSECUTIVE_DETECTIONS_i": [n_conseq_det]['i'],
+                                           "N_CONSECUTIVE_DETECTIONS_i_1h": [n_conseq_det]['i_1h'],
+                                           "N_CONSECUTIVE_DETECTIONS_g": [n_conseq_det]['g_'],
+                                           "N_CONSECUTIVE_DETECTIONS_g_1h": [n_conseq_det]['g_1h'],
+                                           "N_CONSECUTIVE_DETECTIONS_ig": [n_conseq_det]['ig'],
+                                           "N_CONSECUTIVE_DETECTIONS_ig_1h": [n_conseq_det]['ig_1h'],
+                                           "N_CONSECUTIVE_DETECTIONS_ig_2h": [n_conseq_det]['ig_2h'],
                                            "LC_PATH": [f]})
             if args.verbose:
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
