@@ -119,13 +119,14 @@ def consecutive_count(lcfile, verbose=False):
         if verbose:
             print('Max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
 
-    conseq = pd.DataFrame({'i': max(icountsum),
-                           'i_1h': max(icountsum2),
-                           'g': max(gcountsum),
-                           'g_1h': max(gcountsum2),
-                           'ig': max(igcountsum),
-                           'ig_1h': max(igcountsum2),
-                           'ig_2h': max(igcountsum3)})
+    conseq = pd.DataFrame({'i':     [max(icountsum)],
+                           'i_1h':  [max(icountsum2)],
+                           'g':     [max(gcountsum)],
+                           'g_1h':  [max(gcountsum2)],
+                           'ig':    [max(igcountsum)],
+                           'ig_1h': [max(igcountsum2)],
+                           'ig_2h': [max(igcountsum3)]
+                           })
     if verbose:
         print('CONSECUTIVE COUNTS:')
         print(conseq)
