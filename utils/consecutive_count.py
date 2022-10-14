@@ -107,11 +107,13 @@ def consecutive_count(lcfile, verbose=False):
             x = igcountsum[i] + igcountsum[i+1] + igcountsum[i+2]
             igcountsum3.append(x)
         if verbose:
+            print(igcountsum3)
             print('Max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
 
     elif len(igcountsum)>1:
         igcountsum3 = igcountsum2
         if verbose:
+            print(igcountsum3)
             print('Max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
 
     else:
