@@ -233,7 +233,7 @@ if __name__ == "__main__":
 
                 # Finding detection dates and converting them to YYMMDD format
                 det_dates = df["dateobs"].values 
-                det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values ]
+                det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values]
                 df['dateobs'] = det_dates
                 df = df.sort_values(by="dateobs")
 
@@ -308,13 +308,13 @@ if __name__ == "__main__":
                                            "DEC_AVERAGE": [dec_ave],
                                            "N_DETECTIONS": [n_det],
                                            "N_GOOD_DETECTIONS": [n_good_det],
-                                           "N_CONSECUTIVE_DETECTIONS_i": [n_conseq_det]['i'],
-                                           "N_CONSECUTIVE_DETECTIONS_i_1h": [n_conseq_det]['i_1h'],
-                                           "N_CONSECUTIVE_DETECTIONS_g": [n_conseq_det]['g_'],
-                                           "N_CONSECUTIVE_DETECTIONS_g_1h": [n_conseq_det]['g_1h'],
-                                           "N_CONSECUTIVE_DETECTIONS_ig": [n_conseq_det]['ig'],
-                                           "N_CONSECUTIVE_DETECTIONS_ig_1h": [n_conseq_det]['ig_1h'],
-                                           "N_CONSECUTIVE_DETECTIONS_ig_2h": [n_conseq_det]['ig_2h'],
+                                           "N_CONSECUTIVE_DETECTIONS_i": [[n_conseq_det]['i']],
+                                           "N_CONSECUTIVE_DETECTIONS_i_1h": [[n_conseq_det]['i_1h']],
+                                           "N_CONSECUTIVE_DETECTIONS_g": [[n_conseq_det]['g_']],
+                                           "N_CONSECUTIVE_DETECTIONS_g_1h": [[n_conseq_det]['g_1h']],
+                                           "N_CONSECUTIVE_DETECTIONS_ig": [[n_conseq_det]['ig']],
+                                           "N_CONSECUTIVE_DETECTIONS_ig_1h": [[n_conseq_det]['ig_1h']],
+                                           "N_CONSECUTIVE_DETECTIONS_ig_2h": [[n_conseq_det]['ig_2h']],
                                            "LC_PATH": [f]})
             if args.verbose:
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
