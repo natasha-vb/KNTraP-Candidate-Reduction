@@ -24,7 +24,7 @@ def consecutive_count(lcfile, verbose=False):
     del dfmerge['filt'], dfmerge['good']
 
     dfm = dfmerge.groupby(['dateobs']).sum()
-    dfm['detection_i'] = int(lc['detection_i'])
+    dfm['detection_i'] = int(lc['detection_i'].values)
     dfm['good_i'] = lc['good_i'].astype('int')
     dfm['detection_g'] = lc['detection_g'].astype('int')
     dfm['good_g'] = lc['good_g'].astype('int')
