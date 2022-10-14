@@ -50,11 +50,11 @@ def consecutive_count(lcfile, verbose=False):
             x = icountsum[i] + icountsum[i+1]
             icountsum2.append(x)
         if verbose:
-            print('max number of consecutive i band detections w/ one hole:', max(icountsum2))
+            print('Max number of consecutive i band detections w/ one hole:', max(icountsum2))
     else:
         icountsum2 = icountsum
         if verbose:
-            print('max number of consecutive i band detections w/ one hole:', max(icountsum2))
+            print('Max number of consecutive i band detections w/ one hole:', max(icountsum2))
 
     # Counting consecutive g band detections
     gbanddet = dfm['detection_g']
@@ -64,7 +64,7 @@ def consecutive_count(lcfile, verbose=False):
     gcountsum = [int(np.sum([int(digit) for digit in num])) for num in gcount]
 
     if verbose:
-        print('max number of consecutive g band detections:', max(gcountsum))
+        print('Max number of consecutive g band detections:', max(gcountsum))
 
     # Counting consecutive g band detections with one hole
     gcountsum2 = []
@@ -73,11 +73,11 @@ def consecutive_count(lcfile, verbose=False):
             x = gcountsum[i] + gcountsum[i+1]
             gcountsum2.append(x)
         if verbose:
-            print('max number of consecutive g band detections w/ one hole:', max(gcountsum2))
+            print('Max number of consecutive g band detections w/ one hole:', max(gcountsum2))
     else:
         gcountsum2 = gcountsum
         if verbose:
-            print('max number of consecutive g band detections w/ one hole:', max(gcountsum2))
+            print('Max number of consecutive g band detections w/ one hole:', max(gcountsum2))
 
     # Counting consecutive detections in both i and g bands
     igbandboth = (ibanddet & ibandgood) & (gbanddet & gbandgood)
@@ -85,7 +85,7 @@ def consecutive_count(lcfile, verbose=False):
     igcountsum = [int(np.sum([int(digit) for digit in num])) for num in igcount]
 
     if verbose:
-        print('max number of consecutive g band detections:', max(igcountsum))
+        print('Max number of consecutive g band detections:', max(igcountsum))
 
     # Counting consecutive detections in both i and g bands with one hole
     igcountsum2 = []
@@ -94,11 +94,11 @@ def consecutive_count(lcfile, verbose=False):
             x = igcountsum[i] + igcountsum[i+1]
             igcountsum2.append(x)
         if verbose:
-            print('max number of consecutive i & g band detections w/ one hole:', max(igcountsum2))
+            print('Max number of consecutive i & g band detections w/ one hole:', max(igcountsum2))
     else:
         igcountsum2 = igcountsum
         if verbose:
-            print('max number of consecutive i & g band detections w/ one hole:', max(igcountsum2))
+            print('Max number of consecutive i & g band detections w/ one hole:', max(igcountsum2))
 
     # Counting consecutive detections in both i and g bands with two holes
     igcountsum3 = []
@@ -107,16 +107,18 @@ def consecutive_count(lcfile, verbose=False):
             x = igcountsum[i] + igcountsum[i+1] + igcountsum[i+2]
             igcountsum3.append(x)
         if verbose:
-            print('max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
+            print('Max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
 
     elif len(igcountsum)>1:
         igcountsum3 = igcountsum2
         if verbose:
-            print('max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
+            print('Max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
 
     else:
         igcountsum3 = igcountsum
-        print('max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
+        if verbose:
+            print(igcountsum3)
+            print('Max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
 
     conseq = pd.DataFrame({'i': icountsum,
                            'i_1h': icountsum2,
