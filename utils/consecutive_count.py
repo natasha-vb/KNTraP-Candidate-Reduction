@@ -24,6 +24,10 @@ def consecutive_count(lcfile, verbose=False):
     del dfmerge['filt'], dfmerge['good']
 
     dfm = dfmerge.groupby(['dateobs']).sum()
+    dfm['detection_i'] = lc['detection_i'].astype('int')
+    dfm['good_i'] = lc['good_i'].astype('int')
+    dfm['detection_g'] = lc['detection_g'].astype('int')
+    dfm['good_g'] = lc['good_g'].astype('int')
 
     if verbose:
         print('Detections over all nights')
@@ -113,7 +117,6 @@ def consecutive_count(lcfile, verbose=False):
     else:
         igcountsum3 = igcountsum
         print('max number of consecutive i & g band detections w/ two holes:', max(igcountsum3))
-
 
     conseq = pd.DataFrame({'i': icountsum,
                            'i_1h': icountsum2,
