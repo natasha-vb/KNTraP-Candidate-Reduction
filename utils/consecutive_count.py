@@ -127,8 +127,5 @@ def consecutive_count(lcfile, verbose=False):
                            'ig_1h': [max(igcountsum2)],
                            'ig_2h': [max(igcountsum3)]
                            })
-    if verbose:
-        print('CONSECUTIVE COUNTS:')
-        print(conseq)
-    
+
     return conseq
