@@ -317,6 +317,7 @@ if __name__ == "__main__":
                                            "N_CONSECUTIVE_DETECTIONS_ig_2h": n_conseq_det['ig_2h'],
                                            "LC_PATH": [f]})
             if args.verbose:
+                print('')
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
                 print('===================================================================\
