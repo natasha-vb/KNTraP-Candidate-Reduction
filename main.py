@@ -288,7 +288,7 @@ if __name__ == "__main__":
                     print('-----------------------------------------')
 
             app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
-            df_out.to_csv(f'{lc_outdir}/{app_lc_name}')
+            df_out.to_csv(f'{lc_outdir}/{app_lc_name}',index=False)
 
             if args.verbose:
                 print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
@@ -320,7 +320,7 @@ if __name__ == "__main__":
                 print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                 print(masterlist_tmp)
                 print('===================================================================\
-==============================================================\n')
+=========================================================================\n')
 
             # Putting temp masterlist data into ccd masterlist
             masterlist = masterlist.append(masterlist_tmp, sort=False)
