@@ -41,15 +41,15 @@ def crossmatch(candfile, verbose=False):
     candfile["ps1_objID"] = df_ps1["angDist"]
 
     if verbose:
-        print('===================')
+        print('=========================')
         print('FIELD CROSSMATCH RESULTS:')
-        print('-------------------')
+        print('------------------------------------------------------------------')
         print('SIMBAD:')
         print(candfile[["CAND_ID","simbad_type","simbad_ctlg","simbad_sptype","simbad_redshift"]])
-        print('-------------------')
+        print('---------------------------------------------------------------')
         print('GAIA:')
         print(candfile[["CAND_ID","gaia_DR3_parallax","gaia_DR3_parallaxerr","gaia_sigma"]])
-        print('-------------------')
+        print('--------------------------------')
         print('PAN_STARRS 1:')
         print(candfile[["CAND_ID","ps1_objID","ps1_objID"]])
 
