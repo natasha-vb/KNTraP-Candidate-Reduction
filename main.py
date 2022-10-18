@@ -344,7 +344,7 @@ if __name__ == "__main__":
             print(empty_lc_files)
 
     # Combining all ccd masterlists to make masterlist for field
-    masterlist_list = glob.glob(f'{masterlist_outdir}/*')
+    masterlist_list = glob.glob(f'{masterlist_outdir}/*.csv')
     masterlist_allccds = pd.DataFrame()
     for i, m in enumerate(masterlist_list):
         ml = pd.read_csv(masterlist_list[i])
