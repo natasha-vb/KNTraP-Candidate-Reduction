@@ -358,17 +358,14 @@ if __name__ == "__main__":
     
     ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv', index=False)
-    
-    if args.verbose:
-        print('XMATCHED MASTERLIST COLUMNS:')
-        print(ml_xmatch.columns)
 
-    #### SEPARATE CANDIDATES INTO TIERS?? MAKE PRIORITY LIST
-    t1_cands = ml_xmatch(lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 2) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 2))
+    # Separating top tier candidates into a list
+    t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 2) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 2)]
     t1_cands.to_csv(f'{priority_outdir}/tier1_candidates.csv', index=False)
 
     if args.verbose:
-        print('TOP CANDIDATES:')
+        top_cand_num = len(t1_cands)
+        print(f'TOP {top_cand_num} CANDIDATES in field {args.field}:')
         print(t1_cands[['CAND_ID','RA_AVERAGE','DEC_AVERAGE','N_CONSECUTIVE_DETECTIONS_i', 'N_CONSECUTIVE_DETECTIONS_g']])
 
 
