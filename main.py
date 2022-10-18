@@ -208,6 +208,10 @@ if __name__ == "__main__":
         masterlist_outdir = (f'./masterlist/{args.field}')
         if not os.path.exists(masterlist_outdir):
             os.makedirs(masterlist_outdir)
+        
+        priority_outdir = (f'./masterlist/{args.field}/priority')
+        if not os.path.exists(priority_outdir):
+            os.makedirs(priority_outdir)
 
         difflc_files = glob.glob(f'../../web/web/sniff/{args.field}_tmpl/{ccd}/*/*.unforced.difflc.txt')        
 
@@ -355,10 +359,18 @@ if __name__ == "__main__":
     ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_allccds_xmatch.csv', index=False)
     
-    print('XMATCHED MASTERLIST COLUMNS:')
-    print(ml_xmatch.columns)
+    if args.verbose:
+        print('XMATCHED MASTERLIST COLUMNS:')
+        print(ml_xmatch.columns)
 
     #### SEPARATE CANDIDATES INTO TIERS?? MAKE PRIORITY LIST
+    t1_cands = ml_xmatch(lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 2) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 2))
+    t1_cands.to_csv(f'{priority_outdir}/tier1_candidates.csv', index=False)
+
+    if args.verbose:
+        print('TOP CANDIDATES:')
+        print(t1_cands[['CAND_ID','RA_AVERAGE','DEC_AVERAGE','N_CONSECUTIVE_DETECTIONS_i', 'N_CONSECUTIVE_DETECTIONS_g']])
+
 
 
 ### MAKE PRIORITY MASTERLIST COMPILING ALL FIELDS?
