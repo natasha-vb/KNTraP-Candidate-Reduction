@@ -1,6 +1,6 @@
 import argparse
 import glob
-# import ipdb 
+import ipdb 
 import numpy as np
 import os
 import pandas as pd
@@ -204,6 +204,10 @@ if __name__ == "__main__":
         lc_outdir = (f"./lc_files/{args.field}/{ccd}")
         if not os.path.exists(lc_outdir):
             os.makedirs(lc_outdir)
+        
+        logs_outdir = (f'./logs/')
+        if not os.path.exists(logs_outdir):
+            os.makedirs(logs_outdir)
 
         masterlist_outdir = (f'./masterlist/{args.field}')
         if not os.path.exists(masterlist_outdir):
@@ -226,45 +230,50 @@ if __name__ == "__main__":
         
         masterlist = pd.DataFrame()
         empty_lc_files = []
+        unread_lc_files = []
 
         for f in difflc_files:
             if len(f) > 1:
                 df = read_file(f)
 
-                # Reading in candidate ID from file name, by finding the last group of digits in string
-                p = re.compile(r'\d+')
-                cand_id = p.findall(f)[-1]
+                if len(df) > 1: 
+                    # Reading in candidate ID from file name, by finding the last group of digits in string
+                    p = re.compile(r'\d+')
+                    cand_id = p.findall(f)[-1]
 
-                # Finding detection dates and converting them to YYMMDD format
-                det_dates = df["dateobs"].values 
-                det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values]
-                df['dateobs'] = det_dates
-                df = df.sort_values(by="dateobs")
+                    # Finding detection dates and converting them to YYMMDD format
+                    det_dates = df["dateobs"].values 
+                    det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values]
+                    df['dateobs'] = det_dates
+                    df = df.sort_values(by="dateobs")
 
-                # Converting ra and dec to degrees
-                coo = SkyCoord(df["ra"].astype(str),
-                               df["dec"].astype(str),
-                               unit=(u.hourangle, u.deg))
-                df["ra"] = coo.ra.degree
-                df["dec"] = coo.dec.degree
-                
-                if args.verbose:
-                    print('-----------------------------------------')
-                    print('CANDIDATE ID: ', cand_id)
-                    print('DETECTION DATES & COORDS:')
-                    print(df[["dateobs", "ra", "dec"]])
+                    # Converting ra and dec to degrees
+                    coo = SkyCoord(df["ra"].astype(str),
+                                df["dec"].astype(str),
+                                unit=(u.hourangle, u.deg))
+                    df["ra"] = coo.ra.degree
+                    df["dec"] = coo.dec.degree
+                    
+                    if args.verbose:
+                        print('-----------------------------------------')
+                        print('CANDIDATE ID: ', cand_id)
+                        print('DETECTION DATES & COORDS:')
+                        print(df[["dateobs", "ra", "dec"]])
 
-                cat_matches = pd.DataFrame()
-                for ii, d in enumerate(det_dates):
-                    date = df["dateobs"][ii]
-                    ra = df["ra"][ii]
-                    dec = df["dec"][ii]
-                    filt = df["filt"][ii]
+                    cat_matches = pd.DataFrame()
+                    for ii, d in enumerate(det_dates):
+                        date = df["dateobs"][ii]
+                        ra = df["ra"][ii]
+                        dec = df["dec"][ii]
+                        filt = df["filt"][ii]
 
-                    # Matching detection coordinates to source in SE catalogs
-                    match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
+                        # Matching detection coordinates to source in SE catalogs
+                        match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
-                    cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
+                        cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
+                else:
+                    print("FILE CANNOT BE READ:", f)
+                    unread_lc_files.append(f)
 
             else:
                 # Listing all empty light curve files, can be checked out later
@@ -333,6 +342,10 @@ if __name__ == "__main__":
 
         # Saving masterlist to csv 
         masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv', index=False)
+
+        # Saving empty and unreadable light curves to csv
+        empty_lc_files.to_csv(f'{logs_outdir}/{args.field}/empty_lc_files_{args.field}_{ccd}.csv',index=False)
+        unread_lc_files.to_csv(f'{logs_outdir}/{args.field}/unread_lc_files_{args.field}_{ccd}.csv', index=False)
 
         if args.verbose:
             print('=====================')
