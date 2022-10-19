@@ -326,7 +326,7 @@ if __name__ == "__main__":
                         print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
                         print(masterlist_tmp)
                         print('===================================================================\
-    =========================================================================\n')
+=========================================================================\n')
 
                     # Putting temp masterlist data into ccd masterlist
                     masterlist = masterlist.append(masterlist_tmp, sort=False)
@@ -380,11 +380,9 @@ if __name__ == "__main__":
     if args.verbose:
         top_cand_num = len(t1_cands)
         print('')
-        print('====================================')
+        print('================================')
         print(f'TOP {top_cand_num} CANDIDATES IN FIELD {args.field}:')
-        print('====================================')
+        print('================================')
         print(t1_cands[['CAND_ID','RA_AVERAGE','DEC_AVERAGE','N_CONSECUTIVE_DETECTIONS_i', 'N_CONSECUTIVE_DETECTIONS_g']])
-
-
 
 ### MAKE PRIORITY MASTERLIST COMPILING ALL FIELDS?
