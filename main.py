@@ -236,100 +236,101 @@ if __name__ == "__main__":
             if len(f) > 1:
                 df = read_file(f)
 
-                # Reading in candidate ID from file name, by finding the last group of digits in string
-                p = re.compile(r'\d+')
-                cand_id = p.findall(f)[-1]
+                if len(df) > 1:
+                    # Reading in candidate ID from file name, by finding the last group of digits in string
+                    p = re.compile(r'\d+')
+                    cand_id = p.findall(f)[-1]
 
-                # Finding detection dates and converting them to YYMMDD format
-                det_dates = df["dateobs"].values 
-                det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values]
-                df['dateobs'] = det_dates
-                df = df.sort_values(by="dateobs")
+                    # Finding detection dates and converting them to YYMMDD format
+                    det_dates = df["dateobs"].values 
+                    det_dates = [f"{d.replace('-','')[2:8]}" for d in df["dateobs"].values]
+                    df['dateobs'] = det_dates
+                    df = df.sort_values(by="dateobs")
 
-                # Converting ra and dec to degrees
-                coo = SkyCoord(df["ra"].astype(str),
-                            df["dec"].astype(str),
-                            unit=(u.hourangle, u.deg))
-                df["ra"] = coo.ra.degree
-                df["dec"] = coo.dec.degree
-                
-                if args.verbose:
-                    print('-----------------------------------------')
-                    print('CANDIDATE ID: ', cand_id)
-                    print('DETECTION DATES & COORDS:')
-                    print(df[["dateobs", "ra", "dec"]])
-
-                cat_matches = pd.DataFrame()
-                for ii, d in enumerate(det_dates):
-                    date = df["dateobs"][ii]
-                    ra = df["ra"][ii]
-                    dec = df["dec"][ii]
-                    filt = df["filt"][ii]
-
-                    # Matching detection coordinates to source in SE catalogs
-                    match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
-
-                    cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
-
-                # Merging light curve (df) with matched SExtractor catalogue data (cat_matches)
-                df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
-
-                # Adding column for average seeing for each night
-                dic_dateobs_assig = {'220212':1.125, '220213':1.425, '220214':1.225, '220215':1.15, '220216':1.075, '220217':0.95, 
-                                    '220218':1.3, '220219':0.975, '220220':0.8, '220221':1.1, '220222':1.5}
-                df_out["av_seeing"] = df_out.apply(lambda row: dic_dateobs_assig[row.dateobs], axis=1)
-
-                # True/ False for a "good" detection
-                df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 and
-                                                                            row["FWHM_IMAGE_DIFF"] < 2*(row["av_seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel 
-                                                                            row["SPREAD_MODEL_DIFF"] > -0.5 and
-                                                                            row["SPREAD_MODEL_DIFF"] < 0.5 else
-                                                                            False, axis=1)
-
-                if args.verbose:
-                        print('GOOD DETECTIONS?')
-                        print(df_out[["dateobs","filt","av_seeing","good_detection"]])
+                    # Converting ra and dec to degrees
+                    coo = SkyCoord(df["ra"].astype(str),
+                                df["dec"].astype(str),
+                                unit=(u.hourangle, u.deg))
+                    df["ra"] = coo.ra.degree
+                    df["dec"] = coo.dec.degree
+                    
+                    if args.verbose:
                         print('-----------------------------------------')
+                        print('CANDIDATE ID: ', cand_id)
+                        print('DETECTION DATES & COORDS:')
+                        print(df[["dateobs", "ra", "dec"]])
 
-                app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
-                df_out.to_csv(f'{lc_outdir}/{app_lc_name}',index=False)
+                    cat_matches = pd.DataFrame()
+                    for ii, d in enumerate(det_dates):
+                        date = df["dateobs"][ii]
+                        ra = df["ra"][ii]
+                        dec = df["dec"][ii]
+                        filt = df["filt"][ii]
 
-                if args.verbose:
-                    print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
+                        # Matching detection coordinates to source in SE catalogs
+                        match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
 
-                # Calculating masterlist data 
-                ra_ave = statistics.mean(df["ra"])
-                dec_ave = statistics.mean(df["dec"])
-                n_det = len(df_out.index)
-                n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
-                n_good_det = len(df_out[df_out["good_detection"] == True])
+                        cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
-                # Placing data into temp masterlist
-                masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
-                                            "FIELD": [args.field],
-                                            "CCD": [ccd],
-                                            "RA_AVERAGE": [ra_ave],
-                                            "DEC_AVERAGE": [dec_ave],
-                                            "N_DETECTIONS": [n_det],
-                                            "N_GOOD_DETECTIONS": [n_good_det],
-                                            "N_CONSECUTIVE_DETECTIONS_i": n_conseq_det['i'],
-                                            "N_CONSECUTIVE_DETECTIONS_i_1h": n_conseq_det['i_1h'],
-                                            "N_CONSECUTIVE_DETECTIONS_g": n_conseq_det['g'],
-                                            "N_CONSECUTIVE_DETECTIONS_g_1h": n_conseq_det['g_1h'],
-                                            "N_CONSECUTIVE_DETECTIONS_ig": n_conseq_det['ig'],
-                                            "N_CONSECUTIVE_DETECTIONS_ig_1h": n_conseq_det['ig_1h'],
-                                            "N_CONSECUTIVE_DETECTIONS_ig_2h": n_conseq_det['ig_2h'],
-                                            "LC_PATH": [f]})
-                if args.verbose:
-                    print('')
-                    print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
-                    print(masterlist_tmp)
-                    print('===================================================================\
+                    # Merging light curve (df) with matched SExtractor catalogue data (cat_matches)
+                    df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
+
+                    # Adding column for average seeing for each night
+                    dic_dateobs_assig = {'220212':1.125, '220213':1.425, '220214':1.225, '220215':1.15, '220216':1.075, '220217':0.95, 
+                                        '220218':1.3, '220219':0.975, '220220':0.8, '220221':1.1, '220222':1.5}
+                    df_out["av_seeing"] = df_out.apply(lambda row: dic_dateobs_assig[row.dateobs], axis=1)
+
+                    # True/ False for a "good" detection
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 and
+                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["av_seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel 
+                                                                                row["SPREAD_MODEL_DIFF"] > -0.5 and
+                                                                                row["SPREAD_MODEL_DIFF"] < 0.5 else
+                                                                                False, axis=1)
+
+                    if args.verbose:
+                            print('GOOD DETECTIONS?')
+                            print(df_out[["dateobs","filt","av_seeing","good_detection"]])
+                            print('-----------------------------------------')
+
+                    app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
+                    df_out.to_csv(f'{lc_outdir}/{app_lc_name}',index=False)
+
+                    if args.verbose:
+                        print(f"APPENDED LIGHT CURVE FILE SAVED AS: {lc_outdir}/{app_lc_name}\n")
+
+                    # Calculating masterlist data 
+                    ra_ave = statistics.mean(df["ra"])
+                    dec_ave = statistics.mean(df["dec"])
+                    n_det = len(df_out.index)
+                    n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
+                    n_good_det = len(df_out[df_out["good_detection"] == True])
+
+                    # Placing data into temp masterlist
+                    masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
+                                                "FIELD": [args.field],
+                                                "CCD": [ccd],
+                                                "RA_AVERAGE": [ra_ave],
+                                                "DEC_AVERAGE": [dec_ave],
+                                                "N_DETECTIONS": [n_det],
+                                                "N_GOOD_DETECTIONS": [n_good_det],
+                                                "N_CONSECUTIVE_DETECTIONS_i": n_conseq_det['i'],
+                                                "N_CONSECUTIVE_DETECTIONS_i_1h": n_conseq_det['i_1h'],
+                                                "N_CONSECUTIVE_DETECTIONS_g": n_conseq_det['g'],
+                                                "N_CONSECUTIVE_DETECTIONS_g_1h": n_conseq_det['g_1h'],
+                                                "N_CONSECUTIVE_DETECTIONS_ig": n_conseq_det['ig'],
+                                                "N_CONSECUTIVE_DETECTIONS_ig_1h": n_conseq_det['ig_1h'],
+                                                "N_CONSECUTIVE_DETECTIONS_ig_2h": n_conseq_det['ig_2h'],
+                                                "LC_PATH": [f]})
+                    if args.verbose:
+                        print('')
+                        print(f'CANDIDATE {cand_id} MASTERLIST METADATA:')
+                        print(masterlist_tmp)
+                        print('===================================================================\
     =========================================================================\n')
 
-                # Putting temp masterlist data into ccd masterlist
-                masterlist = masterlist.append(masterlist_tmp, sort=False)
-                del(masterlist_tmp)
+                    # Putting temp masterlist data into ccd masterlist
+                    masterlist = masterlist.append(masterlist_tmp, sort=False)
+                    del(masterlist_tmp)
 
             else:
                 # Listing all empty light curve files, can be checked out later
