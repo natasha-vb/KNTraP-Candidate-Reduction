@@ -205,7 +205,7 @@ if __name__ == "__main__":
         if not os.path.exists(lc_outdir):
             os.makedirs(lc_outdir)
         
-        logs_outdir = (f'./logs/')
+        logs_outdir = (f'./logs')
         if not os.path.exists(logs_outdir):
             os.makedirs(logs_outdir)
 
@@ -346,7 +346,7 @@ if __name__ == "__main__":
         # Saving empty and unreadable light curves to csv
         empty_lc_df = pd.DataFrame(empty_lc_files, columns=['filename'])
         empty_lc_df.to_csv(f'{logs_outdir}/{args.field}/empty_lc_files_{args.field}_{ccd}.csv',index=False)
-        
+
         unread_lc_df = pd.DataFrame(unread_lc_files, columns=['filename'])
         unread_lc_df.to_csv(f'{logs_outdir}/{args.field}/unread_lc_files_{args.field}_{ccd}.csv', index=False)
 
