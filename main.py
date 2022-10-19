@@ -344,8 +344,11 @@ if __name__ == "__main__":
         masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv', index=False)
 
         # Saving empty and unreadable light curves to csv
-        empty_lc_files.to_csv(f'{logs_outdir}/{args.field}/empty_lc_files_{args.field}_{ccd}.csv',index=False)
-        unread_lc_files.to_csv(f'{logs_outdir}/{args.field}/unread_lc_files_{args.field}_{ccd}.csv', index=False)
+        empty_lc_df = pd.DataFrame(empty_lc_files, columns=['filename'])
+        empty_lc_df.to_csv(f'{logs_outdir}/{args.field}/empty_lc_files_{args.field}_{ccd}.csv',index=False)
+        
+        unread_lc_df = pd.DataFrame(unread_lc_files, columns=['filename'])
+        unread_lc_df.to_csv(f'{logs_outdir}/{args.field}/unread_lc_files_{args.field}_{ccd}.csv', index=False)
 
         if args.verbose:
             print('=====================')
