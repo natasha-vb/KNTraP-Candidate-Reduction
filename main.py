@@ -281,10 +281,10 @@ if __name__ == "__main__":
                     df_out["av_seeing"] = df_out.apply(lambda row: dic_dateobs_assig[row.dateobs], axis=1)
 
                     # True/ False for a "good" detection
-                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 1.0 and
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.8 and
                                                                                 row["FWHM_IMAGE_DIFF"] < 2*(row["av_seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel 
-                                                                                row["SPREAD_MODEL_DIFF"] > -0.5 and
-                                                                                row["SPREAD_MODEL_DIFF"] < 0.5 else
+                                                                                row["SPREAD_MODEL_DIFF"] > -0.4 and
+                                                                                row["SPREAD_MODEL_DIFF"] < 0.4 else
                                                                                 False, axis=1)
 
                     if args.verbose:
@@ -375,14 +375,14 @@ if __name__ == "__main__":
     # Separating top tier candidates into a list
     t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 2) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 2)]
     t1_cands.reset_index()
-    t1_cands.to_csv(f'{priority_outdir}/tier1_candidates_{args.field}_{ccd}.csv', index=False)
+    t1_cands.to_csv(f'{priority_outdir}/tier1_candidates_{args.field}.csv', index=False)
 
     if args.verbose:
         top_cand_num = len(t1_cands)
         print('')
-        print('================================')
+        print('=================================')
         print(f'TOP {top_cand_num} CANDIDATES IN FIELD {args.field}:')
-        print('================================')
-        print(t1_cands[['CAND_ID','RA_AVERAGE','DEC_AVERAGE','N_CONSECUTIVE_DETECTIONS_i', 'N_CONSECUTIVE_DETECTIONS_g']])
+        print('=================================')
+        print(t1_cands[['CAND_ID','CCD','RA_AVERAGE','DEC_AVERAGE','N_CONSECUTIVE_DETECTIONS_i', 'N_CONSECUTIVE_DETECTIONS_g']])
 
 ### MAKE PRIORITY MASTERLIST COMPILING ALL FIELDS?
