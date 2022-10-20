@@ -277,6 +277,7 @@ if __name__ == "__main__":
                     df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
 
                     # Adding column for average seeing for each night
+                    ########################## TAKE SEEING FROM QCINV FILE INSTEAD FOR ACCURACY ######################################
                     dic_dateobs_assig = {'220212':1.125, '220213':1.425, '220214':1.225, '220215':1.15, '220216':1.075, '220217':0.95, 
                                         '220218':1.3, '220219':0.975, '220220':0.8, '220221':1.1, '220222':1.5}
                     df_out["av_seeing"] = df_out.apply(lambda row: dic_dateobs_assig[row.dateobs], axis=1)
@@ -339,14 +340,14 @@ if __name__ == "__main__":
                 empty_lc_files.append(f)
 
         # Saving masterlist to csv 
-        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_{ccd}.csv', index=False)
+        masterlist.to_csv(f'{masterlist_outdir}/masterlist_{args.field}_ccd{ccd}.csv', index=False) 
 
         # Saving empty and unreadable light curves to csv
         empty_lc_df = pd.DataFrame(empty_lc_files, columns=['filename'])
-        empty_lc_df.to_csv(f'{logs_outdir}/empty_lc_files_{args.field}_{ccd}.csv',index=False)
+        empty_lc_df.to_csv(f'{logs_outdir}/empty_lc_files_{args.field}_ccd{ccd}.csv',index=False)
 
         unread_lc_df = pd.DataFrame(unread_lc_files, columns=['filename'])
-        unread_lc_df.to_csv(f'{logs_outdir}/unread_lc_files_{args.field}_{ccd}.csv', index=False)
+        unread_lc_df.to_csv(f'{logs_outdir}/unread_lc_files_{args.field}_ccd{ccd}.csv', index=False)
 
         if args.verbose:
             print('=====================')
@@ -373,9 +374,10 @@ if __name__ == "__main__":
     ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)
 
+#################################################################  CAN RUN IN SEPARATE SCRIPT. LOOP OVER DIFFERENT CRITERIA AND PRINT OUT HOW MANY CANDIDATES ARE FOUND PER CCD & PER FIELD
     # Separating top tier candidates into a list
-    t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 2) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 2)]
-    t1_cands.reset_index()
+    t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 3) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 3)] ### + ig >= 2
+    t1_cands = t1_cands.reset_index()
     t1_cands.to_csv(f'{priority_outdir}/tier1_candidates_{args.field}.csv', index=False)
 
     if args.verbose:
