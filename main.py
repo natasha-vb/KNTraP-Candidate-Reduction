@@ -7,6 +7,7 @@ import pandas as pd
 from pathlib import Path
 import re 
 import statistics
+import time
 
 from astropy import units as u
 from astropy.coordinates import SkyCoord
@@ -155,13 +156,14 @@ if __name__ == "__main__":
         if args.verbose:
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
         
-        ############### time module (time.time) to check which parts are taking the longest ############
+        
         if not args.skip_se:
             # Run SE on science image
             if args.verbose:
                 print('=========================================')
                 print('RUNNING SOURCE EXTRACTOR ON SCIENCE IMAGE')
                 print('=========================================')
+            start_time = time.time()
             catending = f'{ccd}.sci'
             _,_ = run_sextractor.run_sextractor(sci_list, sextractor_loc=sextractor_loc,
                                                     psfex_loc=psfex_loc, savecats_dir=savecats_dir, 
@@ -169,12 +171,18 @@ if __name__ == "__main__":
                                                     fwhm=fwhm, detect_minarea=detect_minarea,
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=False, verbose=args.verbose)
-            
+            if args.verbose:
+                print('')
+                print('-------------------------------------------------------------------------')
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON SCI IMAGE: %s seconds' % time.time() - start_time)
+                print('-------------------------------------------------------------------------')
+
             # Run SE on difference image
             if args.verbose:
                 print('============================================')
                 print('RUNNING SOURCE EXTRACTOR ON DIFFERENCE IMAGE')
                 print('============================================')
+            start_time = time.time()
             catending = f'{ccd}.diff'
             _,_ = run_sextractor.run_sextractor(diff_list, sextractor_loc=sextractor_loc, 
                                                     psfex_loc=psfex_loc, savecats_dir=savecats_dir,
@@ -182,12 +190,18 @@ if __name__ == "__main__":
                                                     fwhm=fwhm, detect_minarea=detect_minarea, 
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=True, verbose=args.verbose)
+            if args.verbose:
+                print('')
+                print('-------------------------------------------------------------------------')
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON DIFF IMAGE: %s seconds' % time.time() - start_time)
+                print('-------------------------------------------------------------------------')
 
             # Run SE on template image
             if args.verbose:
                 print('==========================================')
                 print('RUNNING SOURCE EXTRACTOR ON TEMPLATE IMAGE')
                 print('==========================================')
+            start_time = time.time()
             catending = f'{ccd}.tmpl'
             _,_ = run_sextractor.run_sextractor(tmpl_list, sextractor_loc=sextractor_loc, 
                                                     psfex_loc=psfex_loc, savecats_dir=savecats_dir,
@@ -195,7 +209,12 @@ if __name__ == "__main__":
                                                     fwhm=fwhm, detect_minarea=detect_minarea, 
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=False, verbose=args.verbose)
-        
+            if args.verbose:
+                print('')
+                print('-------------------------------------------------------------------------')
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON TMPL IMAGE: %s seconds' % time.time() - start_time)
+                print('-------------------------------------------------------------------------')
+
         # Read in unforced diff light curve files pathnames 
         if args.verbose:
             print('=========================================================')
@@ -376,7 +395,8 @@ if __name__ == "__main__":
 
 #################################################################  CAN RUN IN SEPARATE SCRIPT. LOOP OVER DIFFERENT CRITERIA AND PRINT OUT HOW MANY CANDIDATES ARE FOUND PER CCD & PER FIELD
     # Separating top tier candidates into a list
-    t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 3) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 3)] ### + ig >= 2
+    t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 3) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 3) |
+                                           (ml_xmatch.N_CONSECUTIVE_DETECTIONS_ig >= 2)] 
     t1_cands = t1_cands.reset_index()
     t1_cands.to_csv(f'{priority_outdir}/tier1_candidates_{args.field}.csv', index=False)
 
