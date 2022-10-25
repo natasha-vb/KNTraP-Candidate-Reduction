@@ -46,7 +46,7 @@ def grab_seeing(lcfile, field, ccd):
         
         df_seeing = df_seeing.append([{'dateobs': date, 
                                        'filt': filter,
-                                       'seeing': int(seeing)}])
+                                       'seeing': float(seeing)}])
 
         print('===========================================================')
 
