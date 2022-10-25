@@ -304,7 +304,7 @@ if __name__ == "__main__":
                     
                     # True/ False for a "good" detection
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
-                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["av_seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel 
+                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel 
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.2 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.2 else
                                                                                 False, axis=1)
