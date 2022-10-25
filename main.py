@@ -19,6 +19,7 @@ from utils import cat_match
 from utils import consecutive_count
 from utils import crossmatch
 from utils import run_sextractor
+from utils import grab_seeing
 
 def read_file(fname):
     try:
@@ -289,28 +290,27 @@ if __name__ == "__main__":
 
                         # Matching detection coordinates to source in SE catalogs
                         match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
-
                         cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
                     # Merging light curve (df) with matched SExtractor catalogue data (cat_matches)
                     df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
 
-                    # Adding column for average seeing for each night
-                    ########################## TAKE SEEING FROM QCINV FILE INSTEAD FOR ACCURACY ######################################
-                    dic_dateobs_assig = {'220212':1.125, '220213':1.425, '220214':1.225, '220215':1.15, '220216':1.075, '220217':0.95, 
-                                        '220218':1.3, '220219':0.975, '220220':0.8, '220221':1.1, '220222':1.5}
-                    df_out["av_seeing"] = df_out.apply(lambda row: dic_dateobs_assig[row.dateobs], axis=1)
+                    # Adding column for seeing for each night
+                    df_seeing = grab_seeing.grab_seeing(df,args.field,ccd)
+                    df_out = pd.merge(df_out,df_seeing, how='left', on=['dateobs', 'filt'])
 
+                    print('DF_OUT W/ SEEING')
+                    print(df_out[['dateobs','filt','seeing']])
+                    
                     # True/ False for a "good" detection
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
                                                                                 row["FWHM_IMAGE_DIFF"] < 2*(row["av_seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel 
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.2 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.2 else
                                                                                 False, axis=1)
-
                     if args.verbose:
                             print('GOOD DETECTIONS?')
-                            print(df_out[["dateobs","filt","av_seeing","good_detection"]])
+                            print(df_out[["dateobs","filt","seeing","good_detection"]])
                             print('-----------------------------------------')
 
                     app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
