@@ -14,10 +14,6 @@ def grab_seeing(lcfile, field, ccd):
         date_int = int(date)
         date_adj = (date_int + 20000000) - 1 
         obslog = glob.glob(f'./observinglogs/{date_adj}.qcinv')
-        
-        print(' ')
-        print('===========================================================')
-        print('QCINV FILE:',obslog)
 
         # Skip the empty rows at top of the DataFrame
         if date_adj == 20220221:
@@ -27,28 +23,20 @@ def grab_seeing(lcfile, field, ccd):
         
         df_obslog.columns = ['#expid', 'ra', 'dec', 'ut', 'filt', 'time', 'secz', 'psf', 'sky', 'cloud', 'teff', 'Object']
 
-        print(df_obslog)
-
         df_obslog_field = df_obslog[df_obslog['Object'] == field]
-        print(df_obslog_field)
         df_obslog_seeing = df_obslog_field['psf'][df_obslog_field['filt'] == filter]
-        print(df_obslog_seeing)
 
         if len(df_obslog_seeing) > 1:
             # sum up all the seeing values and average them
             df_obslog_sum = sum(df_obslog_seeing)
             df_obslog_ave = df_obslog_sum/len(df_obslog_sum)
             seeing = df_obslog_ave
-            print('seeing =', seeing)
         else:
             seeing = df_obslog_seeing.iloc[0]
-            print('seeing =', seeing)
         
         df_seeing = df_seeing.append([{'dateobs': date, 
                                        'filt': filter,
                                        'seeing': float(seeing)}])
-
-        print('===========================================================')
 
     return df_seeing
 
