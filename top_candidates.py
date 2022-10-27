@@ -337,9 +337,8 @@ if __name__ == "__main__":
 
             else:
                 for m in mcut_list:
-                    ipdb.set_trace()
                     m_df = pd.read_csv(m, sep=',', comment='#', skipinitialspace=True) # read comments as '#' <-- double check this    skiprows=[0,1,2,3,4,5,6,7,8,9,10]
-                    
+                    ipdb.set_trace()
 
                     if len(m_df) > 1:
                         m_ccd = m_df[m_df['CCD'] == ccd]
