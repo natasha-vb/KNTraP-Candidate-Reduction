@@ -57,7 +57,6 @@ if __name__ == "__main__":
             mcut_i = mcut_i.reset_index()   
             mcut_i_len = len(mcut_i)
 
-            ############# put '#' in front of each line to make them comments
             text = """\ 
             # -------------------
             #SELECTION CRITERIA:
@@ -89,16 +88,16 @@ if __name__ == "__main__":
             mcut_g_len = len(mcut_g)
 
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN G BAND >= %s 
-
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            #-------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN G BAND >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_g_len)
 
             with open(f'{priority_outdir}/g_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -119,16 +118,16 @@ if __name__ == "__main__":
             mcut_i_1h_len = len(mcut_i_1h)
 
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN I BAND WITH ONE HOLE >= %s 
-
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            #-------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN I BAND WITH ONE HOLE >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_i_1h_len)
 
             with open(f'{priority_outdir}/i_1h_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -149,16 +148,16 @@ if __name__ == "__main__":
             mcut_g_1h_len = len(mcut_g_1h)
 
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= %s 
-
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            #-------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_g_1h_len)
 
             with open(f'{priority_outdir}/g_1h_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -179,16 +178,16 @@ if __name__ == "__main__":
             mcut_i_g_len = len(mcut_i_g)
 
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN I BAND OR G BAND >= %s 
-
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            #-------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN I BAND OR G BAND >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_i_g_len)
 
             with open(f'{priority_outdir}/i_g_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -209,16 +208,16 @@ if __name__ == "__main__":
             mcut_i_g_1h_len = len(mcut_i_g_1h)
 
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN I BAND OR G BAND WITH ONE HOLE >= %s 
-
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            #-------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN I BAND OR G BAND WITH ONE HOLE >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_i_g_1h_len)
 
             with open(f'{priority_outdir}/i_g_1h_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -239,16 +238,16 @@ if __name__ == "__main__":
             mcut_ig_len = len(mcut_ig)
 
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN BOTH I AND G BANDS >= %s 
-
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            #-------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN BOTH I AND G BANDS >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_ig_len)
 
             with open(f'{priority_outdir}/ig_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -269,16 +268,16 @@ if __name__ == "__main__":
             mcut_ig_1h_len = len(mcut_ig_1h)
 
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN BOTH I AND G BANDS WITH ONE HOLE >= %s 
-
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            #-------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN BOTH I AND G BANDS WITH ONE HOLE >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s 
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_ig_1h_len)
 
             with open(f'{priority_outdir}/ig_1h_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -299,16 +298,16 @@ if __name__ == "__main__":
             mcut_ig_2h_len = len(mcut_ig_2h)
 
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN BOTH I AND G BANDS WITH TWO HOLES >= %s 
-
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            #-------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN BOTH I AND G BANDS WITH TWO HOLES >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_i_len)
 
             with open(f'{priority_outdir}/ig_2h_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -338,10 +337,9 @@ if __name__ == "__main__":
 
             else:
                 for m in mcut_list:
-                    m_df = pd.read_csv(m, sep=',', skiprows=[0,1,2,3,4,5,6,7,8,9,10], skipinitialspace=True) # read comments as '#' <-- double check this
+                    m_df = pd.read_csv(m, sep=',', comment='#' , skipinitialspace=True) # read comments as '#' <-- double check this    skiprows=[0,1,2,3,4,5,6,7,8,9,10]
 
                     if len(m_df) > 1:
-                        # ipdb.set_trace()
                         m_ccd = m_df[m_df['CCD'] == ccd]
                         m_ccd_len = len(m_ccd)
 
@@ -375,15 +373,25 @@ if __name__ == "__main__":
                         if _1h:
                             hole = ' with one hole '
                             p_num = re.compile(r'\d')
-                            num = p_num.findall(m)[1]
+                            num = p_num.findall(m)
+                            num1 = p_num.findall(m)[1]
+                            print('num:', num)
+                            print('num index 1:', num1)
                         elif _2h:
                             hole = ' with two holes '
                             p_num = re.compile(r'\d')
-                            num = p_num.findall(m)[1]
+                            num = p_num.findall(m)
+                            num1 = p_num.findall(m)[1]
+                            print('num:', num)
+                            print('num index 1:', num1)
                         else:
                             hole = ' '
-                            p_num = re.compile(r'\d')
-                            num = p_num.findall(m)[0]
+                            p_num = re.compile(r'\d') # probably not working need to look at this closer
+                            num = p_num.findall(m)
+                            num0 = p_num.findall(m)[0]
+                            print('num:', num)
+                            print('num index 0:', num0)
+
 
                         print(f'> {num} consecutive {band} detections{hole}: {m_ccd_len} ')
 
