@@ -3,6 +3,7 @@ import glob
 import os
 import pandas as pd
 import re
+import ipdb
 
 
 if __name__ == "__main__":
@@ -55,17 +56,18 @@ if __name__ == "__main__":
             mcut_i = mcut_i.reset_index()   
             mcut_i_len = len(mcut_i)
 
+            ############# put '#' in front of each line to make them comments
             text = """\ 
-            -------------------
-            SELECTION CRITERIA:
-            -------------------
-            ELLIPTICITY %s
-            FWHM %s
-            SPREAD MODEL %s
-            CONSECUTIVE DETECTIONS IN I BAND >= %s 
-            
-            --- NUMBER OF CANDIDATES FOUND: %s
-
+            # -------------------
+            #SELECTION CRITERIA:
+            #-------------------
+            #ELLIPTICITY %s
+            #FWHM %s
+            #SPREAD MODEL %s
+            #CONSECUTIVE DETECTIONS IN I BAND >= %s 
+            #
+            #--- NUMBER OF CANDIDATES FOUND: %s
+            #
             {}""" % (ellipticity, fwhm, spread_model,i, mcut_i_len)
 
             with open(f'{priority_outdir}/i_atleast{i}consec_{field}.csv', 'w') as fp:
@@ -335,9 +337,10 @@ if __name__ == "__main__":
 
             else:
                 for m in mcut_list:
-                    m_df = pd.read_csv(m, sep=',', skiprows=[1,2,3,4,5,6,7,8,9,10])
+                    m_df = pd.read_csv(m, sep=',', skiprows=[1,2,3,4,5,6,7,8,9,10]) # read comments as '#' <-- double check this
 
                     if len(m_df) > 1:
+                        ipdb.set_trace()
                         m_ccd = m_df[m_df['CCD'] == ccd]
                         m_ccd_len = len(m_ccd)
 
