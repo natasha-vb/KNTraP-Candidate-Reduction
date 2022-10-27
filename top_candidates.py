@@ -72,13 +72,13 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_i.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN I BAND >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_i_len}')
-                print(' ')
 
             ########################################################################
             mcut_g = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_g >= i]
@@ -102,13 +102,13 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_g.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN G BAND >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
-                print(f'{mcut_g_len}')
-                print(' ')
+                print(f'{mcut_g_len}')                
 
             ########################################################################
             mcut_i_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_i_1h >= i]
@@ -132,13 +132,13 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_i_1h.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN I BAND WITH ONE HOLE >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}')
-                print(f'{mcut_i_1h_len}')
-                print(' ')
+                print(f'{mcut_i_1h_len}')                
 
             ########################################################################
             mcut_g_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= i]
@@ -162,13 +162,13 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_g_1h.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
-                print(f'{mcut_g_1h_len}')
-                print(' ')
+                print(f'{mcut_g_1h_len}')                
 
             ########################################################################
             mcut_i_g = mlist[lambda mlist: (mlist.N_CONSECUTIVE_DETECTIONS_i >= i) | (mlist.N_CONSECUTIVE_DETECTIONS_g >= i)]
@@ -192,13 +192,13 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_i_g.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN I BAND OR G BAND >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
-                print(f'{mcut_i_g_len}')
-                print(' ')
+                print(f'{mcut_i_g_len}')                
 
             ########################################################################
             mcut_i_g_1h = mlist[lambda mlist: (mlist.N_CONSECUTIVE_DETECTIONS_i_1h >= i) | (mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= i)]
@@ -222,14 +222,14 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_i_g_1h.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN I BAND OR G BAND WITH ONE HOLE >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_i_g_1h_len}')
-                print(' ')
-
+                
             ########################################################################
             mcut_ig = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_ig >= i]
             mcut_ig = mcut_ig.reset_index()
@@ -252,13 +252,13 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_ig.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN BOTH I AND G BANDS >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
-                print(f'{mcut_ig_len}')
-                print(' ')
+                print(f'{mcut_ig_len}')                
 
             ########################################################################
             mcut_ig_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_ig_1h >= i]
@@ -282,13 +282,13 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_ig_1h.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN IN BOTH I AND G BANDS WITH ONE HOLE >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}')
-                print(f'{mcut_ig_1h_len}')
-                print(' ')
+                print(f'{mcut_ig_1h_len}')                
 
             ########################################################################
             mcut_ig_2h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_ig_2h >= i]
@@ -312,13 +312,14 @@ if __name__ == "__main__":
                 fp.write(text.format(mcut_ig_2h.to_csv(index=False)))
 
             if args.verbose:
+                print(' ')
                 print('-------------------------------------------------')
                 print('CRITERIA:')
                 print(f'NUMBER OF CONSECUTIVE DETECTIONS IN BOTH I AND G BANDS WITH TWO HOLES >= {i}')
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_ig_2h_len}')
-                print(' ')
+                
         
         # Count number of candidates in each reduced masterlist for each CCD
         ccds = range(1,63,1)
