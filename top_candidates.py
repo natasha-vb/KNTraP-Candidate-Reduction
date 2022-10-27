@@ -1,5 +1,4 @@
 import argparse
-from bdb import set_trace
 import glob
 from operator import truediv
 import os
