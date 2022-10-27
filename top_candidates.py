@@ -337,49 +337,54 @@ if __name__ == "__main__":
                 for m in mcut_list:
                     m_df = pd.read_csv(m, sep=',', skiprows=[1,2,3,4,5,6,7,8,9,10])
 
-                    m_ccd = m_df[m_df['CCD'] == ccd]
-                    m_ccd_len = len(m_ccd)
+                    if len(m_df) > 1:
+                        m_ccd = m_df[m_df['CCD'] == ccd]
+                        m_ccd_len = len(m_ccd)
 
-                    p_ig = re.compile("ig_")
-                    ig = p_ig.search(m)
-                    
-                    p_i_g = re.compile("i_g_")
-                    i_g = p_i_g.search(m)
+                        p_ig = re.compile("ig_")
+                        ig = p_ig.search(m)
+                        
+                        p_i_g = re.compile("i_g_")
+                        i_g = p_i_g.search(m)
 
-                    p_i = re.compile("i_")
-                    i_ = p_i.search(m)
+                        p_i = re.compile("i_")
+                        i_ = p_i.search(m)
 
-                    p_g = re.compile("g_")
-                    g_ = p_g.search(m)
+                        p_g = re.compile("g_")
+                        g_ = p_g.search(m)
 
-                    p_1h = re.compile("_1h")
-                    _1h = p_1h.search(m)
+                        p_1h = re.compile("_1h")
+                        _1h = p_1h.search(m)
 
-                    p_2h = re.compile("_2h")
-                    _2h = p_2h.search(m)
+                        p_2h = re.compile("_2h")
+                        _2h = p_2h.search(m)
 
-                    if ig:
-                        band = 'i and g band'
-                    elif i_g:
-                        band = 'i or g band'
-                    elif i_:
-                        band = 'i band'
-                    elif g_:
-                        band = 'g band'
-                    
-                    if _1h:
-                        hole = ' with one hole '
-                        p_num = re.compile(r'\d')
-                        num = p_num.findall(m)[1]
-                    elif _2h:
-                        hole = ' with two holes '
-                        p_num = re.compile(r'\d')
-                        num = p_num.findall(m)[1]
+                        if ig:
+                            band = 'i and g band'
+                        elif i_g:
+                            band = 'i or g band'
+                        elif i_:
+                            band = 'i band'
+                        elif g_:
+                            band = 'g band'
+                        
+                        if _1h:
+                            hole = ' with one hole '
+                            p_num = re.compile(r'\d')
+                            num = p_num.findall(m)[1]
+                        elif _2h:
+                            hole = ' with two holes '
+                            p_num = re.compile(r'\d')
+                            num = p_num.findall(m)[1]
+                        else:
+                            hole = ' '
+                            p_num = re.compile(r'\d')
+                            num = p_num.findall(m)[0]
+
+                        print(f'> {num} consecutive {band} detections{hole}: {m_ccd_len} ')
+
                     else:
-                        hole = ' '
-                        p_num = re.compile(r'\d')
-                        num = p_num.findall(m)[0]
-
-                    print(f'> {num} consecutive {band} detections{hole}: {m_ccd_len} ')
-                
+                        if args.verbose:
+                            print('No candidates found in masterlist:', m)
+                    
             print('----------------------------------------------------------------------------------------')
