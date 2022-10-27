@@ -324,23 +324,59 @@ for m in masterlists_field:
     ccds = range(1,63,1)
     for ccd in ccds:
         mcut_list = glob.glob(f'{priority_outdir}/*consec_{field}.csv')
-        
-        for m in mcut_list:
-            m_ccd = m[m['CCD'] == ccd]
-            m_ccd_len = len(m_ccd)
 
-            p_ig = re.compile("ig_")
-            ig = p_ig.search(m)
-            
-            p_1h = re.compile("_1h")
-            _1h = 
-            if ig:
+        print('----------------------------------------------------------------------------------------')
+        print(f'NUMBER OF CANDIDATES FOR THE FOLLOWING SELECTION CRITERIA IN FIELD {field} CCD {ccd}:')
+
+        if len(mcut_list) == 0:
+            if args.verbose:
+                print(f'CCD {ccd} masterlist not found')
+
+        else:
+            for m in mcut_list:
+                m_ccd = m[m['CCD'] == ccd]
+                m_ccd_len = len(m_ccd)
+
+                p_ig = re.compile("ig_")
+                ig = p_ig.search(m)
+                
+                p_i_g = re.compile("i_g_")
+                i_g = p_i_g.search(m)
+
+                p_i = re.compile("i_")
+                i_ = p_i.search(m)
+
+                p_g = re.compile("g_")
+                g_ = p_g.search(m)
+
+                p_1h = re.compile("_1h")
+                _1h = p_1h.search(m)
+
+                p_2h = re.compile("_2h")
+                _2h = p_2h.search(m)
+
+                if ig:
+                    band = 'i and g band'
+                elif i_g:
+                    band = 'i or g band'
+                elif i_:
+                    band = 'i band'
+                elif g_:
+                    band = 'g band'
                 
                 if _1h:
+                    hole = ' with one hole '
+                    p_num = re.compile(r'\d')
+                    num = p_num.findall(m)[1]
+                elif _2h:
+                    hole = ' with two holes '
+                    p_num = re.compile(r'\d')
+                    num = p_num.findall(m)[1]
+                else:
+                    hole = ' '
+                    p_num = re.compile(r'\d')
+                    num = p_num.findall(m)[0]
 
-
-
-            print('----------------------------------------------------------------------------------------')
-            print(f'NUMBER OF CANDIDATES FOR THE FOLLOWING SELECTION CRITERIA IN FIELD {field} CCD {ccd}:')
-            print()
-            print('----------------------------------------------------------------------------------------')
+                print(f'> {num} consecutive {band} detections{hole}: {m_ccd_len} ')
+            
+        print('----------------------------------------------------------------------------------------')
