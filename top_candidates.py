@@ -376,26 +376,26 @@ if __name__ == "__main__":
                             hole = ' with one hole '
                             p_num = re.compile(r'\d')
                             num = p_num.findall(m)
-                            num1 = p_num.findall(m)[1]
+                            num1 = p_num.findall(m)[2]
                             print('num:', num)
-                            print('num index 1:', num1)
+                            print('num index 2:', num1)
                         elif _2h:
                             hole = ' with two holes '
-                            p_num = re.compile(r'\d')
+                            p_num = re.compile(r'\d+')
                             num = p_num.findall(m)
-                            num1 = p_num.findall(m)[1]
+                            num1 = p_num.findall(m)[2]
                             print('num:', num)
-                            print('num index 1:', num1)
+                            print('num index 2:', num1)
                         else:
                             hole = ' '
                             p_num = re.compile(r'\d') # probably not working need to look at this closer
                             num = p_num.findall(m)
-                            num0 = p_num.findall(m)[0]
+                            num1 = p_num.findall(m)[1]
                             print('num:', num)
-                            print('num index 0:', num0)
+                            print('num index 1:', num1)
 
 
-                        print(f'> {num} consecutive {band} detections{hole}: {m_ccd_len} ')
+                        print(f'> {num1} consecutive {band} detections{hole}: {m_ccd_len} ')
 
                     else:
                         if args.verbose:
