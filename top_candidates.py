@@ -375,27 +375,18 @@ if __name__ == "__main__":
                         if _1h:
                             hole = ' with one hole '
                             p_num = re.compile(r'\d+')
-                            num = p_num.findall(m)
-                            num1 = p_num.findall(m)[2]
-                            print('num:', num)
-                            print('num index 2:', num1)
+                            num = p_num.findall(m)[2]
+                        
                         elif _2h:
                             hole = ' with two holes '
                             p_num = re.compile(r'\d+')
-                            num = p_num.findall(m)
-                            num1 = p_num.findall(m)[2]
-                            print('num:', num)
-                            print('num index 2:', num1)
+                            num = p_num.findall(m)[2]
                         else:
                             hole = ' '
                             p_num = re.compile(r'\d+') # probably not working need to look at this closer
-                            num = p_num.findall(m)
-                            num1 = p_num.findall(m)[1]
-                            print('num:', num)
-                            print('num index 1:', num1)
+                            num = p_num.findall(m)[1]
 
-
-                        print(f'> {num1} consecutive {band} detections{hole}: {m_ccd_len} ')
+                        print(f'> {num} consecutive {band} detections{hole}: {m_ccd_len} ')
 
                     else:
                         if args.verbose:
