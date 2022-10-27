@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     # Grabbing masterlists from all field directories or one specified field
     if args.field:
-        masterlists_field = [glob.glob(f'./masterlist/{args.field}/*.allccds_xmatch.csv')]
+        masterlists_field = glob.glob(f'./masterlist/{args.field}/*.allccds_xmatch.csv')
         if args.verbose:
             print('MASTERLISTS FOUND:')
             print(masterlists_field)
@@ -324,7 +324,7 @@ if __name__ == "__main__":
         ccds = range(1,63,1)
         for ccd in ccds:
             mcut_list = glob.glob(f'{priority_outdir}/*consec_{field}.csv')
-
+            
             print('----------------------------------------------------------------------------------------')
             print(f'NUMBER OF CANDIDATES FOR THE FOLLOWING SELECTION CRITERIA IN FIELD {field} CCD {ccd}:')
 
@@ -334,7 +334,9 @@ if __name__ == "__main__":
 
             else:
                 for m in mcut_list:
-                    m_ccd = m[m['CCD'] == int(ccd)]
+                    m_df = pd.read_csv(m, sep=',')
+
+                    m_ccd = m_df[m_df['CCD'] == ccd]
                     m_ccd_len = len(m_ccd)
 
                     p_ig = re.compile("ig_")
