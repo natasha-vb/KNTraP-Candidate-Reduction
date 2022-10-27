@@ -337,7 +337,7 @@ if __name__ == "__main__":
 
             else:
                 for m in mcut_list:
-                    m_df = pd.read_csv(m, sep=',', skiprows=[1,2,3,4,5,6,7,8,9,10]) # read comments as '#' <-- double check this
+                    m_df = pd.read_csv(m, sep=',', skiprows=[0,1,2,3,4,5,6,7,8,9,10]) # read comments as '#' <-- double check this
 
                     if len(m_df) > 1:
                         ipdb.set_trace()
