@@ -341,7 +341,7 @@ if __name__ == "__main__":
                     m_df = pd.read_csv(m, sep=',', skiprows=[0,1,2,3,4,5,6,7,8,9,10], skipinitialspace=True) # read comments as '#' <-- double check this
 
                     if len(m_df) > 1:
-                        ipdb.set_trace()
+                        # ipdb.set_trace()
                         m_ccd = m_df[m_df['CCD'] == ccd]
                         m_ccd_len = len(m_ccd)
 
