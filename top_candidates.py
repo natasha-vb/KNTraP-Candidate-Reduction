@@ -28,12 +28,12 @@ if __name__ == "__main__":
 
     # Grabbing masterlists from all field directories or one specified field
     if args.field:
-        masterlists_field = glob.glob(f'./{args.field}/*.allccds_xmatch.csv')
+        masterlists_field = glob.glob(f'./masterlist/{args.field}/*.allccds_xmatch.csv')
         if args.verbose:
             print('MASTERLISTS FOUND:')
             print(masterlists_field)
     else:
-        masterlists_field = glob.glob(f'./*/*.allccds_xmatch.csv')
+        masterlists_field = glob.glob(f'./masterlist/*/*.allccds_xmatch.csv')
         if args.verbose:
             print('MASTERLISTS FOUND:')
             print(masterlists_field)
