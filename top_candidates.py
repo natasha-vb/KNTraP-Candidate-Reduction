@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     # Grabbing masterlists from all field directories or one specified field
     if args.field:
-        masterlists_field = glob.glob(f'./masterlist/{args.field}/*.allccds_xmatch.csv')
+        masterlists_field = [glob.glob(f'./masterlist/{args.field}/*.allccds_xmatch.csv')]
         if args.verbose:
             print('MASTERLISTS FOUND:')
             print(masterlists_field)
@@ -78,7 +78,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_i_len}')
-                print('-------------------------------------------------')
                 print(' ')
 
             ########################################################################
@@ -109,7 +108,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_g_len}')
-                print('-------------------------------------------------')
                 print(' ')
 
             ########################################################################
@@ -140,7 +138,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}')
                 print(f'{mcut_i_1h_len}')
-                print('-------------------------------------------------')
                 print(' ')
 
             ########################################################################
@@ -171,7 +168,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_g_1h_len}')
-                print('-------------------------------------------------')
                 print(' ')
 
             ########################################################################
@@ -202,7 +198,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_i_g_len}')
-                print('-------------------------------------------------')
                 print(' ')
 
             ########################################################################
@@ -233,7 +228,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_i_g_1h_len}')
-                print('-------------------------------------------------')
                 print(' ')
 
             ########################################################################
@@ -264,7 +258,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_ig_len}')
-                print('-------------------------------------------------')
                 print(' ')
 
             ########################################################################
@@ -295,7 +288,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}')
                 print(f'{mcut_ig_1h_len}')
-                print('-------------------------------------------------')
                 print(' ')
 
             ########################################################################
@@ -326,7 +318,6 @@ if __name__ == "__main__":
                 print(' ')
                 print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
                 print(f'{mcut_ig_2h_len}')
-                print('-------------------------------------------------')
                 print(' ')
         
         # Count number of candidates in each reduced masterlist for each CCD
@@ -343,7 +334,7 @@ if __name__ == "__main__":
 
             else:
                 for m in mcut_list:
-                    m_ccd = m[m['CCD'] == ccd]
+                    m_ccd = m[m['CCD'] == int(ccd)]
                     m_ccd_len = len(m_ccd)
 
                     p_ig = re.compile("ig_")
