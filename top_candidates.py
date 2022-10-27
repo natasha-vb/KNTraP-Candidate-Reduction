@@ -383,10 +383,10 @@ if __name__ == "__main__":
                             num = p_num.findall(m)[2]
                         else:
                             hole = ' '
-                            p_num = re.compile(r'\d+') # probably not working need to look at this closer
+                            p_num = re.compile(r'\d+') 
                             num = p_num.findall(m)[1]
 
-                        print(f'> {num} consecutive {band} detections{hole}: {m_ccd_len} ')
+                        print(f'>= {num} consecutive {band} detections{hole}: {m_ccd_len} ')
 
                     else:
                         if args.verbose:

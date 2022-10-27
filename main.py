@@ -105,7 +105,7 @@ if __name__ == "__main__":
     if args.ccd:
         ccds = [args.ccd]
     else:
-        ccds = range(1,62,1)
+        ccds = range(1,63,1)
 
     for ccd in ccds:
         # Read in fits files
