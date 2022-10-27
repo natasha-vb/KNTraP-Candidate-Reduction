@@ -335,7 +335,7 @@ if __name__ == "__main__":
 
             else:
                 for m in mcut_list:
-                    m_df = pd.read_csv(m, sep=',')
+                    m_df = pd.read_csv(m, sep=',', skiprows=[1:11])
 
                     m_ccd = m_df[m_df['CCD'] == ccd]
                     m_ccd_len = len(m_ccd)
