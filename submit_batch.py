@@ -1,3 +1,9 @@
+# Code from Jielai Zhang
+
+import docopt
+import sys, os
+import numpy as np
+
 ##############################################################
 ####################### Main Function ########################
 ##############################################################
@@ -5,8 +11,8 @@
 batch_script_template = '''#!/bin/bash
 
 #SBATCH --job-name=JOB_NAME
-#SBATCH --output=/PIPE_DATA_DIR/logs/ozstar/FIELDNAME/JOB_NAME.out
-#SBATCH --error=/PIPE_DATA_DIR/logs/ozstar/FIELDNAME/JOB_NAME.err
+#SBATCH --output=/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.out
+#SBATCH --error=/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.err
 
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -17,12 +23,12 @@ RESERVATION_LINE
 
 echo Slurm Job JOB_NAME start
 echo Job bash script is: JOB_BASH_SCRIPT
-echo Job .out is saved at: /PIPE_DATA_DIR/logs/ozstar/FIELDNAME/JOB_NAME.out
-echo Job .err is saved at: /PIPE_DATA_DIR/logs/ozstar/FIELDNAME/JOB_NAME.err
+echo Job .out is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.out
+echo Job .err is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.err
 echo `date`
 SECONDS=0
 echo -------- --------
-source BASHRCFILE KNTRAPmode
+source BASHRCFILE
 COMMAND
 echo -------- --------
 echo `date`
@@ -31,21 +37,16 @@ echo Slurm Job JOB_NAME done in $(($duration / 60)) minutes and $(($duration % 6
 '''
 
 def submit_slurm_OzSTAR_batch(commandfile,
-                                bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/src/photpipe/config/DECAMNOAO/YSE/YSE.bash.sourceme',
+                                bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.sourceme',
                                 memory_request=8000,
                                 verbose=False,
                                 do_not_submit=False):
     # Get environment variables for pipeline set up
-    pipeproj_name     = os.getenv('PIPENAME')
-    bashrcfile = bashrcfile.replace('YSE',pipeproj_name)
     pipedata_dir      = os.getenv('/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar')
     submit_via_sbatch = os.getenv('OZSTARSUBMIT')
-    kntrap_mode       = os.getenv('KNTRAPmode')
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
         walltime='7:00:00'
-    if kntrap_mode == None:
-        kntrap_mode = ''
     if submit_via_sbatch == 'True':
         submit_via_sbatch = True
     elif submit_via_sbatch == 'False':
@@ -64,10 +65,10 @@ def submit_slurm_OzSTAR_batch(commandfile,
 
             # Define slurm job name
             # Remove full path to "pipemaster.pl"
-            if 'pipemaster.pl' in pipecommand:
-                pipe_command_clean  = pipecommand.split('pipemaster.pl')[1].strip()
-            elif 'pipeloop.pl' in pipecommand:
-                pipe_command_clean = pipecommand.split('pipeloop.pl')[1].strip()
+            if 'main.py' in pipecommand:
+                pipe_command_clean  = pipecommand.split('main.py')[1].strip()
+            elif 'main.py' in pipecommand:
+                pipe_command_clean = pipecommand.split('main.py')[1].strip()
             # Join spaces with _ and replace ' and * and / and < and > and - with nothing
             # replace __ with _
             slurm_job_name      = '_'.join(pipe_command_clean.split(' '))
@@ -106,7 +107,6 @@ def submit_slurm_OzSTAR_batch(commandfile,
             script_string = script_string.replace('BASHRCFILE',bashrcfile)
             script_string = script_string.replace('FIELDNAME',fieldname)
             script_string = script_string.replace('MEM_REQUEST',str(int(np.ceil(memory_request/1000.))) )
-            script_string = script_string.replace('KNTRAPmode',kntrap_mode)
             script_string = script_string.replace('OZSTARWALLTIME',walltime)
 
 
