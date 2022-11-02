@@ -68,8 +68,8 @@ def submit_slurm_OzSTAR_batch(commandfile,
         print('WARNING: As a result, submit_via_sbatch set to False, prepared slurm scripts will not be sbatched.')
         submit_via_sbatch = False
 
-    with open(commandfile) as fp:
-        pipecommand = fp.readline().strip()
+    # with open(commandfile) as fp:
+        pipecommand = commandfile.readline().strip()
         cnt = 1
         while pipecommand:
             print('==========')
@@ -145,7 +145,7 @@ def submit_slurm_OzSTAR_batch(commandfile,
             cnt += 1
 
     # Finish
-    return None
+    # return None
 
 
 ############################################################################
