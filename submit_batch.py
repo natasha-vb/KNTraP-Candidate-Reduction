@@ -86,7 +86,8 @@ def submit_slurm_OzSTAR_batch(commandfile,
                 slurm_job_name.replace('tmpl_','')
 
         # This is always the fieldname
-        fieldname           = pipe_command_clean.split(' ')[0]
+        fieldname           = slurm_job_name.split('_')[0]
+        print('fieldname:', fieldname)
 
         # Figure out where to save the slurm script
         slurm_script_dir    = pipedata_dir+f'/logs/ozstar/{fieldname}'
