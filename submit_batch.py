@@ -61,76 +61,67 @@ def submit_slurm_OzSTAR_batch(commandfile,
 
     # with open(commandfile) as fp:
         pipecommand = commandfile.strip()
-        cnt = 1
-        while pipecommand:
-            print('==========')
-            print(f"Line {cnt} : {pipecommand}")
 
-            # Define slurm job name
-            # Remove full path to "main.py"
-            if 'main.py' in pipecommand:
-                pipe_command_clean  = pipecommand.split('main.py')[1].strip()
+        # Define slurm job name
+        # Remove full path to "main.py"
+        if 'main.py' in pipecommand:
+            pipe_command_clean  = pipecommand.split('main.py')[1].strip()
 
-            # Join spaces with _ and replace ' and * and / and < and > and - with nothing
-            # replace __ with _
-            slurm_job_name      = '_'.join(pipe_command_clean.split(' '))
-            slurm_job_name      = slurm_job_name.replace("'",'')
-            slurm_job_name      = slurm_job_name.replace("*",'')
-            slurm_job_name      = slurm_job_name.replace("/",'')
-            slurm_job_name      = slurm_job_name.replace("<",'')
-            slurm_job_name      = slurm_job_name.replace(">",'')
-            slurm_job_name      = slurm_job_name.replace("-",'')
-            slurm_job_name      = slurm_job_name.replace("__",'_')
-            slurm_job_name      = slurm_job_name[0:200]
+        # Join spaces with _ and replace ' and * and / and < and > and - with nothing
+        # replace __ with _
+        slurm_job_name      = '_'.join(pipe_command_clean.split(' '))
+        slurm_job_name      = slurm_job_name.replace("'",'')
+        slurm_job_name      = slurm_job_name.replace("*",'')
+        slurm_job_name      = slurm_job_name.replace("/",'')
+        slurm_job_name      = slurm_job_name.replace("<",'')
+        slurm_job_name      = slurm_job_name.replace(">",'')
+        slurm_job_name      = slurm_job_name.replace("-",'')
+        slurm_job_name      = slurm_job_name.replace("__",'_')
+        slurm_job_name      = slurm_job_name[0:200]
 
-            # when doing websniff, commands are pipeloop and not pipemaster due to batch4amp. To get ccd# in the job name, do this:
-            if 'main.py' in pipecommand:
-                if len(slurm_job_name.split(',')) > 3:
-                    slurm_job_name = slurm_job_name.split(',')[0]+',etc,'+slurm_job_name.split(',')[-1]
-                    slurm_job_name.replace('tmpl_','')
+        # when doing websniff, commands are pipeloop and not pipemaster due to batch4amp. To get ccd# in the job name, do this:
+        if 'main.py' in pipecommand:
+            if len(slurm_job_name.split(',')) > 3:
+                slurm_job_name = slurm_job_name.split(',')[0]+',etc,'+slurm_job_name.split(',')[-1]
+                slurm_job_name.replace('tmpl_','')
 
-            # This is always the fieldname
-            fieldname           = pipe_command_clean.split(' ')[0]
+        # This is always the fieldname
+        fieldname           = pipe_command_clean.split(' ')[0]
 
-            # Figure out where to save the slurm script
-            slurm_script_dir    = pipedata_dir+f'/logs/ozstar/{fieldname}'
-            slurm_script_path   = slurm_script_dir+f'/{slurm_job_name}_slurm.sh'
+        # Figure out where to save the slurm script
+        slurm_script_dir    = pipedata_dir+f'/logs/ozstar/{fieldname}'
+        slurm_script_path   = slurm_script_dir+f'/{slurm_job_name}_slurm.sh'
 
-            # Create output directory if not exist
-            just_created  = create_dir_ifnot(slurm_script_dir)
-            if just_created == True:
-                if verbose == True:
-                    print(f'VERBOSE/DEBUG: {slurm_script_dir} was just created.')
+        # Create output directory if not exist
+        just_created  = create_dir_ifnot(slurm_script_dir)
+        if just_created == True:
+            if verbose == True:
+                print(f'VERBOSE/DEBUG: {slurm_script_dir} was just created.')
 
-            # Create slurm batch bash script
-            script_string = batch_script_template.replace('JOB_NAME',slurm_job_name)
-            script_string = script_string.replace('PIPE_DATA_DIR',pipedata_dir)
-            script_string = script_string.replace('COMMAND',pipecommand)
-            script_string = script_string.replace('BASHRCFILE',bashrcfile)
-            script_string = script_string.replace('FIELDNAME',fieldname)
-            script_string = script_string.replace('MEM_REQUEST',str(int(np.ceil(memory_request/1000.))) )
-            script_string = script_string.replace('OZSTARWALLTIME',walltime)
+        # Create slurm batch bash script
+        script_string = batch_script_template.replace('JOB_NAME',slurm_job_name)
+        script_string = script_string.replace('PIPE_DATA_DIR',pipedata_dir)
+        script_string = script_string.replace('COMMAND',pipecommand)
+        script_string = script_string.replace('BASHRCFILE',bashrcfile)
+        script_string = script_string.replace('FIELDNAME',fieldname)
+        script_string = script_string.replace('MEM_REQUEST',str(int(np.ceil(memory_request/1000.))) )
+        script_string = script_string.replace('OZSTARWALLTIME',walltime)
 
-            # Write the bash script to file
-            f = open(slurm_script_path,'w')
-            f.write(script_string)
-            f.close()
+        # Write the bash script to file
+        f = open(slurm_script_path,'w')
+        f.write(script_string)
+        f.close()
 
-            # print
-            print(f'Saved  : {slurm_script_path}')
+        # print
+        print(f'Saved  : {slurm_script_path}')
 
-            # submit slurm script
-            sbatchcommand = f'sbatch {slurm_script_path}'
-            print(f'Running: {sbatchcommand}')
-            try:
-                os.system(sbatchcommand)
-            except:
-                sys.exit(f'!!! ERROR-- sys.exit when running: {sbatchcommand}')
-            print('Note   : If want to switch off submit via sbatch: put "export OZSTARSUBMIT=False"')
-
-            # read in next line
-            pipecommand = commandfile.strip()
-            cnt += 1
+        # submit slurm script
+        sbatchcommand = f'sbatch {slurm_script_path}'
+        print(f'Running: {sbatchcommand}')
+        try:
+            os.system(sbatchcommand)
+        except:
+            sys.exit(f'!!! ERROR-- sys.exit when running: {sbatchcommand}')
 
     # Finish
     # return None
