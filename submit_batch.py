@@ -69,7 +69,7 @@ def submit_slurm_OzSTAR_batch(commandfile,
         submit_via_sbatch = False
 
     # with open(commandfile) as fp:
-        pipecommand = commandfile.readline().strip()
+        pipecommand = commandfile.strip()
         cnt = 1
         while pipecommand:
             print('==========')
