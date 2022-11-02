@@ -54,19 +54,10 @@ def submit_slurm_OzSTAR_batch(commandfile,
                                 verbose=False,
                                 do_not_submit=False):
     # Get environment variables for pipeline set up
-    pipedata_dir      = os.getenv('/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction')
-    submit_via_sbatch = os.getenv('OZSTARSUBMIT')
+    pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction'
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
         walltime='7:00:00'
-    if submit_via_sbatch == 'True':
-        submit_via_sbatch = True
-    elif submit_via_sbatch == 'False':
-        submit_via_sbatch = False
-    else:
-        print('WARNING: OZSTARSUBMIT env variable exported to : ',submit_via_sbatch)
-        print('WARNING: As a result, submit_via_sbatch set to False, prepared slurm scripts will not be sbatched.')
-        submit_via_sbatch = False
 
     # with open(commandfile) as fp:
         pipecommand = commandfile.strip()
@@ -129,19 +120,16 @@ def submit_slurm_OzSTAR_batch(commandfile,
             print(f'Saved  : {slurm_script_path}')
 
             # submit slurm script
-            if do_not_submit == False and submit_via_sbatch == True:
-                sbatchcommand = f'sbatch {slurm_script_path}'
-                print(f'Running: {sbatchcommand}')
-                try:
-                    os.system(sbatchcommand)
-                except:
-                    sys.exit(f'!!! ERROR-- sys.exit when running: {sbatchcommand}')
-                print('Note   : If want to switch off submit via sbatch: put "export OZSTARSUBMIT=False"')
-            else:
-                print('WARNING: sbatch command not carried out as requested. To submit, put "export OZSTARSUBMIT=True"')
+            sbatchcommand = f'sbatch {slurm_script_path}'
+            print(f'Running: {sbatchcommand}')
+            try:
+                os.system(sbatchcommand)
+            except:
+                sys.exit(f'!!! ERROR-- sys.exit when running: {sbatchcommand}')
+            print('Note   : If want to switch off submit via sbatch: put "export OZSTARSUBMIT=False"')
 
             # read in next line
-            pipecommand = fp.readline().strip()
+            pipecommand = commandfile.strip()
             cnt += 1
 
     # Finish
