@@ -1,8 +1,20 @@
 # Code from Jielai Zhang
 
+#!/usr/bin/env python
+
 import docopt
 import sys, os
 import numpy as np
+
+def create_dir_ifnot(directory):
+
+    if os.path.isdir(directory):
+        created_or_not = False
+    else:
+        os.makedirs(directory)
+        created_or_not = True
+
+    return created_or_not
 
 ##############################################################
 ####################### Main Function ########################
@@ -42,7 +54,7 @@ def submit_slurm_OzSTAR_batch(commandfile,
                                 verbose=False,
                                 do_not_submit=False):
     # Get environment variables for pipeline set up
-    pipedata_dir      = os.getenv('/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar')
+    pipedata_dir      = os.getenv('/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction')
     submit_via_sbatch = os.getenv('OZSTARSUBMIT')
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
@@ -64,11 +76,10 @@ def submit_slurm_OzSTAR_batch(commandfile,
             print(f"Line {cnt} : {pipecommand}")
 
             # Define slurm job name
-            # Remove full path to "pipemaster.pl"
+            # Remove full path to "main.py"
             if 'main.py' in pipecommand:
                 pipe_command_clean  = pipecommand.split('main.py')[1].strip()
-            elif 'main.py' in pipecommand:
-                pipe_command_clean = pipecommand.split('main.py')[1].strip()
+
             # Join spaces with _ and replace ' and * and / and < and > and - with nothing
             # replace __ with _
             slurm_job_name      = '_'.join(pipe_command_clean.split(' '))
@@ -82,13 +93,13 @@ def submit_slurm_OzSTAR_batch(commandfile,
             slurm_job_name      = slurm_job_name[0:200]
 
             # when doing websniff, commands are pipeloop and not pipemaster due to batch4amp. To get ccd# in the job name, do this:
-            if 'pipeloop.pl' in pipecommand:
+            if 'main.py' in pipecommand:
                 if len(slurm_job_name.split(',')) > 3:
                     slurm_job_name = slurm_job_name.split(',')[0]+',etc,'+slurm_job_name.split(',')[-1]
                     slurm_job_name.replace('tmpl_','')
 
             # This is always the fieldname
-            fieldname           = pipe_command_clean.split(' ')[1]
+            fieldname           = pipe_command_clean.split(' ')[0]
 
             # Figure out where to save the slurm script
             slurm_script_dir    = pipedata_dir+f'/logs/ozstar/{fieldname}'
@@ -109,7 +120,6 @@ def submit_slurm_OzSTAR_batch(commandfile,
             script_string = script_string.replace('MEM_REQUEST',str(int(np.ceil(memory_request/1000.))) )
             script_string = script_string.replace('OZSTARWALLTIME',walltime)
 
-
             # Write the bash script to file
             f = open(slurm_script_path,'w')
             f.write(script_string)
@@ -125,8 +135,8 @@ def submit_slurm_OzSTAR_batch(commandfile,
                 try:
                     os.system(sbatchcommand)
                 except:
-                    sys.exit(f'!!! ERROR-- sys.exit when running: {command}')
-                print('Note   : If want to switch of submit via sbatch: put "export OZSTARSUBMIT=False"')
+                    sys.exit(f'!!! ERROR-- sys.exit when running: {sbatchcommand}')
+                print('Note   : If want to switch off submit via sbatch: put "export OZSTARSUBMIT=False"')
             else:
                 print('WARNING: sbatch command not carried out as requested. To submit, put "export OZSTARSUBMIT=True"')
 
@@ -144,6 +154,8 @@ def submit_slurm_OzSTAR_batch(commandfile,
 
 if __name__ == "__main__":
 
+    ccd = 1
+
     # Read in input arguments
     arguments           = docopt.docopt(__doc__)
     # Code running mode arguments
@@ -153,7 +165,8 @@ if __name__ == "__main__":
     verbose             = arguments['--verbose']
     do_not_submit       = arguments['--do_not_submit']
     # Required arguments
-    commandfile         = arguments['<commandfile>']
+    field               = arguments['<field>']
+    commandfile         = f'python main.py --{field} --ccd {ccd} --v --skip_se'
     # Optional arguments (with defaults set)
     bashrcfile          = arguments['--bashrcfile']
     memory_request      = int(arguments['--request_memory'])
