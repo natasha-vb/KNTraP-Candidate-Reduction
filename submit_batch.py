@@ -87,7 +87,9 @@ def submit_slurm_OzSTAR_batch(commandfile,
 
         # This is always the fieldname
         fieldname           = slurm_job_name.split('_')[0]
+        print('----------------')
         print('fieldname:', fieldname)
+        print('ccd', ccd)
 
         # Figure out where to save the slurm script
         slurm_script_dir    = pipedata_dir+f'/logs/ozstar/{fieldname}'
@@ -106,6 +108,7 @@ def submit_slurm_OzSTAR_batch(commandfile,
         script_string = script_string.replace('BASHRCFILE',bashrcfile)
         script_string = script_string.replace('FIELDNAME',fieldname)
         script_string = script_string.replace('MEM_REQUEST',str(int(np.ceil(memory_request/1000.))) )
+        script_string = script_string.replace('JOB_BASH_SCRIPT',slurm_script_path)
         script_string = script_string.replace('OZSTARWALLTIME',walltime)
 
         # Write the bash script to file
