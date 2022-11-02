@@ -2,7 +2,7 @@
 
 #!/usr/bin/env python
 
-import docopt
+import argparse
 import sys, os
 import numpy as np
 
@@ -154,23 +154,53 @@ def submit_slurm_OzSTAR_batch(commandfile,
 
 if __name__ == "__main__":
 
+    # Read in input arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+            'field',
+            type=str,
+            help='Selected field'
+    )
+    parser.add_argument(
+            '--debugmode',
+            action='store_true',
+            help="Activating debug mode"
+    )
+    parser.add_argument(
+            '--verbose', '--v',
+            action='store_true',
+            help='Print extra info to screen'
+    )
+    parser.add_argument(
+            '--do_not_submit',
+            action='store_true',
+            help='Do not submit OzSTAR job via batch'
+    )
+    parser.add_argument(
+            '--bashrcfile',
+            default='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.sourceme',
+            help='Path to bashrc file'
+    )
+    parser.add_argument(
+            '--memory_request',
+            default='8000',
+            help='Request this much memory'
+    )
+    args = parser.parse_args()
+
     ccd = 1
 
-    # Read in input arguments
-    arguments           = docopt.docopt(__doc__)
     # Code running mode arguments
-    debugmode           = arguments['--debug']
-    if debugmode:
-        print(arguments)
-    verbose             = arguments['--verbose']
-    do_not_submit       = arguments['--do_not_submit']
+    if args.debugmode:
+        print(args)
+    do_not_submit       = args.do_not_submit
+    verbose             = args.verbose
     # Required arguments
-    field               = arguments['<field>']
+    field               = args.field
     commandfile         = f'python main.py --{field} --ccd {ccd} --v --skip_se'
     # Optional arguments (with defaults set)
-    bashrcfile          = arguments['--bashrcfile']
-    memory_request      = int(arguments['--request_memory'])
-    _                   = arguments['--skiplog']
+    bashrcfile          = args.bashrcfile
+    memory_request      = int(args.memory_request)
 
     _ = submit_slurm_OzSTAR_batch(commandfile,
                                 bashrcfile=bashrcfile,
