@@ -161,7 +161,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
             '--bashrcfile',
-            default='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.sourceme',
+            default='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
             help='Path to bashrc file'
     )
     parser.add_argument(
