@@ -41,8 +41,8 @@ echo `date`
 SECONDS=0
 echo -------- --------
 source BASHRCFILE
-#COMMAND
-echo "TESTING FILE TESTING FILE TESTING FILE TESTING FILE"
+
+echo TESTING FILE TESTING FILE TESTING FILE TESTING FILE
 echo -------- --------
 echo `date`
 duration=$SECONDS
