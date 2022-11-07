@@ -46,15 +46,15 @@ def crossmatch(candfile, verbose=False):
         print('CROSSMATCH RESULTS:')
         print('===================')
         print('SIMBAD:')
-        print('---------------------------------------------------------------------------------')
+        print('----------------------------------------------------------------------')
         print(candfile[["CAND_ID","simbad_type","simbad_ctlg","simbad_sptype","simbad_redshift"]])
         print('')
         print('GAIA:')
-        print('-----------------------------------------------------------------')
+        print('---------------------------------------------------------------')
         print(candfile[["CAND_ID","gaia_DR3_parallax","gaia_DR3_parallaxerr","gaia_sigma"]])
         print('')
         print('PAN_STARRS 1:')
-        print('----------------------------------')
+        print('--------------------------------')
         print(candfile[["CAND_ID","ps1_objID","ps1_objID"]])
 
     return candfile

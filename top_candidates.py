@@ -1,6 +1,5 @@
 import argparse
 import glob
-from operator import truediv
 import os
 import pandas as pd
 import re
