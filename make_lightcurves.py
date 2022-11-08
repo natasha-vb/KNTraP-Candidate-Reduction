@@ -42,6 +42,8 @@ if __name__ == "__main__":
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
             print('Forced light curve file:', forced_lc)
             flc_df = pd.read_csv(forced_lc[0])
+            print('FORCED LIGHT CURVE FILE:', flc_df)
+            print(flc_df)
 
             det_dates = flc_df['dateobs'].values 
             det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
