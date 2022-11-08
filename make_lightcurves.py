@@ -64,13 +64,9 @@ if __name__ == "__main__":
             # Changing markers for good detections
             good_unf_i = unf_i['good_detection']
             good_unf_g = unf_g['good_detection']
-            good_f_i = f_i['good_detection']
-            good_f_g = f_g['good_detection']
 
             m_unf_i = ['X' if val==True else '.' for val in good_unf_i]
             m_unf_g = ['X' if val==True else '.' for val in good_unf_g]
-            m_f_i = ['X' if val==True else '.' for val in good_f_i]
-            m_f_g = ['X' if val==True else '.' for val in good_f_g]
 
             fig, ax = plt.subplots()
 
@@ -79,10 +75,8 @@ if __name__ == "__main__":
             for x, y, m in zip(unf_g['dateobs'], unf_g['m'], m_unf_g, label = 'g band'):
                 ax.scatter(x, y, c='b', marker=m)
 
-            for x, y, m in zip(f_i['dateobs'], f_i['m'], m_f_i):
-                ax.scatter(x, y, edgecolors='r', facecolors=None, marker=m)
-            for x, y, m in zip(f_g['dateobs'], f_g['m'], m_f_g):
-                ax.scatter(x, y, edgecolors='b', facecolors=None, marker=m)
+            ax.scatter(f_i['dateobs'], f_i['m'], edgecolors='r', facecolors=None)
+            ax.scatter(f_g['dateobs'], f_g['m'], edgecolors='b', facecolors=None, marker=m)
             
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
