@@ -2,7 +2,7 @@ import glob
 import matplotlib.pyplot as plt
 import os
 import pandas as pd
-
+import import ipdb 
 
 if __name__ == "__main__":
 
@@ -42,12 +42,15 @@ if __name__ == "__main__":
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
             print('Forced light curve file:', forced_lc)
             flc_df = pd.read_csv(forced_lc[0])
-            print('FORCED LIGHT CURVE FILE:', flc_df)
+            print('FORCED LIGHT CURVE FILE:')
+            print(flc_df)
+
+            ipdb.set_trace()
 
             det_dates = flc_df['dateobs'].values 
             det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
             flc_df['dateobs'] = det_dates
-            flc_df = flc_df.sort_values(by="dateobs")
+            flc_df = flc_df.sort_values(by='dateobs')
 
             # Plot light curve
             unf_i = unflc_df[unflc_df['filt'] == 'i']
