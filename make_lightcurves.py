@@ -35,13 +35,12 @@ if __name__ == "__main__":
 
             # Grab corresponding appended light curve and forced light curve files for candidate
             unforced_lc_app = glob.glob(f'./lc_files/{field}/{ccd}/cand{cand_id}*')
-
-            print(unforced_lc_app)
-
+            print('Unforced light curve file:', unforced_lc_app)
             unflc_df = pd.read_csv(unforced_lc_app[0])
 
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
-            flc_df = pd.read_csv('forced_lc')
+            print('Forced light curve file:', forced_lc)
+            flc_df = pd.read_csv(forced_lc[0])
 
             det_dates = flc_df['dateobs'].values 
             det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
