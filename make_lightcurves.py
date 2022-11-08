@@ -47,7 +47,7 @@ if __name__ == "__main__":
             print('FORCED LIGHT CURVE FILE:')
             print(flc_df)
 
-            ipdb.set_trace()
+            # ipdb.set_trace()
 
             det_dates = flc_df['dateobs'].values 
             det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
