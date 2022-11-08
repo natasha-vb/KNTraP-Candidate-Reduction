@@ -37,7 +37,7 @@ if __name__ == "__main__":
             flc_df = pd.read_csv('forced_lc')
 
             det_dates = flc_df['dateobs'].values 
-            det_dates = [f'{d.replace('-','')[2:8]}' for d in flc_df['dateobs'].values]
+            det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
             flc_df['dateobs'] = det_dates
             flc_df = flc_df.sort_values(by="dateobs")
 
@@ -63,13 +63,11 @@ if __name__ == "__main__":
 
             for x, y, m in zip(unf_i['dateobs'], unf_i['m'], m_unf_i, label = 'i band'):
                 ax.scatter(x, y, c='r', marker=m)
-            
             for x, y, m in zip(unf_g['dateobs'], unf_g['m'], m_unf_g, label = 'g band'):
                 ax.scatter(x, y, c='b', marker=m)
 
             for x, y, m in zip(f_i['dateobs'], f_i['m'], m_f_i):
                 ax.scatter(x, y, edgecolors='r', facecolors=None, marker=m)
-            
             for x, y, m in zip(f_g['dateobs'], f_g['m'], m_f_g):
                 ax.scatter(x, y, edgecolors='b', facecolors=None, marker=m)
             
