@@ -48,11 +48,36 @@ if __name__ == "__main__":
             f_i = flc_df[flc_df['filt'] == 'i']
             f_g = flc_df[flc_df['filt'] == 'g']
 
-            plt.scatter(unf_i['dateobs'], unf_i['m'], c='r')
-            plt.scatter(unf_g['dateobs'], unf_i['m'], c='b')
+            # Changing markers for good detections
+            good_unf_i = unf_i['good_detection']
+            good_unf_g = unf_g['good_detection']
+            good_f_i = f_i['good_detection']
+            good_f_g = f_g['good_detection']
 
-            plt.scatter(f_i['dateobs'], f_i['m'], edgecolors='r', facecolors=None)
-            plt.scatter(f_g['dateobs'], f_i['m'], edgecolors='b', facecolors=None)
+            m_unf_i = ['X' if val==True else '.' for val in good_unf_i]
+            m_unf_g = ['X' if val==True else '.' for val in good_unf_g]
+            m_f_i = ['X' if val==True else '.' for val in good_f_i]
+            m_f_g = ['X' if val==True else '.' for val in good_f_g]
+
+            fig, ax = plt.subplots()
+
+            for x, y, m in zip(unf_i['dateobs'], unf_i['m'], m_unf_i, label = 'i band'):
+                ax.scatter(x, y, c='r', marker=m)
+            
+            for x, y, m in zip(unf_g['dateobs'], unf_g['m'], m_unf_g, label = 'g band'):
+                ax.scatter(x, y, c='b', marker=m)
+
+            for x, y, m in zip(f_i['dateobs'], f_i['m'], m_f_i):
+                ax.scatter(x, y, edgecolors='r', facecolors=None, marker=m)
+            
+            for x, y, m in zip(f_g['dateobs'], f_g['m'], m_f_g):
+                ax.scatter(x, y, edgecolors='b', facecolors=None, marker=m)
+            
+            ax.set_title(f'Candidate {cand_id}')
+            ax.set_xlabel('date of observation')
+            ax.set_ylabel('mag')
+            ax.invert_yaxis()
+            ax.legend()
 
             fig_name = f'cand{cand_id}_{field}_ccd{ccd}.png'
 
