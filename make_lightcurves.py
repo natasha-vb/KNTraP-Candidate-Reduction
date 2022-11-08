@@ -37,8 +37,8 @@ if __name__ == "__main__":
             unforced_lc_app = glob.glob(f'./lc_files/{field}/{ccd}/cand{cand_id}*')
 
             print(unforced_lc_app)
-            
-            unflc_df = pd.read_csv('unforced_lc_app')
+
+            unflc_df = pd.read_csv(unforced_lc_app[0])
 
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
             flc_df = pd.read_csv('forced_lc')
