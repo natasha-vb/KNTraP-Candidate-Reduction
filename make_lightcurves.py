@@ -36,18 +36,14 @@ if __name__ == "__main__":
 
             # Grab corresponding appended light curve and forced light curve files for candidate
             unforced_lc_app = glob.glob(f'./lc_files/{field}/{ccd}/cand{cand_id}*')
-            print('Unforced light curve file:', unforced_lc_app)
             unflc_df = pd.read_csv(unforced_lc_app[0])
+            print('Unforced light curve file:', unforced_lc_app)
 
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
-            print('Forced light curve file:', forced_lc)
             flc_df = pd.read_csv(forced_lc[0], delim_whitespace=True)
             flc_df = flc_df.drop(columns=['tmpl'])
             flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
-            print('FORCED LIGHT CURVE FILE:')
-            print(flc_df)
-
-            # ipdb.set_trace()
+            print('Forced light curve file:', forced_lc)
 
             det_dates = flc_df['dateobs'].values 
             det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
@@ -88,6 +84,5 @@ if __name__ == "__main__":
 
             plt.savefig(f'{lc_outdir}/{fig_name}')
 
-
-
-
+            print(f'Light curve saved as: {lc_outdir}/{fig_name}')
+            print('')
