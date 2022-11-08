@@ -29,7 +29,8 @@ if __name__ == "__main__":
 
             cand_id = cand['CAND_ID']
             ccd = cand['CCD']
-
+            
+            print('------------------------------')
             print(f'CANDIDATE ID: {cand_id}')
             print(f'CCD: {ccd}')
 
