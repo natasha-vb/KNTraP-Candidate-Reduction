@@ -1,5 +1,6 @@
 import glob 
 import matplotlib.pyplot as plt
+import numpy as np
 import os
 import pandas as pd
 import ipdb 
@@ -51,8 +52,9 @@ if __name__ == "__main__":
             flc_df['dateobs'] = det_dates
             flc_df = flc_df.sort_values(by='dateobs')
 
-            # Calculate limiting magnitudes ####################
-            
+            ipdb.set_trace()
+            # Calculate limiting magnitudes
+            flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux'] + 3*flc_df['dflux_c']))
 
             # Plot light curve
             unf_i = unflc_df[unflc_df['filt'] == 'i']
@@ -72,13 +74,15 @@ if __name__ == "__main__":
 
             fig, ax = plt.subplots()
 
-            for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'], m_unf_i):
-                ax.scatter(xi, yi, c='r', marker=mi, label = 'i band')
-            for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'], m_unf_g):
-                ax.scatter(xg, yg, c='b', marker=mg, label = 'g band')
+            for xi, yi, mi in zip(unf_i['dateobs'], float(unf_i['m']), m_unf_i):
+                ax.scatter(xi, yi, c='r', marker=mi)
+            for xg, yg, mg in zip(unf_g['dateobs'], float(unf_g['m']), m_unf_g):
+                ax.scatter(xg, yg, c='b', marker=mg)
 
-            ax.scatter(f_i['dateobs'], f_i['m'], edgecolors='r', facecolors=None)
-            ax.scatter(f_g['dateobs'], f_g['m'], edgecolors='b', facecolors=None)
+            ax.scatter(f_i['dateobs'], float(f_i['m']), edgecolors='r', facecolors=None, label = 'i band')
+            ax.scatter(f_i['dateobs'], f_i['limiting_mag'], c='r', marker='^')
+            ax.scatter(f_g['dateobs'], float(f_g['m']), edgecolors='b', facecolors=None)
+            ax.scatter(f_g['dateobs'], f_g['limiting_mag'], c='b', marker='^', label = 'g band')
             
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
