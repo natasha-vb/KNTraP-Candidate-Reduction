@@ -41,7 +41,9 @@ if __name__ == "__main__":
 
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
             print('Forced light curve file:', forced_lc)
-            flc_df = pd.read_csv(forced_lc[0])
+            flc_df = pd.read_csv(forced_lc[0], delim_whitespace=True)
+            flc_df = flc_df.drop(columns=['tmpl'])
+            flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
             print('FORCED LIGHT CURVE FILE:')
             print(flc_df)
 
