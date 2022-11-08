@@ -23,8 +23,7 @@ if __name__ == "__main__":
         df = pd.read_csv(f, sep=',', comment='#', header=11, skipinitialspace=True)
 
         # Iterate over candidates within masterlist 
-        for i in len(df):
-            cand = df.iloc[i]
+        for i, cand in df.iterrows():
 
             cand_id = cand['CAND_ID']
             ccd = cand['CCD']
