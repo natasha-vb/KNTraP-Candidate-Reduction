@@ -70,10 +70,10 @@ if __name__ == "__main__":
 
             fig, ax = plt.subplots()
 
-            for x, y, m in zip(unf_i['dateobs'], unf_i['m'], m_unf_i, label = 'i band'):
-                ax.scatter(x, y, c='r', marker=m)
-            for x, y, m in zip(unf_g['dateobs'], unf_g['m'], m_unf_g, label = 'g band'):
-                ax.scatter(x, y, c='b', marker=m)
+            for x, y, m in zip(unf_i['dateobs'], unf_i['m'], m_unf_i):
+                ax.scatter(x, y, c='r', marker=m, label = 'i band')
+            for x, y, m in zip(unf_g['dateobs'], unf_g['m'], m_unf_g):
+                ax.scatter(x, y, c='b', marker=m, label = 'g band')
 
             ax.scatter(f_i['dateobs'], f_i['m'], edgecolors='r', facecolors=None)
             ax.scatter(f_g['dateobs'], f_g['m'], edgecolors='b', facecolors=None, marker=m)
