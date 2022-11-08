@@ -45,10 +45,14 @@ if __name__ == "__main__":
             flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
             print('Forced light curve file:', forced_lc)
 
+            # Converting date format to match forced lc format: YYMMDD
             det_dates = flc_df['dateobs'].values 
             det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
             flc_df['dateobs'] = det_dates
             flc_df = flc_df.sort_values(by='dateobs')
+
+            # Calculate limiting magnitudes ####################
+            
 
             # Plot light curve
             unf_i = unflc_df[unflc_df['filt'] == 'i']
@@ -56,6 +60,8 @@ if __name__ == "__main__":
 
             f_i = flc_df[flc_df['filt'] == 'i']
             f_g = flc_df[flc_df['filt'] == 'g']
+            f_i = f_i[f_i['m'] != '-']
+            f_g = f_g[f_g['m'] != '-']
 
             # Changing markers for good detections
             good_unf_i = unf_i['good_detection']
@@ -66,13 +72,13 @@ if __name__ == "__main__":
 
             fig, ax = plt.subplots()
 
-            for x, y, m in zip(unf_i['dateobs'], unf_i['m'], m_unf_i):
-                ax.scatter(x, y, c='r', marker=m, label = 'i band')
-            for x, y, m in zip(unf_g['dateobs'], unf_g['m'], m_unf_g):
-                ax.scatter(x, y, c='b', marker=m, label = 'g band')
+            for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'], m_unf_i):
+                ax.scatter(xi, yi, c='r', marker=mi, label = 'i band')
+            for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'], m_unf_g):
+                ax.scatter(xg, yg, c='b', marker=mg, label = 'g band')
 
             ax.scatter(f_i['dateobs'], f_i['m'], edgecolors='r', facecolors=None)
-            ax.scatter(f_g['dateobs'], f_g['m'], edgecolors='b', facecolors=None, marker=m)
+            ax.scatter(f_g['dateobs'], f_g['m'], edgecolors='b', facecolors=None)
             
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
