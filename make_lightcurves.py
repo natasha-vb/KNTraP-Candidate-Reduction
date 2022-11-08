@@ -52,10 +52,13 @@ if __name__ == "__main__":
             flc_df['dateobs'] = det_dates
             flc_df = flc_df.sort_values(by='dateobs')
 
-            ipdb.set_trace()
             # Calculate limiting magnitudes
-            flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux'] + 3*flc_df['dflux_c']))
-
+            for ii, row in flc_df.iterrows():
+                if row['flux_c'] >= 0:
+                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux_c'] + 3*flc_df['dflux_c']))
+                else:
+                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['dflux_c']))
+            
             # Plot light curve
             unf_i = unflc_df[unflc_df['filt'] == 'i']
             unf_g = unflc_df[unflc_df['filt'] == 'g']
