@@ -19,6 +19,8 @@ if __name__ == "__main__":
         if not os.path.exists(lc_outdir):
             os.makedirs(lc_outdir)
         
+        print(f'Light curve directory: {lc_outdir}')
+
         # Read in masterlist
         df = pd.read_csv(f, sep=',', comment='#', header=11, skipinitialspace=True)
 
@@ -28,8 +30,14 @@ if __name__ == "__main__":
             cand_id = cand['CAND_ID']
             ccd = cand['CCD']
 
+            print(f'CANDIDATE ID: {cand_id}')
+            print(f'CCD: {ccd}')
+
             # Grab corresponding appended light curve and forced light curve files for candidate
             unforced_lc_app = glob.glob(f'./lc_files/{field}/{ccd}/cand{cand_id}*')
+
+            print(unforced_lc_app)
+            
             unflc_df = pd.read_csv('unforced_lc_app')
 
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
