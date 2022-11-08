@@ -2,7 +2,7 @@ import glob
 import matplotlib.pyplot as plt
 import os
 import pandas as pd
-import import ipdb 
+import ipdb 
 
 if __name__ == "__main__":
 
