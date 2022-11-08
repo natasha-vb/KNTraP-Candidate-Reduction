@@ -55,7 +55,7 @@ if __name__ == "__main__":
             # Calculate limiting magnitudes
             for ii, row in flc_df.iterrows():
                 if row['flux_c'] >= 0:
-                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux_c'] + 3*flc_df['dflux_c']))
+                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux_c'] + 3*(flc_df['dflux_c'])))
                 else:
                     flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['dflux_c']))
             
