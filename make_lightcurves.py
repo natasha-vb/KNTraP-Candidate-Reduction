@@ -53,13 +53,14 @@ if __name__ == "__main__":
             flc_df = flc_df.sort_values(by='dateobs')
 
             # Calculate limiting magnitudes
+            zp = 29.2     #zero point
             for ii, row in flc_df.iterrows():
                 if row['flux_c'] >= 0:
-                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux_c'] + 3*(flc_df['dflux_c'])))
+                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux_c'] + 3*(flc_df['dflux_c']))) + zp
                 else:
-                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['dflux_c']))
+                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['dflux_c'])) + zp
             
-            # Plot light curve
+            # Creating i and g band subsets, and removing '-' magnitude values
             unf_i = unflc_df[unflc_df['filt'] == 'i']
             unf_g = unflc_df[unflc_df['filt'] == 'g']
             unf_i = unf_i[unf_i['m'] != '-']
@@ -76,7 +77,8 @@ if __name__ == "__main__":
 
             m_unf_i = ['X' if val==True else '.' for val in good_unf_i]
             m_unf_g = ['X' if val==True else '.' for val in good_unf_g]
-
+            
+            # Plot light curve
             fig, ax = plt.subplots()
 
             for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'].astype(float), m_unf_i):
@@ -84,9 +86,9 @@ if __name__ == "__main__":
             for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'].astype(float), m_unf_g):
                 ax.scatter(xg, yg, c='b', marker=mg)
 
-            ax.scatter(f_i['dateobs'], f_i['m'].astype(float), edgecolors='r', facecolors=None, label = 'i band')
+            ax.scatter(f_i['dateobs'], f_i['m'].astype(float), c='r', alpha=0.4, label='i band')
             ax.scatter(f_i['dateobs'], f_i['limiting_mag'], c='r', marker='^')
-            ax.scatter(f_g['dateobs'], f_g['m'].astype(float), edgecolors='b', facecolors=None, label = 'g band')
+            ax.scatter(f_g['dateobs'], f_g['m'].astype(float), c='b', alpha=0.4, label='g band')
             ax.scatter(f_g['dateobs'], f_g['limiting_mag'], c='b', marker='^')
             
             ax.set_title(f'Candidate {cand_id}')
