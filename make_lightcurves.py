@@ -77,14 +77,14 @@ if __name__ == "__main__":
 
             fig, ax = plt.subplots()
 
-            for xi, yi, mi in zip(unf_i['dateobs'], float(unf_i['m']), m_unf_i):
+            for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'].astype(float), m_unf_i):
                 ax.scatter(xi, yi, c='r', marker=mi)
-            for xg, yg, mg in zip(unf_g['dateobs'], float(unf_g['m']), m_unf_g):
+            for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'].astype(float), m_unf_g):
                 ax.scatter(xg, yg, c='b', marker=mg)
 
-            ax.scatter(f_i['dateobs'], float(f_i['m']), edgecolors='r', facecolors=None, label = 'i band')
+            ax.scatter(f_i['dateobs'], f_i['m'].astype(float), edgecolors='r', facecolors=None, label = 'i band')
             ax.scatter(f_i['dateobs'], f_i['limiting_mag'], c='r', marker='^')
-            ax.scatter(f_g['dateobs'], float(f_g['m']), edgecolors='b', facecolors=None)
+            ax.scatter(f_g['dateobs'], f_g['m'].astype(float), edgecolors='b', facecolors=None)
             ax.scatter(f_g['dateobs'], f_g['limiting_mag'], c='b', marker='^', label = 'g band')
             
             ax.set_title(f'Candidate {cand_id}')
