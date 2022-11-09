@@ -61,7 +61,7 @@ if __name__ == "__main__":
                 if row['flux_c'] >= 0:
                     flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux_c'] + 3*(flc_df['dflux_c']))) + flc_df['ZPTMAG_c']
                 else:
-                    flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['dflux_c'])) + flc_df['ZPTMAG_c']
+                    flc_df['limiting_mag'] = -2.5*(np.log10(3*(flc_df['dflux_c']))) + flc_df['ZPTMAG_c']
             
             # Creating i and g band subsets, and removing '-' magnitude values
             unf_i = unflc_df[unflc_df['filt'] == 'i']
@@ -71,8 +71,8 @@ if __name__ == "__main__":
 
             f_i = flc_df[flc_df['filt'] == 'i']
             f_g = flc_df[flc_df['filt'] == 'g']
-            f_i = f_i[f_i['m'] != '-']
-            f_g = f_g[f_g['m'] != '-']
+            f_mi = f_i[f_i['m'] != '-']
+            f_mg = f_g[f_g['m'] != '-']
 
             # Changing markers for good detections
             # good_unf_i = unf_i['good_detection']
@@ -93,7 +93,7 @@ if __name__ == "__main__":
             #     ax.scatter(xg, yg, c='b', marker=mg)
             
             print('flc_df:')
-            print(flc_df[['dateobs', 'm', 'limiting_mag']])
+            print(flc_df[['dateobs', 'filt', 'm', 'limiting_mag']])
             print('')
             print('f_i:')
             print(f_i[['dateobs', 'm', 'limiting_mag']])
@@ -113,16 +113,16 @@ if __name__ == "__main__":
             print('good_unf_g:')
             print(good_unf_g[['dateobs', 'm']])
 
-            ax.scatter(f_i['dateobs'].astype(float), f_i['m'].astype(float), c='r', marker='.', alpha=0.4)
+            ax.scatter(f_mi['dateobs'].astype(float), f_i['m'].astype(float), c='r', marker='.', alpha=0.4)
             ax.scatter(f_i['dateobs'].astype(float), f_i['limiting_mag'],    c='r', marker='^', alpha=0.4)
-            ax.scatter(f_g['dateobs'].astype(float), f_g['m'].astype(float), c='b', marker='.', alpha=0.4)
+            ax.scatter(f_mg['dateobs'].astype(float), f_g['m'].astype(float), c='b', marker='.', alpha=0.4)
             ax.scatter(f_g['dateobs'].astype(float), f_g['limiting_mag'],    c='b', marker='^', alpha=0.4)
 
             ax.scatter(unf_i['dateobs'].astype(float), unf_i['m'].astype(float), c='r', marker='.', label='i band')
             ax.scatter(unf_g['dateobs'].astype(float), unf_g['m'].astype(float), c='b', marker='.', label='g band')
 
-            ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='X')
-            ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='X')
+            ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
+            ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
             
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
