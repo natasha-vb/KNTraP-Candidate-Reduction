@@ -89,13 +89,13 @@ if __name__ == "__main__":
             # for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'].astype(float), m_unf_g):
             #     ax.scatter(xg, yg, c='b', marker=mg)
 
-            ax.scatter(unf_i['dateobs'], unf_i['m'].astype(float), c='r', marker='.', label='i band')
-            ax.scatter(unf_g['dateobs'], unf_g['m'].astype(float), c='b', marker='.', label='g band')
-
             ax.scatter(f_i['dateobs'], f_i['m'].astype(float), c='r', marker='.', alpha=0.4)
             ax.scatter(f_i['dateobs'], f_i['limiting_mag'],    c='r', marker='^', alpha=0.4)
             ax.scatter(f_g['dateobs'], f_g['m'].astype(float), c='b', marker='.', alpha=0.4)
             ax.scatter(f_g['dateobs'], f_g['limiting_mag'],    c='b', marker='^', alpha=0.4)
+
+            ax.scatter(unf_i['dateobs'], unf_i['m'].astype(float), c='r', marker='.', label='i band')
+            ax.scatter(unf_g['dateobs'], unf_g['m'].astype(float), c='b', marker='.', label='g band')
 
             ax.scatter(good_unf_i['dateobs'], good_unf_i['m'].astype(float), c='r', marker='X')
             ax.scatter(good_unf_g['dateobs'], good_unf_g['m'].astype(float), c='b', marker='X')
