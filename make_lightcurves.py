@@ -117,7 +117,7 @@ if __name__ == "__main__":
             fig.autofmt_xdate(rotation=45)
             ax.legend()
 
-            fig_name = f'cand{cand_id}_{field}_ccd{ccd}.png'
+            fig_name = f'{field}_ccd{ccd}_cand{cand_id}.png'
 
             plt.savefig(f'{lc_outdir}/{fig_name}')
 
