@@ -82,7 +82,7 @@ if __name__ == "__main__":
             # m_unf_g = ['X' if val==True else '.' for val in good_unf_g]
             
             # Plot light curve
-            fig, ax = plt.subplots(111)
+            fig, ax = plt.subplots()
 
             # for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'].astype(float), m_unf_i):
             #     ax.scatter(xi, yi, c='r', marker=mi)
