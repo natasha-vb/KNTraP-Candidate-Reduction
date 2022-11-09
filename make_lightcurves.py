@@ -72,19 +72,29 @@ if __name__ == "__main__":
             f_g = f_g[f_g['m'] != '-']
 
             # Changing markers for good detections
-            good_unf_i = unf_i['good_detection']
-            good_unf_g = unf_g['good_detection']
+            # good_unf_i = unf_i['good_detection']
+            # good_unf_g = unf_g['good_detection']
 
-            m_unf_i = ['X' if val==True else '.' for val in good_unf_i]
-            m_unf_g = ['X' if val==True else '.' for val in good_unf_g]
+            good_unf_i = unf_i[unf_i['good_detection'] == True]
+            good_unf_g = unf_g[unf_g['good_detection'] == True]
+
+            # m_unf_i = ['X' if val==True else '.' for val in good_unf_i]
+            # m_unf_g = ['X' if val==True else '.' for val in good_unf_g]
             
             # Plot light curve
             fig, ax = plt.subplots()
 
-            for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'].astype(float), m_unf_i):
-                ax.scatter(xi, yi, c='r', marker=mi)
-            for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'].astype(float), m_unf_g):
-                ax.scatter(xg, yg, c='b', marker=mg)
+            # for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'].astype(float), m_unf_i):
+            #     ax.scatter(xi, yi, c='r', marker=mi)
+            # for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'].astype(float), m_unf_g):
+            #     ax.scatter(xg, yg, c='b', marker=mg)
+
+            ax.scatter(unf_i['dateobs'], unf_i['m'].astype(float), c='r', marker='.')
+            ax.scatter(unf_g['dateobs'], unf_g['m'].astype(float), c='b', marker='.')
+
+            ax.scatter(good_unf_i['dateobs'], good_unf_i['m'].astype(float), c='r', marker='X')
+            ax.scatter(good_unf_g['dateobs'], good_unf_g['m'].astype(float), c='b', marker='X')
+
 
             ax.scatter(f_i['dateobs'], f_i['m'].astype(float), c='r', alpha=0.4, label='i band')
             ax.scatter(f_i['dateobs'], f_i['limiting_mag'], c='r', marker='^')
