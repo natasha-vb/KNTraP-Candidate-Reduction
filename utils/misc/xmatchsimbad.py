@@ -41,9 +41,10 @@ def xmatch(id, ra, dec, distmaxarcsec):
     table_header = """objectID, ra_in, dec_in\n"""
     table = generate_csv(table_header, [id, ra, dec])
 
+    #### TESTING
     print('XMATCH TABLE:')
     print(table)
-    #### TESTING
+    
     cnt = 1
     datareader = csv.reader(table)
     for row in datareader:
