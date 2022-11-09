@@ -41,11 +41,15 @@ def xmatch(id, ra, dec, distmaxarcsec):
     table_header = """objectID, ra_in, dec_in\n"""
     table = generate_csv(table_header, [id, ra, dec])
 
+    print('XMATCH TABLE:')
+    print(table)
     #### TESTING
     cnt = 1
     datareader = csv.reader(table)
     for row in datareader:
         print('Count =', cnt)
+        print('TABLE ROW:')
+        print(row)
         r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
                         data={"request": "xmatch",
                                 "distMaxArcsec": distmaxarcsec,
