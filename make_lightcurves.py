@@ -91,7 +91,10 @@ if __name__ == "__main__":
             #     ax.scatter(xi, yi, c='r', marker=mi)
             # for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'].astype(float), m_unf_g):
             #     ax.scatter(xg, yg, c='b', marker=mg)
-
+            
+            print('flc_df:')
+            print(flc_df[['dateobs', 'm', 'limiting_mag']])
+            print('')
             print('f_i:')
             print(f_i[['dateobs', 'm', 'limiting_mag']])
             print('')
@@ -110,16 +113,16 @@ if __name__ == "__main__":
             print('good_unf_g:')
             print(good_unf_g[['dateobs', 'm']])
 
-            ax.scatter(f_i['dateobs'], f_i['m'].astype(float), c='r', marker='.', alpha=0.4)
-            ax.scatter(f_i['dateobs'], f_i['limiting_mag'],    c='r', marker='^', alpha=0.4)
-            ax.scatter(f_g['dateobs'], f_g['m'].astype(float), c='b', marker='.', alpha=0.4)
-            ax.scatter(f_g['dateobs'], f_g['limiting_mag'],    c='b', marker='^', alpha=0.4)
+            ax.scatter(f_i['dateobs'].astype(float), f_i['m'].astype(float), c='r', marker='.', alpha=0.4)
+            ax.scatter(f_i['dateobs'].astype(float), f_i['limiting_mag'],    c='r', marker='^', alpha=0.4)
+            ax.scatter(f_g['dateobs'].astype(float), f_g['m'].astype(float), c='b', marker='.', alpha=0.4)
+            ax.scatter(f_g['dateobs'].astype(float), f_g['limiting_mag'],    c='b', marker='^', alpha=0.4)
 
-            ax.scatter(unf_i['dateobs'], unf_i['m'].astype(float), c='r', marker='.', label='i band')
-            ax.scatter(unf_g['dateobs'], unf_g['m'].astype(float), c='b', marker='.', label='g band')
+            ax.scatter(unf_i['dateobs'].astype(float), unf_i['m'].astype(float), c='r', marker='.', label='i band')
+            ax.scatter(unf_g['dateobs'].astype(float), unf_g['m'].astype(float), c='b', marker='.', label='g band')
 
-            ax.scatter(good_unf_i['dateobs'], good_unf_i['m'].astype(float), c='r', marker='X')
-            ax.scatter(good_unf_g['dateobs'], good_unf_g['m'].astype(float), c='b', marker='X')
+            ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='X')
+            ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='X')
             
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
