@@ -82,7 +82,7 @@ if __name__ == "__main__":
             # m_unf_g = ['X' if val==True else '.' for val in good_unf_g]
             
             # Plot light curve
-            fig, ax = plt.subplots()
+            fig, ax = plt.subplots(111)
 
             # for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'].astype(float), m_unf_i):
             #     ax.scatter(xi, yi, c='r', marker=mi)
@@ -92,18 +92,19 @@ if __name__ == "__main__":
             ax.scatter(unf_i['dateobs'], unf_i['m'].astype(float), c='r', marker='.', label='i band')
             ax.scatter(unf_g['dateobs'], unf_g['m'].astype(float), c='b', marker='.', label='g band')
 
-            ax.scatter(good_unf_i['dateobs'], good_unf_i['m'].astype(float), c='r', marker='X')
-            ax.scatter(good_unf_g['dateobs'], good_unf_g['m'].astype(float), c='b', marker='X')
-
             ax.scatter(f_i['dateobs'], f_i['m'].astype(float), c='r', marker='.', alpha=0.4)
             ax.scatter(f_i['dateobs'], f_i['limiting_mag'],    c='r', marker='^', alpha=0.4)
             ax.scatter(f_g['dateobs'], f_g['m'].astype(float), c='b', marker='.', alpha=0.4)
             ax.scatter(f_g['dateobs'], f_g['limiting_mag'],    c='b', marker='^', alpha=0.4)
+
+            ax.scatter(good_unf_i['dateobs'], good_unf_i['m'].astype(float), c='r', marker='X')
+            ax.scatter(good_unf_g['dateobs'], good_unf_g['m'].astype(float), c='b', marker='X')
             
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
             ax.set_ylabel('mag')
             ax.invert_yaxis()
+            fig.autofmt_xdate(rotation=45)
             ax.legend()
 
             fig_name = f'cand{cand_id}_{field}_ccd{ccd}.png'
