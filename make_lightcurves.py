@@ -10,6 +10,9 @@ if __name__ == "__main__":
     # Grab all masterlists of filtered candidates 
     filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
 
+    ##### TESTING
+    filtered_mlists = [filtered_mlists[5]]
+    #####
     for f in filtered_mlists:
         
         # Setting up directory to save light curves. Directory name is the filtering criteria parameters
@@ -88,6 +91,18 @@ if __name__ == "__main__":
             #     ax.scatter(xi, yi, c='r', marker=mi)
             # for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'].astype(float), m_unf_g):
             #     ax.scatter(xg, yg, c='b', marker=mg)
+
+            print('f_i:')
+            print(f_i)
+            print('')
+            print('f_g:')
+            print(f_g)
+            print('')
+            print('unf_i:')
+            print(unf_i)
+            print('')
+            print('unf_g:')
+            print(unf_g)
 
             ax.scatter(f_i['dateobs'], f_i['m'].astype(float), c='r', marker='.', alpha=0.4)
             ax.scatter(f_i['dateobs'], f_i['limiting_mag'],    c='r', marker='^', alpha=0.4)
