@@ -113,9 +113,9 @@ if __name__ == "__main__":
             print('good_unf_g:')
             print(good_unf_g[['dateobs', 'm']])
 
-            ax.scatter(f_mi['dateobs'].astype(float), f_mi['m'].astype(float), c='r', marker='.', alpha=0.4)
+            ax.scatter(f_mi['dateobs'].astype(float), f_mi['m'].astype(float), c='r', marker='.')
             ax.scatter(f_i['dateobs'].astype(float), f_i['limiting_mag'],    c='r', marker='^', alpha=0.4)
-            ax.scatter(f_mg['dateobs'].astype(float), f_mg['m'].astype(float), c='b', marker='.', alpha=0.4)
+            ax.scatter(f_mg['dateobs'].astype(float), f_mg['m'].astype(float), c='b', marker='.')
             ax.scatter(f_g['dateobs'].astype(float), f_g['limiting_mag'],    c='b', marker='^', alpha=0.4)
 
             ax.scatter(unf_i['dateobs'].astype(float), unf_i['m'].astype(float), c='r', marker='.', label='i band')
