@@ -97,9 +97,9 @@ if __name__ == "__main__":
 
 
             ax.scatter(f_i['dateobs'], f_i['m'].astype(float), c='r', alpha=0.4, label='i band')
-            ax.scatter(f_i['dateobs'], f_i['limiting_mag'], c='r', marker='^')
+            ax.scatter(f_i['dateobs'], f_i['limiting_mag'], c='r', marker='^', alpha=0.4)
             ax.scatter(f_g['dateobs'], f_g['m'].astype(float), c='b', alpha=0.4, label='g band')
-            ax.scatter(f_g['dateobs'], f_g['limiting_mag'], c='b', marker='^')
+            ax.scatter(f_g['dateobs'], f_g['limiting_mag'], c='b', marker='^', alpha=0.4)
             
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
