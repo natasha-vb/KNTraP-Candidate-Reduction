@@ -43,7 +43,8 @@ def xmatch(id, ra, dec, distmaxarcsec):
 
     #### TESTING
     cnt = 1
-    for i, row in table.iterrows():
+    datareader = csv.reader(table)
+    for row in datareader:
         print('Count =', cnt)
         r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
                         data={"request": "xmatch",
