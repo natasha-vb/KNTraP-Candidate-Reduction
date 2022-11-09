@@ -10,9 +10,6 @@ if __name__ == "__main__":
     # Grab all masterlists of filtered candidates 
     filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
 
-    ##### TESTING
-    filtered_mlists = [filtered_mlists[5]]
-    #####
     for f in filtered_mlists:
         
         # Setting up directory to save light curves. Directory name is the filtering criteria parameters
@@ -56,7 +53,6 @@ if __name__ == "__main__":
             flc_df = flc_df.sort_values(by='dateobs')
 
             # Calculate limiting magnitudes
-            # zp = 29.3155     #zero point
             for ii, row in flc_df.iterrows():
                 if row['flux_c'] >= 0:
                     flc_df['limiting_mag'] = -2.5*(np.log10(flc_df['flux_c'] + 3*(flc_df['dflux_c']))) + flc_df['ZPTMAG_c']
@@ -75,48 +71,38 @@ if __name__ == "__main__":
             f_mg = f_g[f_g['m'] != '-']
 
             # Changing markers for good detections
-            # good_unf_i = unf_i['good_detection']
-            # good_unf_g = unf_g['good_detection']
-
             good_unf_i = unf_i[unf_i['good_detection'] == True]
             good_unf_g = unf_g[unf_g['good_detection'] == True]
 
-            # m_unf_i = ['X' if val==True else '.' for val in good_unf_i]
-            # m_unf_g = ['X' if val==True else '.' for val in good_unf_g]
-            
+
             # Plot light curve
             fig, ax = plt.subplots()
 
-            # for xi, yi, mi in zip(unf_i['dateobs'], unf_i['m'].astype(float), m_unf_i):
-            #     ax.scatter(xi, yi, c='r', marker=mi)
-            # for xg, yg, mg in zip(unf_g['dateobs'], unf_g['m'].astype(float), m_unf_g):
-            #     ax.scatter(xg, yg, c='b', marker=mg)
-            
-            print('flc_df:')
-            print(flc_df[['dateobs', 'filt', 'm', 'limiting_mag']])
-            print('')
-            print('f_i:')
-            print(f_i[['dateobs', 'm', 'limiting_mag']])
-            print('')
-            print('f_g:')
-            print(f_g[['dateobs', 'm', 'limiting_mag']])
-            print('')
-            print('unf_i:')
-            print(unf_i[['dateobs', 'm']])
-            print('')
-            print('unf_g:')
-            print(unf_g[['dateobs', 'm']])
-            print('')
-            print('good_unf_i:')
-            print(good_unf_i[['dateobs', 'm']])
-            print('')
-            print('good_unf_g:')
-            print(good_unf_g[['dateobs', 'm']])
+            # print('flc_df:')
+            # print(flc_df[['dateobs', 'filt', 'm', 'limiting_mag']])
+            # print('')
+            # print('f_i:')
+            # print(f_i[['dateobs', 'm', 'limiting_mag']])
+            # print('')
+            # print('f_g:')
+            # print(f_g[['dateobs', 'm', 'limiting_mag']])
+            # print('')
+            # print('unf_i:')
+            # print(unf_i[['dateobs', 'm']])
+            # print('')
+            # print('unf_g:')
+            # print(unf_g[['dateobs', 'm']])
+            # print('')
+            # print('good_unf_i:')
+            # print(good_unf_i[['dateobs', 'm']])
+            # print('')
+            # print('good_unf_g:')
+            # print(good_unf_g[['dateobs', 'm']])
 
             ax.scatter(f_mi['dateobs'].astype(float), f_mi['m'].astype(float), c='r', marker='.')
-            ax.scatter(f_i['dateobs'].astype(float), f_i['limiting_mag'],    c='r', marker='^', alpha=0.4)
+            ax.scatter(f_i['dateobs'].astype(float), f_i['limiting_mag'],    c='r', marker='^', alpha=0.2)
             ax.scatter(f_mg['dateobs'].astype(float), f_mg['m'].astype(float), c='b', marker='.')
-            ax.scatter(f_g['dateobs'].astype(float), f_g['limiting_mag'],    c='b', marker='^', alpha=0.4)
+            ax.scatter(f_g['dateobs'].astype(float), f_g['limiting_mag'],    c='b', marker='^', alpha=0.2)
 
             ax.scatter(unf_i['dateobs'].astype(float), unf_i['m'].astype(float), c='r', marker='.', label='i band')
             ax.scatter(unf_g['dateobs'].astype(float), unf_g['m'].astype(float), c='b', marker='.', label='g band')
