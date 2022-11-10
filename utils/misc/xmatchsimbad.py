@@ -47,7 +47,7 @@ def xmatch(id, ra, dec, distmaxarcsec):
     
     cnt = 1
     df_table = pd.read_csv(table)
-    for row in df_table.iterrows():
+    for i, row in df_table.iterrows():
         print('Count =', cnt)
         print('TABLE ROW:')
         print(row)
