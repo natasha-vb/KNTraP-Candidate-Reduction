@@ -46,29 +46,27 @@ def xmatch(id, ra, dec, distmaxarcsec):
     print(table)
     
     cnt = 1
-    with open(table) as fd:
-        reader = csv.reader(fd)
-        row = list(reader)
-        for i in len(table):
+    tablesplit = table.split('\n')
+    tablecut = tablesplit[1:-1]
+    for i in len(tablecut):
+        row = tablecut[i]
+        print('Count =', cnt)
+        print('TABLE ROW:')
+        print(row)
+        r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
+                        data={"request": "xmatch",
+                                "distMaxArcsec": distmaxarcsec,
+                                "selection": "all",
+                                "RESPONSEFORMAT":"csv",
+                                "cat2": "simbad",
+                                "colRA1": "ra_in",
+                                "colDec1": "dec_in"},
+                            files={"cat1": row})
 
-            print('Count =', cnt)
-            print('TABLE ROW:')
-            print(row[i])
-            coords = row[i].to_list()
-            r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
-                            data={"request": "xmatch",
-                                    "distMaxArcsec": distmaxarcsec,
-                                    "selection": "all",
-                                    "RESPONSEFORMAT":"csv",
-                                    "cat2": "simbad",
-                                    "colRA1": "ra_in",
-                                    "colDec1": "dec_in"},
-                                files={"cat1": coords})
+        data = r.content.decode().split("\n")[1:-1]
+        header = r.content.decode().split("\n")[0].split(",")
 
-            data = r.content.decode().split("\n")[1:-1]
-            header = r.content.decode().split("\n")[0].split(",")
-
-            cnt +=1
+        cnt +=1
             
     # h = open('simbad_text.csv', 'w')
     # h.write(r.text)
