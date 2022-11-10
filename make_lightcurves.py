@@ -55,14 +55,14 @@ if __name__ == "__main__":
             print('FORCED LIGHT CURVE:')
             print(flc_df[['dateobs','flux_c','dflux_c']])
             # Calculate limiting magnitudes
-            flc_df['limiting_mag'] = 0
+            flc_df['limiting_mag'] = 0.0
             for ii, row in flc_df.iterrows():
                 print('ROW:')
                 print(row)
                 if row['flux_c'] >= 0:
-                    flc_df['limiting_mag'][ii] = -2.5*(np.log10(row['flux_c'].astype(float) + 3*(row['dflux_c'].astype(float)))) + row['ZPTMAG_c'].astype(float)
+                    flc_df['limiting_mag'][ii] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
                 else:
-                    flc_df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c'].astype(float)))) + row['ZPTMAG_c'].astype(float)
+                    flc_df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
                 print('CALCULATED LIMITING MAG:')
                 print(flc_df['limiting_mag'])
             
