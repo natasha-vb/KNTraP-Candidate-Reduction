@@ -52,20 +52,14 @@ if __name__ == "__main__":
             flc_df['dateobs'] = det_dates
             flc_df = flc_df.sort_values(by='dateobs')
 
-            print('FORCED LIGHT CURVE:')
-            print(flc_df[['dateobs','flux_c','dflux_c']])
             # Calculate limiting magnitudes
             flc_df['limiting_mag'] = 0.0
             for ii, row in flc_df.iterrows():
-                print('ROW:')
-                print(row)
                 if row['flux_c'] >= 0:
                     flc_df['limiting_mag'][ii] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
                 else:
                     flc_df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
-                print('CALCULATED LIMITING MAG:')
-                print(flc_df['limiting_mag'])
-            
+
             # Creating i and g band subsets, and removing '-' magnitude values
             unf_i = unflc_df[unflc_df['filt'] == 'i']
             unf_g = unflc_df[unflc_df['filt'] == 'g']
@@ -84,27 +78,6 @@ if __name__ == "__main__":
 
             # Plot light curve
             fig, ax = plt.subplots()
-
-            # print('flc_df:')
-            # print(flc_df[['dateobs', 'filt', 'm', 'limiting_mag']])
-            # print('')
-            # print('f_i:')
-            # print(f_i[['dateobs', 'm', 'limiting_mag']])
-            # print('')
-            # print('f_g:')
-            # print(f_g[['dateobs', 'm', 'limiting_mag']])
-            # print('')
-            # print('unf_i:')
-            # print(unf_i[['dateobs', 'm']])
-            # print('')
-            # print('unf_g:')
-            # print(unf_g[['dateobs', 'm']])
-            # print('')
-            # print('good_unf_i:')
-            # print(good_unf_i[['dateobs', 'm']])
-            # print('')
-            # print('good_unf_g:')
-            # print(good_unf_g[['dateobs', 'm']])
 
             ax.scatter(f_mi['dateobs'].astype(float), f_mi['m'].astype(float), c='r', marker='.')
             ax.scatter(f_i['dateobs'].astype(float), f_i['limiting_mag'],    c='r', marker='^', alpha=0.2)
