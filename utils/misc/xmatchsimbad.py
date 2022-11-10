@@ -48,7 +48,8 @@ def xmatch(id, ra, dec, distmaxarcsec):
     cnt = 1
     tablesplit = table.split('\n')
     tablecut = tablesplit[1:-1]
-    for i in len(tablecut):
+    num = len(tablecut)
+    for i in range(num):
         row = tablecut[i]
         print('Count =', cnt)
         print('TABLE ROW:')
