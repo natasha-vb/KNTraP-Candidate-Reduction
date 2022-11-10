@@ -1,6 +1,6 @@
 import argparse
 import glob
-# import ipdb 
+import ipdb 
 import numpy as np
 import os
 import pandas as pd
@@ -390,7 +390,7 @@ if __name__ == "__main__":
     ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)
 
-#################################################################  CAN RUN IN SEPARATE SCRIPT. LOOP OVER DIFFERENT CRITERIA AND PRINT OUT HOW MANY CANDIDATES ARE FOUND PER CCD & PER FIELD
+####### CHANGE CRITERIA DEPENDING ON BEST CHOICE FROM TOP_CANDIDATES #######
     # Separating top tier candidates into a list
     t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 3) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 3) |
                                            (ml_xmatch.N_CONSECUTIVE_DETECTIONS_ig >= 2)] 

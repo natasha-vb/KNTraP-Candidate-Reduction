@@ -1,28 +1,28 @@
 # Based on run_sourceextractor.py code by Jielai Zhang
 
-import docopt, os
-import astropy.io.fits as fits
-import subprocess
-from astropy.io import ascii
-import pandas as pd
-import numpy as np
-import ntpath, shutil
-import time
-import string    
+import ntpath
+import os
 import random
-import glob
+import subprocess
 
 from utils.misc import get_psf
+
+def remove_temp_files(fs):
+    for f in fs:
+        os.remove(f)
+    return None
 
 def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                     savecats_dir=None , spreadmodel=True, catending=None,
                     fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=1, 
                     field='257A', diff_im=False, verbose=False):
     
-    nnw_path = "./utils/default.nnw"
-    conv_path = "./utils/default.conv" 
-    params_path = "./utils/default.param"
-    config_path = "./utils/default.sex"
+    rand_tmpname = random.randint(10**11,(10**12)-1)
+
+    nnw_path = f"./utils/{rand_tmpname}/default.nnw"
+    conv_path = f"./utils/{rand_tmpname}/default.conv" 
+    params_path = f"./utils/{rand_tmpname}/default.param"
+    config_path = f"./utils/{rand_tmpname}/default.sex"
 
     if verbose:
         VERBOSE_TYPE = 'NORMAL'
@@ -107,5 +107,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         
         if diff_im:
             spreadmodel=False
+
+    remove_temp_files([params_path,conv_path,config_path])
 
     return catfiles, catted_fitsfiles

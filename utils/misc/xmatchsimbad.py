@@ -1,7 +1,6 @@
 # Code from Anais Moller
 
 import numpy as np
-import pandas as pd
 import io
 import csv
 import logging

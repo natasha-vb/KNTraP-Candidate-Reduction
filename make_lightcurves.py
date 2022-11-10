@@ -10,6 +10,9 @@ if __name__ == "__main__":
     # Grab all masterlists of filtered candidates 
     filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
 
+    ### TESTING
+    # filtered_mlists = [filtered_mlists[5]]
+
     for f in filtered_mlists:
         
         # Setting up directory to save light curves. Directory name is the filtering criteria parameters

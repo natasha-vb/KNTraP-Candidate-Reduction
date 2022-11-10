@@ -1,7 +1,3 @@
-import numpy as np 
-import pandas as pd 
-import os
-
 from utils.misc import xmatchsimbad
 from utils.misc import xmatchgaia
 from utils.misc import xmatchps1

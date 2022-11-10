@@ -1,19 +1,20 @@
 # Code from Jielai Zhang
 
-import docopt, os
-import astropy.io.fits as fits
-import subprocess
-from astropy.io import ascii
-import pandas as pd
-import numpy as np
 import ntpath
+import os
 from pathlib import Path
+import random
+import subprocess
+
+import astropy.io.fits as fits
 
 # Create temporary SE files for psf
-conv_name = "./temp_default.conv"
-params_name = "./temp_params.txt"
-config_name = "./temp_default.sex"
-psfconfig_name = "./temp_default.psfex"
+rand_tmpname = random.randint(10**11,(10**12)-1)
+
+conv_name = f"./{rand_tmpname}/temp_default.conv"
+params_name = f"./{rand_tmpname}/temp_params.txt"
+config_name = f"./{rand_tmpname}/temp_default.sex"
+psfconfig_name = f"./{rand_tmpname}/temp_default.psfex"
 
 f_conv = '''CONV NORM
 # 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.
