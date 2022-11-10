@@ -51,16 +51,20 @@ if __name__ == "__main__":
             det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
             flc_df['dateobs'] = det_dates
             flc_df = flc_df.sort_values(by='dateobs')
+
             print('FORCED LIGHT CURVE:')
-            print(flc_df)
+            print(flc_df[['dateobs','flux_c','dflux_c']])
             # Calculate limiting magnitudes
+            flc_df['limiting_mag'] = 0
             for ii, row in flc_df.iterrows():
                 print('ROW:')
                 print(row)
                 if row['flux_c'] >= 0:
-                    flc_df['limiting_mag'] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
+                    flc_df['limiting_mag'][i] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
                 else:
-                    flc_df['limiting_mag'] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
+                    flc_df['limiting_mag'][i] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
+                print('CALCULATED LIMITING MAG:')
+                print(flc_df['limiting_mag'])
             
             # Creating i and g band subsets, and removing '-' magnitude values
             unf_i = unflc_df[unflc_df['filt'] == 'i']
