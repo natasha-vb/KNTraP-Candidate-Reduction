@@ -60,9 +60,9 @@ if __name__ == "__main__":
                 print('ROW:')
                 print(row)
                 if row['flux_c'] >= 0:
-                    flc_df['limiting_mag'][i] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
+                    flc_df['limiting_mag'][ii['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
                 else:
-                    flc_df['limiting_mag'][i] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
+                    flc_df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
                 print('CALCULATED LIMITING MAG:')
                 print(flc_df['limiting_mag'])
             
