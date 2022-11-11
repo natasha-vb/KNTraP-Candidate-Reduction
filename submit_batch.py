@@ -145,6 +145,11 @@ if __name__ == "__main__":
             help='Selected field'
     )
     parser.add_argument(
+            '--ccd',
+            type=int,
+            help='Selected CCD'
+    )
+    parser.add_argument(
             '--debugmode',
             action='store_true',
             help="Activating debug mode"
@@ -171,22 +176,28 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    ccd = 1
 
-    # Code running mode arguments
-    if args.debugmode:
-        print(args)
-    do_not_submit       = args.do_not_submit
-    verbose             = args.verbose
-    # Required arguments
-    field               = args.field
-    commandfile         = f'python main.py {field} --ccd {ccd} --v'
-    # Optional arguments (with defaults set)
-    bashrcfile          = args.bashrcfile
-    memory_request      = int(args.memory_request)
+    if args.ccd:
+        ccds = [args.ccd]
+    else:
+        ccds = range(1,63,1)
 
-    _ = submit_slurm_OzSTAR_batch(commandfile,
-                                bashrcfile=bashrcfile,
-                                memory_request = memory_request,
-                                verbose=verbose,
-                                do_not_submit=do_not_submit)
+    for ccd in ccds:
+        
+        # Code running mode arguments
+        if args.debugmode:
+            print(args)
+        do_not_submit       = args.do_not_submit
+        verbose             = args.verbose
+        # Required arguments
+        field               = args.field
+        commandfile         = f'python main.py {field} --ccd {ccd} --v'
+        # Optional arguments (with defaults set)
+        bashrcfile          = args.bashrcfile
+        memory_request      = int(args.memory_request)
+
+        _ = submit_slurm_OzSTAR_batch(commandfile,
+                                    bashrcfile=bashrcfile,
+                                    memory_request = memory_request,
+                                    verbose=verbose,
+                                    do_not_submit=do_not_submit)
