@@ -12,6 +12,11 @@ def remove_temp_files(fs):
         os.remove(f)
     return None
 
+def make_directory(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    return
+
 def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                     savecats_dir=None , spreadmodel=True, catending=None,
                     fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=1, 
@@ -23,6 +28,11 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
     conv_path = f"./utils/{rand_tmpname}/default.conv" 
     params_path = f"./utils/{rand_tmpname}/default.param"
     config_path = f"./utils/{rand_tmpname}/default.sex"
+
+    _ = make_directory(nnw_path)
+    _ = make_directory(conv_path)
+    _ = make_directory(params_path)
+    _ = make_directory(config_path)
 
     if verbose:
         VERBOSE_TYPE = 'NORMAL'
