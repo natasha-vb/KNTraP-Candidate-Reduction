@@ -81,14 +81,13 @@ if __name__ == "__main__":
             good_unf_i = unf_i[unf_i['good_detection'] == True]
             good_unf_g = unf_g[unf_g['good_detection'] == True]
 
-
             # Plot light curve
             fig, ax = plt.subplots()
 
             ax.scatter(f_mi['dateobs'].astype(float), f_mi['m'].astype(float), c='r', marker='.')
-            ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'],    c='r', marker='^', alpha=0.2)
+            ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'],    c='r', marker='v', alpha=0.2)
             ax.scatter(f_mg['dateobs'].astype(float), f_mg['m'].astype(float), c='b', marker='.')
-            ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'],    c='b', marker='^', alpha=0.2) ### upside down triangle
+            ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'],    c='b', marker='v', alpha=0.2) ### upside down triangle
 
             ax.scatter(unf_i['dateobs'].astype(float), unf_i['m'].astype(float), c='r', marker='.', label='i band')
             ax.scatter(unf_g['dateobs'].astype(float), unf_g['m'].astype(float), c='b', marker='.', label='g band')
