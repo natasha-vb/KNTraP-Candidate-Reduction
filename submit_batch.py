@@ -180,7 +180,7 @@ if __name__ == "__main__":
     verbose             = args.verbose
     # Required arguments
     field               = args.field
-    commandfile         = f'python main.py {field} --ccd {ccd} --v --skip_se'
+    commandfile         = f'python main.py {field} --ccd {ccd} --v'
     # Optional arguments (with defaults set)
     bashrcfile          = args.bashrcfile
     memory_request      = int(args.memory_request)
