@@ -8,6 +8,16 @@ import subprocess
 
 import astropy.io.fits as fits
 
+def remove_temp_dirs(dirs):
+    for d in dirs:
+        shutil.rmtree(d, ignore_errors=True)
+    return None
+
+def make_directory(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    return None
+
 # Create temporary SE files for psf
 rand_tmpname = random.randint(10**11,(10**12)-1)
 
@@ -15,6 +25,11 @@ conv_name = f"./{rand_tmpname}/temp_default.conv"
 params_name = f"./{rand_tmpname}/temp_params.txt"
 config_name = f"./{rand_tmpname}/temp_default.sex"
 psfconfig_name = f"./{rand_tmpname}/temp_default.psfex"
+
+make_directory(conv_name)
+make_directory(params_name)
+make_directory(config_name)
+make_directory(psfconfig_name)
 
 f_conv = '''CONV NORM
 # 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.
@@ -156,7 +171,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             
         PSFs.append(f_psfbinary)
 
-    remove_temp_files([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
+    remove_temp_dirs([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
 
     if verbose:
         print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)

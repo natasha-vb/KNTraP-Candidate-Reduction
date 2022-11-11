@@ -3,6 +3,7 @@
 import ntpath
 import os
 import random
+import shutil
 import subprocess
 
 from utils.misc import get_psf
@@ -12,10 +13,15 @@ def remove_temp_files(fs):
         os.remove(f)
     return None
 
+def remove_temp_dirs(dirs):
+    for d in dirs:
+        shutil.rmtree(d, ignore_errors=True)
+    return None
+
 def make_directory(path):
     if not os.path.exists(path):
         os.makedirs(path)
-    return
+    return None
 
 def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                     savecats_dir=None , spreadmodel=True, catending=None,
@@ -29,10 +35,10 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
     params_path = f"./utils/{rand_tmpname}/default.param"
     config_path = f"./utils/{rand_tmpname}/default.sex"
 
-    _ = make_directory(nnw_path)
-    _ = make_directory(conv_path)
-    _ = make_directory(params_path)
-    _ = make_directory(config_path)
+    make_directory(nnw_path)
+    make_directory(conv_path)
+    make_directory(params_path)
+    make_directory(config_path)
 
     if verbose:
         VERBOSE_TYPE = 'NORMAL'
@@ -118,6 +124,6 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         if diff_im:
             spreadmodel=False
 
-    remove_temp_files([params_path,conv_path,config_path])
+    remove_temp_dirs([params_path,conv_path,config_path])
 
     return catfiles, catted_fitsfiles
