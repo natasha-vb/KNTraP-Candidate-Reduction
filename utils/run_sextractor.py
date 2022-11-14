@@ -38,7 +38,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
 
     tempdir_path = f"./utils/{rand_tmpname}/"
 
-    make_directory(tempdir_path)
+    # make_directory(tempdir_path)
 
     if verbose:
         print(f'Randomised directory name: {rand_tmpname}')
