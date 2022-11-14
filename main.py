@@ -173,10 +173,11 @@ if __name__ == "__main__":
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=False, verbose=args.verbose)
             end_time = time.time()
+            time_diff = end_time - start_time
             if args.verbose:
                 print('')
                 print('-------------------------------------------------------------------------')
-                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON SCI IMAGE: %f seconds' % float(end_time) - float(start_time))
+                print(f'TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON SCI IMAGE: {time_diff} seconds')
                 print('-------------------------------------------------------------------------')
 
             # Run SE on difference image
