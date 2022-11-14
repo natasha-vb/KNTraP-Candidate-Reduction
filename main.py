@@ -175,7 +175,7 @@ if __name__ == "__main__":
             if args.verbose:
                 print('')
                 print('-------------------------------------------------------------------------')
-                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON SCI IMAGE: %f seconds' % time.time() - start_time)
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON SCI IMAGE: %f seconds' % time.time() - float(start_time))
                 print('-------------------------------------------------------------------------')
 
             # Run SE on difference image
@@ -194,7 +194,7 @@ if __name__ == "__main__":
             if args.verbose:
                 print('')
                 print('-------------------------------------------------------------------------')
-                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON DIFF IMAGE: %f seconds' % time.time() - start_time)
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON DIFF IMAGE: %f seconds' % time.time() - float(start_time))
                 print('-------------------------------------------------------------------------')
 
             # Run SE on template image
@@ -213,7 +213,7 @@ if __name__ == "__main__":
             if args.verbose:
                 print('')
                 print('-------------------------------------------------------------------------')
-                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON TMPL IMAGE: %f seconds' % time.time() - start_time)
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON TMPL IMAGE: %f seconds' % time.time() - float(start_time))
                 print('-------------------------------------------------------------------------')
 
         # Read in unforced diff light curve files pathnames 
