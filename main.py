@@ -172,10 +172,11 @@ if __name__ == "__main__":
                                                     fwhm=fwhm, detect_minarea=detect_minarea,
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=False, verbose=args.verbose)
+            end_time = time.time()
             if args.verbose:
                 print('')
                 print('-------------------------------------------------------------------------')
-                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON SCI IMAGE: %f seconds' % float(time.time()) - float(start_time))
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON SCI IMAGE: %f seconds' % float(end_time) - float(start_time))
                 print('-------------------------------------------------------------------------')
 
             # Run SE on difference image
@@ -191,10 +192,11 @@ if __name__ == "__main__":
                                                     fwhm=fwhm, detect_minarea=detect_minarea, 
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=True, verbose=args.verbose)
+            end_time = time.time()
             if args.verbose:
                 print('')
                 print('-------------------------------------------------------------------------')
-                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON DIFF IMAGE: %f seconds' % float(time.time()) - float(start_time))
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON DIFF IMAGE: %f seconds' % float(end_time) - float(start_time))
                 print('-------------------------------------------------------------------------')
 
             # Run SE on template image
@@ -210,10 +212,11 @@ if __name__ == "__main__":
                                                     fwhm=fwhm, detect_minarea=detect_minarea, 
                                                     detect_thresh=detect_thresh, ccd=ccd, field=args.field,
                                                     diff_im=False, verbose=args.verbose)
+            end_time = time.time()
             if args.verbose:
                 print('')
                 print('-------------------------------------------------------------------------')
-                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON TMPL IMAGE: %f seconds' % float(time.time()) - float(start_time))
+                print('TIME TAKEN FOR SOURCE EXTRACTOR AND PSFEx ON TMPL IMAGE: %f seconds' % float(end_time) - float(start_time))
                 print('-------------------------------------------------------------------------')
 
         # Read in unforced diff light curve files pathnames 
