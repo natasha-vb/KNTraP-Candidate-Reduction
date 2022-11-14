@@ -23,26 +23,30 @@ def make_directory(path):
         os.makedirs(path)
     return None
 
+
 def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                     savecats_dir=None , spreadmodel=True, catending=None,
                     fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=1, 
                     field='257A', diff_im=False, verbose=False):
     
+    if verbose:
+        VERBOSE_TYPE = 'NORMAL'
+    else:
+        VERBOSE_TYPE = 'QUIET'
+
     rand_tmpname = random.randint(10**11,(10**12)-1)
 
     tempdir_path = f"./utils/{rand_tmpname}/"
 
     make_directory(tempdir_path)
 
-    nnw_path = f"./utils/{rand_tmpname}/default.nnw"
-    conv_path = f"./utils/{rand_tmpname}/default.conv" 
-    params_path = f"./utils/{rand_tmpname}/default.param"
-    config_path = f"./utils/{rand_tmpname}/default.sex"
-
     if verbose:
-        VERBOSE_TYPE = 'NORMAL'
-    else:
-        VERBOSE_TYPE = 'QUIET'
+        print(f'Randomised directory name: {rand_tmpname}')
+
+    nnw_path    = f"./utils/default.nnw"
+    conv_path   = f"./utils/default.conv" 
+    params_path = f"./utils/default.param"
+    config_path = f"./utils/default.sex"
 
     catfiles = []
     psffiles = []
