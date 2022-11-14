@@ -77,6 +77,9 @@ if __name__ == "__main__":
             f_limi = f_i[f_i['m'] == '-']
             f_limg = f_g[f_g['m'] == '-']
 
+            f_mi_cut = pd.merge(f_mi, unf_i, indicator=True, how='outer').query('_merge == "left_only"').drop('_merge',axis=1)
+            f_mg_cut = pd.merge(f_mg, unf_g, indicator=True, how='outer').query('_merge == "left_only"').drop('_merge',axis=1)
+
             # Changing markers for good detections
             good_unf_i = unf_i[unf_i['good_detection'] == True]
             good_unf_g = unf_g[unf_g['good_detection'] == True]
@@ -84,9 +87,9 @@ if __name__ == "__main__":
             # Plot light curve
             fig, ax = plt.subplots()
 
-            ax.scatter(f_mi['dateobs'].astype(float), f_mi['m'].astype(float), c='r', marker='.')
+            ax.scatter(f_mi['dateobs'].astype(float), f_mi_cut['m'].astype(float), c='r', marker='.')
             ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'],    c='r', marker='v', alpha=0.2)
-            ax.scatter(f_mg['dateobs'].astype(float), f_mg['m'].astype(float), c='b', marker='.')
+            ax.scatter(f_mg['dateobs'].astype(float), f_mg_cut['m'].astype(float), c='b', marker='.')
             ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'],    c='b', marker='v', alpha=0.2) 
 
             ax.scatter(unf_i['dateobs'].astype(float), unf_i['m'].astype(float), c='r', marker='.', label='i band')
@@ -95,10 +98,16 @@ if __name__ == "__main__":
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
             ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
 
+            print('forced:')
             print(f_mi[['dateobs', 'm']])
             print(f_mg[['dateobs', 'm']])
+            print('forced cut:')
+            print(f_mi_cut[['dateobs', 'm']])
+            print(f_mg_cut[['dateobs', 'm']])
+            print('unforced:')
             print(unf_i[['dateobs', 'm']])
             print(unf_g[['dateobs', 'm']])
+            print('unforced good:')
             print(good_unf_i[['dateobs','m']])
             print(good_unf_g[['dateobs','m']])
             
