@@ -77,10 +77,8 @@ if __name__ == "__main__":
             f_limi = f_i[f_i['m'] == '-']
             f_limg = f_g[f_g['m'] == '-']
 
-            ipdb.set_trace()
-
-            # f_mi_cut = 
-            # f_mg_cut = 
+            f_mi_cut = f_mi[f_mi.dateobs.isin(unf_i.dateobs)]
+            f_mg_cut = f_mg[f_mg.dateobs.isin(unf_g.dateobs)]
 
             # Changing markers for good detections
             good_unf_i = unf_i[unf_i['good_detection'] == True]
