@@ -95,8 +95,8 @@ if __name__ == "__main__":
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
             ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
 
-            print(f_i[['dateobs', 'm']])
-            print(f_g[['dateobs', 'm']])
+            print(f_mi[['dateobs', 'm']])
+            print(f_mg[['dateobs', 'm']])
             print(unf_i[['dateobs', 'm']])
             print(unf_g[['dateobs', 'm']])
             print(good_unf_i[['dateobs','m']])
