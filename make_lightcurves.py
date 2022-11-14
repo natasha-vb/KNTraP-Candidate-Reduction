@@ -87,9 +87,9 @@ if __name__ == "__main__":
             # Plot light curve
             fig, ax = plt.subplots()
 
-            ax.scatter(f_mi['dateobs'].astype(float), f_mi_cut['m'].astype(float), c='r', marker='.')
+            ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), c='r', marker='.')
             ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'],    c='r', marker='v', alpha=0.2)
-            ax.scatter(f_mg['dateobs'].astype(float), f_mg_cut['m'].astype(float), c='b', marker='.')
+            ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), c='b', marker='.')
             ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'],    c='b', marker='v', alpha=0.2) 
 
             ax.scatter(unf_i['dateobs'].astype(float), unf_i['m'].astype(float), c='r', marker='.', label='i band')
