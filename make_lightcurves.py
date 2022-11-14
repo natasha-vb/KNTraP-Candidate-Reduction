@@ -77,8 +77,8 @@ if __name__ == "__main__":
             f_limi = f_i[f_i['m'] == '-']
             f_limg = f_g[f_g['m'] == '-']
 
-            f_mi_cut = pd.merge(f_mi, unf_i, indicator=True, how='outer').query('_merge == "left_only"').drop('_merge',axis=1)
-            f_mg_cut = pd.merge(f_mg, unf_g, indicator=True, how='outer').query('_merge == "left_only"').drop('_merge',axis=1)
+            f_mi_cut = pd.merge(f_mi, unf_i, indicator=True, how='left').query('_merge == "left_only"').drop('_merge',axis=1)
+            f_mg_cut = pd.merge(f_mg, unf_g, indicator=True, how='left').query('_merge == "left_only"').drop('_merge',axis=1)
 
             # Changing markers for good detections
             good_unf_i = unf_i[unf_i['good_detection'] == True]
