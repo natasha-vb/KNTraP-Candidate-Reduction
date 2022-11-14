@@ -30,15 +30,14 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
     
     rand_tmpname = random.randint(10**11,(10**12)-1)
 
+    tempdir_path = f"./utils/{rand_tmpname}/"
+
+    make_directory(tempdir_path)
+
     nnw_path = f"./utils/{rand_tmpname}/default.nnw"
     conv_path = f"./utils/{rand_tmpname}/default.conv" 
     params_path = f"./utils/{rand_tmpname}/default.param"
     config_path = f"./utils/{rand_tmpname}/default.sex"
-
-    make_directory(nnw_path)
-    make_directory(conv_path)
-    make_directory(params_path)
-    make_directory(config_path)
 
     if verbose:
         VERBOSE_TYPE = 'NORMAL'

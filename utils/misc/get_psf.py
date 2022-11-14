@@ -4,6 +4,7 @@ import ntpath
 import os
 from pathlib import Path
 import random
+import shutil
 import subprocess
 
 import astropy.io.fits as fits
@@ -21,15 +22,14 @@ def make_directory(path):
 # Create temporary SE files for psf
 rand_tmpname = random.randint(10**11,(10**12)-1)
 
+tempdir_name = f"./{rand_tmpname}"
+
+make_directory(tempdir_name)
+
 conv_name = f"./{rand_tmpname}/temp_default.conv"
 params_name = f"./{rand_tmpname}/temp_params.txt"
 config_name = f"./{rand_tmpname}/temp_default.sex"
 psfconfig_name = f"./{rand_tmpname}/temp_default.psfex"
-
-make_directory(conv_name)
-make_directory(params_name)
-make_directory(config_name)
-make_directory(psfconfig_name)
 
 f_conv = '''CONV NORM
 # 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.
