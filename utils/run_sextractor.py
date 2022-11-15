@@ -36,17 +36,17 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
 
     rand_tmpname = random.randint(10**11,(10**12)-1)
 
-    tempdir_path = f"./utils/{rand_tmpname}/"
+    # tempdir_path = f"./utils/{rand_tmpname}/"
 
     # make_directory(tempdir_path)
 
-    if verbose:
-        print(f'Randomised directory name: {rand_tmpname}')
+    # if verbose:
+    #     print(f'Randomised directory name: {rand_tmpname}')
 
-    nnw_path    = f"./utils/default.nnw"
-    conv_path   = f"./utils/default.conv" 
-    params_path = f"./utils/default.param"
-    config_path = f"./utils/default.sex"
+    nnw_path    = f"./utils/SE_files/default.nnw"
+    conv_path   = f"./utils/SE_files/default.conv" 
+    params_path = f"./utils/SE_files/default.param"
+    config_path = f"./utils/SE_files/default.sex"
 
     catfiles = []
     psffiles = []
@@ -127,6 +127,6 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         if diff_im:
             spreadmodel=False
 
-    remove_temp_dirs([params_path,conv_path,config_path])
+    # remove_temp_dirs([tempdir_path])
 
     return catfiles, catted_fitsfiles
