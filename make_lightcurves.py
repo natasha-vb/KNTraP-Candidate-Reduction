@@ -66,8 +66,8 @@ if __name__ == "__main__":
             # Creating i and g band subsets, and removing '-' magnitude values
             unf_i = unflc_df[unflc_df['filt'] == 'i']
             unf_g = unflc_df[unflc_df['filt'] == 'g']
-            unf_i = unf_i[unf_i['m'] != '-']
-            unf_g = unf_g[unf_g['m'] != '-']
+            unf_mi = unf_i[unf_i['m'] != '-']
+            unf_mg = unf_g[unf_g['m'] != '-']
 
             f_i = flc_df[flc_df['filt'] == 'i']
             f_g = flc_df[flc_df['filt'] == 'g']
@@ -77,12 +77,12 @@ if __name__ == "__main__":
             f_limi = f_i[f_i['m'] == '-']
             f_limg = f_g[f_g['m'] == '-']
 
-            f_mi_cut = f_mi[f_mi.dateobs.isin(unf_i.dateobs)]
-            f_mg_cut = f_mg[f_mg.dateobs.isin(unf_g.dateobs)]
+            f_mi_cut = f_mi[f_mi.MJD.isin(unf_i.MJD)]
+            f_mg_cut = f_mg[f_mg.MJD.isin(unf_g.MJD)]
 
             # Changing markers for good detections
-            good_unf_i = unf_i[unf_i['good_detection'] == True]
-            good_unf_g = unf_g[unf_g['good_detection'] == True]
+            good_unf_i = unf_mi[unf_mi['good_detection'] == True]
+            good_unf_g = unf_mg[unf_mg['good_detection'] == True]
 
             # Plot light curve
             fig, ax = plt.subplots()
@@ -92,8 +92,8 @@ if __name__ == "__main__":
             ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), c='b', marker='.')
             ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'],    c='b', marker='v', alpha=0.2) 
 
-            ax.scatter(unf_i['dateobs'].astype(float), unf_i['m'].astype(float), c='r', marker='.', label='i band')
-            ax.scatter(unf_g['dateobs'].astype(float), unf_g['m'].astype(float), c='b', marker='.', label='g band')
+            ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
+            ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
 
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
             ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
@@ -105,8 +105,8 @@ if __name__ == "__main__":
             print(f_mi_cut[['dateobs', 'm']])
             print(f_mg_cut[['dateobs', 'm']])
             print('unforced:')
-            print(unf_i[['dateobs', 'm']])
-            print(unf_g[['dateobs', 'm']])
+            print(unf_mi[['dateobs', 'm']])
+            print(unf_mg[['dateobs', 'm']])
             print('unforced good:')
             print(good_unf_i[['dateobs','m']])
             print(good_unf_g[['dateobs','m']])
