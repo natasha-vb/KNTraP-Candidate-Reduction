@@ -172,6 +172,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
         PSFs.append(f_psfbinary)
 
     remove_temp_dirs([tempdir_name])
+    remove_temp_files(['psfex.xml'])
 
     if verbose:
         print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)
