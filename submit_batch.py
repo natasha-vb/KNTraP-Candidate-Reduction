@@ -57,7 +57,7 @@ def submit_slurm_OzSTAR_batch(commandfile,
     pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction'
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
-        walltime='7:00:00'
+        walltime='8:00:00'
 
     # with open(commandfile) as fp:
         pipecommand = commandfile.strip()
@@ -175,7 +175,6 @@ if __name__ == "__main__":
             help='Request this much memory'
     )
     args = parser.parse_args()
-
 
     if args.ccd:
         ccds = [args.ccd]

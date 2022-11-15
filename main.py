@@ -386,6 +386,7 @@ if __name__ == "__main__":
     for i, m in enumerate(masterlist_list):
         ml = pd.read_csv(masterlist_list[i])
         masterlist_allccds = masterlist_allccds.append(ml,sort=False)
+    masterlist_allccds = masterlist_allccds.sort_values(by = ['CCD', 'CAND_ID'] )
 
     masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}.allccds.csv')
     masterlist_allccds.to_csv(masterlist_allccds_path, index=False)
