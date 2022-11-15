@@ -77,8 +77,8 @@ if __name__ == "__main__":
             f_limi = f_i[f_i['m'] == '-']
             f_limg = f_g[f_g['m'] == '-']
 
-            f_mi_cut = f_mi[~f_mi.MJD.isin(unf_i.MJD)]
-            f_mg_cut = f_mg[~f_mg.MJD.isin(unf_g.MJD)]
+            f_mi_cut = f_mi[~f_mi.MJD.isin(unf_mi.MJD)]
+            f_mg_cut = f_mg[~f_mg.MJD.isin(unf_mg.MJD)]
 
             # Changing markers for good detections
             good_unf_i = unf_mi[unf_mi['good_detection'] == True]
