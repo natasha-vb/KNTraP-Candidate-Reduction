@@ -75,7 +75,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                                             psfex_loc=psfex_loc, catending=None, verbose=verbose)
                 PSF_success[ii] = True
             except:
-                print(f'\nSKIPPED: PSF measurement unsuccessful for {f}')
+                print(f'SKIPPED: PSF measurement unsuccessful for {f}\n')
                 continue
         else:
             PSF_success[ii] = True
