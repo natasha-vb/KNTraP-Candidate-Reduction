@@ -26,13 +26,13 @@ def make_directory(path):
 
 # Create temporary SE files for psf
 rand_tmpname = random.randint(10**11,(10**12)-1)
-tempdir_name = f"./{rand_tmpname}"
+tempdir_name = f"./utils/{rand_tmpname}"
 make_directory(tempdir_name)
 
-conv_name      = f"./utils/{rand_tmpname}/temp_default.conv"
-params_name    = f"./utils/{rand_tmpname}/temp_params.txt"
-config_name    = f"./utils/{rand_tmpname}/temp_default.sex"
-psfconfig_name = f"./utils/{rand_tmpname}/temp_default.psfex"
+conv_name      = f"{tempdir_name}/temp_default.conv"
+params_name    = f"{tempdir_name}/temp_params.txt"
+config_name    = f"{tempdir_name}/temp_default.sex"
+psfconfig_name = f"{tempdir_name}/temp_default.psfex"
 
 f_conv = '''CONV NORM
 # 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.
@@ -91,6 +91,9 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
         VERBOSE_TYPE = 'NORMAL'
     else:
         VERBOSE_TYPE = 'QUIET'
+    
+    if verbose:
+        print(f'Randomised directory name: {rand_tmpname}')
     
     PSFs = []
     if savepsffits:
@@ -168,7 +171,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             
         PSFs.append(f_psfbinary)
 
-    remove_temp_dirs([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
+    remove_temp_dirs([tempdir_name])
 
     if verbose:
         print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)
