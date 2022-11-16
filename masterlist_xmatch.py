@@ -22,7 +22,6 @@ if __name__ == "__main__":
         masterlists = glob.glob('./masterlist/*/*allccds.csv')
     
     for ml in masterlists:
-
         # Directory path to save xmatched masterlists
         if args.field:
             field = args.field
