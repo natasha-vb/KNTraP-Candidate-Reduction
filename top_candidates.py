@@ -326,6 +326,7 @@ if __name__ == "__main__":
         ccds = range(1,63,1)
         for ccd in ccds:
             mcut_list = glob.glob(f'{priority_outdir}/*consec_{field}.csv')
+            mcut_list = sorted(mcut_list)
             
             print('----------------------------------------------------------------------------------------')
             print(f'NUMBER OF CANDIDATES FOR THE FOLLOWING SELECTION CRITERIA IN FIELD {field} CCD {ccd}:')
