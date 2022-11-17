@@ -1,5 +1,6 @@
 import argparse
 import glob 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -15,6 +16,8 @@ if __name__ == "__main__":
             help="Selected field"
     )
     args = parser.parse_args()
+
+    matplotlib.use('Agg') 
 
     # Grab all masterlists of filtered candidates 
     if args.field:
