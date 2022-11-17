@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Run Source Extractor to filter transient candidates")
     parser.add_argument(
-            "field",
+            "--field",
             type=str,
             help="Selected field"
     )
