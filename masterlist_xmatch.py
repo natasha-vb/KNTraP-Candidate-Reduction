@@ -27,7 +27,7 @@ if __name__ == "__main__":
             field = args.field
         else:
             field = re.split(r'[_.]', ml)[2]
-        outdir = f'./masterlist{field}'
+        outdir = f'./masterlist/{field}'
 
         # Crossmatching candidates with Simbad, Gaia, and Pan-STARRS 1 catalogues
         ml_file = pd.read_csv(ml)
