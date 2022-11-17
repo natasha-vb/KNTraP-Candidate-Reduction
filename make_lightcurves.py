@@ -1,3 +1,4 @@
+import argparse
 import glob 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,19 +8,33 @@ import ipdb
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser(description="Run Source Extractor to filter transient candidates")
+    parser.add_argument(
+            "--field",
+            type=str,
+            help="Selected field"
+    )
+    args = parser.parse_args()
+
     # Grab all masterlists of filtered candidates 
-    filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
+    if args.field:
+        filtered_mlists = glob.glob(f'./masterlist/{args.field}/priority/*.csv')
+    else:
+        filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
 
     for f in filtered_mlists:
         
         # Setting up directory to save light curves. Directory name is the filtering criteria parameters
-        field = f.split('_')[-1].split('.')[0]
-        lc_dir_name = f.split('/')[-1].replace('.csv','')
+        if args.field:
+            field = args.field
+        else:
+            field = f.split('_')[-1].split('.')[0]
 
+        lc_dir_name = f.split('/')[-1].replace('.csv','')
         lc_outdir = (f'./lc_files/{field}/filtered_candidates/{lc_dir_name}')
         if not os.path.exists(lc_outdir):
             os.makedirs(lc_outdir)
-        
+            
         print(f'Light curve directory: {lc_outdir}')
 
         # Read in masterlist
