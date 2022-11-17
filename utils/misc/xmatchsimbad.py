@@ -35,39 +35,23 @@ def generate_csv(s, lists):
 
     return s + output.getvalue().replace("\r", "")
 
-
 def xmatch(id, ra, dec, distmaxarcsec):
     table_header = """objectID, ra_in, dec_in\n"""
     table = generate_csv(table_header, [id, ra, dec])
-
-    #### TESTING
-    print('XMATCH TABLE:')
-    print(table)
     
-    cnt = 1
-    tablesplit = table.split('\n')
-    tablecut = tablesplit[1:-1]
-    num = len(tablecut)
-    for i in range(num):
-        row = tablecut[i]
-        print('Count =', cnt)
-        print('TABLE ROW:')
-        print(row)
-        r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
-                        data={"request": "xmatch",
-                                "distMaxArcsec": distmaxarcsec,
-                                "selection": "all",
-                                "RESPONSEFORMAT":"csv",
-                                "cat2": "simbad",
-                                "colRA1": "ra_in",
-                                "colDec1": "dec_in"},
-                            files={"cat1": row})
+    r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
+                    data={"request": "xmatch",
+                            "distMaxArcsec": distmaxarcsec,
+                            "selection": "all",
+                            "RESPONSEFORMAT":"csv",
+                            "cat2": "simbad",
+                            "colRA1": "ra_in",
+                            "colDec1": "dec_in"},
+                        files={"cat1": table})
 
-        data = r.content.decode().split("\n")[1:-1]
-        header = r.content.decode().split("\n")[0].split(",")
+    data = r.content.decode().split("\n")[1:-1]
+    header = r.content.decode().split("\n")[0].split(",")
 
-        cnt +=1
-            
     # h = open('simbad_text.csv', 'w')
     # h.write(r.text)
     # h.close()
