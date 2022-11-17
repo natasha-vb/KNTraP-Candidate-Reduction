@@ -23,7 +23,7 @@ if __name__ == "__main__":
         filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
 
     for f in filtered_mlists:
-        
+
         # Setting up directory to save light curves. Directory name is the filtering criteria parameters
         if args.field:
             field = args.field
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         lc_outdir = (f'./lc_files/{field}/filtered_candidates/{lc_dir_name}')
         if not os.path.exists(lc_outdir):
             os.makedirs(lc_outdir)
-            
+
         print(f'Light curve directory: {lc_outdir}')
 
         # Read in masterlist
@@ -123,3 +123,5 @@ if __name__ == "__main__":
 
             print(f'Light curve saved as: {lc_outdir}/{fig_name}')
             print('')
+
+    print('All light curve plots created!')
