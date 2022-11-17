@@ -10,9 +10,6 @@ if __name__ == "__main__":
     # Grab all masterlists of filtered candidates 
     filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
 
-    ### TESTING
-    # filtered_mlists = [filtered_mlists[5]]
-
     for f in filtered_mlists:
         
         # Setting up directory to save light curves. Directory name is the filtering criteria parameters
@@ -97,19 +94,6 @@ if __name__ == "__main__":
 
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
             ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
-
-            print('forced:')
-            print(f_mi[['dateobs', 'MJD','m']])
-            print(f_mg[['dateobs', 'MJD','m']])
-            print('forced cut:')
-            print(f_mi_cut[['dateobs', 'MJD', 'm']])
-            print(f_mg_cut[['dateobs', 'MJD','m']])
-            print('unforced:')
-            print(unf_mi[['dateobs', 'MJD','m']])
-            print(unf_mg[['dateobs', 'MJD','m']])
-            print('unforced good:')
-            print(good_unf_i[['dateobs', 'MJD','m']])
-            print(good_unf_g[['dateobs', 'MJD','m']])
             
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
