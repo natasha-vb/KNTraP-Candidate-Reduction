@@ -57,7 +57,7 @@ def submit_slurm_OzSTAR_batch(commandfile,
     pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction'
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
-        walltime='12:00:00'
+        walltime='15:00:00'
 
     # with open(commandfile) as fp:
         pipecommand = commandfile.strip()

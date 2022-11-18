@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # Source Extractor Filter Values
     ellipticity = '< 0.7'
     fwhm = ' < 2 * (seeing/0.263)'
-    spread_model = '> -0.2 & < 0.2'
+    spread_model = '> -0.02 & < 0.02'
 
     # Grabbing masterlists from all field directories or one specified field
     if args.field:
