@@ -7,6 +7,10 @@ def grab_seeing(lcfile, field, ccd):
     
     if field == 'SCVZ':
         field = 'S-CVZ'
+    elif field == 'KNTRAPaa':
+        field = 'KNTRAP1'
+    elif field == 'FOURHR':
+        field == '4hr'
 
     for i in range(len(lcfile)):
         lc_row = lcfile.iloc[i]
