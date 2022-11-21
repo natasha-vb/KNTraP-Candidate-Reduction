@@ -4,6 +4,9 @@ import pandas as pd
 def grab_seeing(lcfile, field, ccd):
 
     df_seeing = pd.DataFrame()
+    
+    if field == 'SCVZ':
+        field = 'S-CVZ'
 
     for i in range(len(lcfile)):
         lc_row = lcfile.iloc[i]
