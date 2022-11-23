@@ -49,12 +49,12 @@ echo Slurm Job JOB_NAME done in $(($duration / 60)) minutes and $(($duration % 6
 '''
 
 def submit_slurm_OzSTAR_batch(commandfile,
-                                bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
+                                bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
                                 memory_request=8000,
                                 verbose=False,
                                 do_not_submit=False):
     # Get environment variables for pipeline set up
-    pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction'
+    pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction'
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
         walltime='17:00:00'
@@ -166,7 +166,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
             '--bashrcfile',
-            default='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
+            default='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
             help='Path to bashrc file'
     )
     parser.add_argument(
