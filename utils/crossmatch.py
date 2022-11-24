@@ -31,7 +31,7 @@ def crossmatch(candfile, verbose=False):
                                                       candfile["RA_AVERAGE"].to_list(),
                                                       candfile["DEC_AVERAGE"].to_list(),
                                                       ctlg="vizier:II/349/ps1",
-                                                      distmaxarcsec=5)
+                                                      distmaxarcsec=2)
 
     candfile["ps1_objID"] = df_ps1["ObjectID_PS1"]
     candfile["ps1_objID"] = df_ps1["angDist"]

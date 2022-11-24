@@ -63,7 +63,7 @@ def crossmatch_alerts_simbad(id_list, ra_list, dec_list):
         return []
     
     try:
-        data, header = xmatch(id_list, ra_list, dec_list, distmaxarcsec=50)
+        data, header = xmatch(id_list, ra_list, dec_list, distmaxarcsec=2)
     except (ConnectionError, TimeoutError, ValueError) as ce:
         logging.warning("XMATCH failed " + repr(ce))
         return []
