@@ -307,6 +307,8 @@ if __name__ == "__main__":
 
                     print('df_out:')
                     print(df_out)
+                    for col in df_out.columns:
+                        print(col)
                     print(df_out['ELLIPTICITY_DIFF'])
                     
                     # True/ False for a "good" detection
