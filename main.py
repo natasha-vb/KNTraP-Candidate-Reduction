@@ -304,10 +304,14 @@ if __name__ == "__main__":
                     # Adding column for seeing for each night
                     df_seeing = grab_seeing.grab_seeing(df,args.field,ccd)
                     df_out = pd.merge(df_out,df_seeing, how='left', on=['dateobs', 'filt'])
+
+                    print('df_out:')
+                    print(df_out)
+                    print(df_out['ELLIPTICITY_DIFF'])
                     
                     # True/ False for a "good" detection
-                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and
-                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel 
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and ### MAYBE REDUCE TO 0.6
+                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel ###MAYBE REDUCE TO 1.8 x 
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.02 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.02 else
                                                                                 False, axis=1)
