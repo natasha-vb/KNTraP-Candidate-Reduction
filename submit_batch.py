@@ -150,6 +150,11 @@ if __name__ == "__main__":
             help='Selected CCD'
     )
     parser.add_argument(
+            "--skip_se",
+            action="store_true",
+            help="Skip Source Extractor process"
+    )
+    parser.add_argument(
             '--debugmode',
             action='store_true',
             help="Activating debug mode"
@@ -190,7 +195,10 @@ if __name__ == "__main__":
         verbose             = args.verbose
         # Required arguments
         field               = args.field
-        commandfile         = f'python main.py {field} --ccd {ccd} --v'
+        if args.skip_se:
+            commandfile         = f'python main.py {field} --ccd {ccd} --skip_se --v'
+        else:
+            commandfile         = f'python main.py {field} --ccd {ccd} --v'
         # Optional arguments (with defaults set)
         bashrcfile          = args.bashrcfile
         memory_request      = int(args.memory_request)
