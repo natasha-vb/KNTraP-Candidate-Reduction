@@ -36,7 +36,7 @@ def grab_seeing(lcfile, field, ccd):
         if len(df_obslog_seeing) > 1:
             # sum up all the seeing values and average them
             df_obslog_sum = sum(df_obslog_seeing)
-            df_obslog_ave = df_obslog_sum/len(df_obslog_sum)
+            df_obslog_ave = df_obslog_sum/len(df_obslog_seeing)
             seeing = df_obslog_ave
         else:
             seeing = df_obslog_seeing.iloc[0]
