@@ -11,6 +11,12 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
         match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
         df_cattmp = pd.DataFrame()
 
+        if verbose:
+            print(' ')
+            print('SOURCE EXTRACTOR CATALOGUE MATCHING:')
+            print(f'Source Extractor Catalogues for ccd {ccd}')
+            print(match_list)
+
         df_cattmp["dateobs"] = [f"{date}"]
         df_cattmp["filt"]    = [f"{filt}"]
 
@@ -61,5 +67,9 @@ def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
             df_cattmp[f"FWHM_IMAGE_{column_ending}"]   = df_cat_matched["FWHM_IMAGE"]
             df_cattmp[f"SPREAD_MODEL_{column_ending}"] = df_cat_matched["SPREAD_MODEL"]
             df_cattmp[f"FLAGS_{column_ending}"]        = df_cat_matched["FLAGS"]
+
+            if verbose:
+                print('SExtractor Parameters:')
+                print(df_cattmp)
 
         return df_cattmp
