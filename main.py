@@ -296,6 +296,7 @@ if __name__ == "__main__":
 
                         # For deep field, use MJD date for SE catalog matching
                         datemjd = np.round(df['MJD'][ii], 0)
+                        datemjd = int(datemjd)
                         print(datemjd)
 
                         # Matching detection coordinates to source in SE catalogs
