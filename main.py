@@ -298,6 +298,11 @@ if __name__ == "__main__":
                         match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
                         cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
+                        print('cat_matches:')
+                        print(cat_matches)
+                        for col in cat_matches.columns:
+                            print(col)
+
                     # Merging light curve (df) with matched SExtractor catalogue data (cat_matches)
                     df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
 

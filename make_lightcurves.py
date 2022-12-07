@@ -99,12 +99,12 @@ if __name__ == "__main__":
             good_unf_i = unf_mi[unf_mi['good_detection'] == True]
             good_unf_g = unf_mg[unf_mg['good_detection'] == True]
 
-            # Plot light curve
+            # Plot unforced light curve
             fig, ax = plt.subplots()
 
-            ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), c='r', marker='.')
+            # ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), c='r', marker='.')
             ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'],    c='r', marker='v', alpha=0.2)
-            ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), c='b', marker='.')
+            # ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), c='b', marker='.')
             ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'],    c='b', marker='v', alpha=0.2) 
 
             ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
@@ -120,7 +120,35 @@ if __name__ == "__main__":
             fig.autofmt_xdate(rotation=45)
             ax.legend()
 
-            fig_name = f'{field}_ccd{ccd}_cand{cand_id}.png'
+            fig_name = f'{field}_ccd{ccd}_cand{cand_id}_unforced.png'
+
+            plt.savefig(f'{lc_outdir}/{fig_name}')
+
+            print(f'Light curve saved as: {lc_outdir}/{fig_name}')
+            print('')
+
+            # Plot light curve with forced photometry points
+            fig, ax = plt.subplots()
+
+            ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolor=None, marker='o')
+            ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
+            ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolor=None, marker='o')
+            ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'], c='b', marker='v', alpha=0.2) 
+
+            ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
+            ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
+
+            ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
+            ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
+            
+            ax.set_title(f'Candidate {cand_id}')
+            ax.set_xlabel('date of observation')
+            ax.set_ylabel('mag')
+            ax.invert_yaxis()
+            fig.autofmt_xdate(rotation=45)
+            ax.legend()
+
+            fig_name = f'{field}_ccd{ccd}_cand{cand_id}_forced.png'
 
             plt.savefig(f'{lc_outdir}/{fig_name}')
 
