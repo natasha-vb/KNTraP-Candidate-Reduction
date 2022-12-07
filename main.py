@@ -294,8 +294,11 @@ if __name__ == "__main__":
                         dec = df["dec"][ii]
                         filt = df["filt"][ii]
 
+                        # For deep field, use MJD date for SE catalog matching
+                        datemjd = np.round(df['MJD'], 0)
+
                         # Matching detection coordinates to source in SE catalogs
-                        match_cat_table = cat_match.cat_match(date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
+                        match_cat_table = cat_match.cat_match(datemjd, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
                         cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
                         print('cat_matches:')
