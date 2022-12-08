@@ -7,8 +7,8 @@ import astropy.io.ascii as ascii
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 
-def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
-        match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
+def cat_match(datemjd, date, ra, dec, filt, field='257A', ccd='1', verbose=False):
+        match_list = glob.glob(f'./cats/{field}/{ccd}/*.{filt}.{datemjd}.*.cat')
         df_cattmp = pd.DataFrame()
 
         if verbose:
