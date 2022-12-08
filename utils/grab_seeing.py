@@ -33,12 +33,14 @@ def grab_seeing(lcfile, field, ccd):
         df_obslog_field = df_obslog[df_obslog['Object'] == field]
         df_obslog_seeing = df_obslog_field['psf'][df_obslog_field['filt'] == filter]
 
+        df_obslog_seeing_vals = [float(x) for x in df_obslog_seeing.to_list()]
+        
         print('SEEING VALUES:')
-        print(df_obslog_seeing)
+        print(df_obslog_seeing_vals)
 
-        if len(df_obslog_seeing) > 1:
+        if len(df_obslog_seeing_vals) > 1:
             # sum up all the seeing values and average them
-            df_obslog_sum = sum(df_obslog_seeing)
+            df_obslog_sum = sum(df_obslog_seeing_vals)
             df_obslog_ave = df_obslog_sum/len(df_obslog_seeing)
             seeing = df_obslog_ave
         else:
