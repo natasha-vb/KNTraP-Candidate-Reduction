@@ -300,7 +300,7 @@ if __name__ == "__main__":
                         print(datemjd)
 
                         # Matching detection coordinates to source in SE catalogs
-                        match_cat_table = cat_match.cat_match(datemjd, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
+                        match_cat_table = cat_match.cat_match(datemjd, date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
                         cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
 
                         print('cat_matches:')
