@@ -1,0 +1,10 @@
+import glob
+import pandas as pd
+
+def mag_rates(lc_file):
+
+    # ITERATE THOUGH MAGS FOR I AND G BANDS
+    # CALCULATE ALPHA VALUE 
+    # SAVE INTO TEMP DATAFRAME TO APPEND BACK TO LC FILE
+    # REMEMBER TO LEAVE FIRST ROW BLANK
+    
