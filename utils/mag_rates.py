@@ -29,13 +29,15 @@ def mag_rates(lc_file):
     lc_file_i = lc_file[lc_file['filt'] == 'i']
     lc_file_g = lc_file[lc_file['filt'] == 'g']
 
-    if len(lc_file_i) == 0:
-        alpha_i = pd.DataFrame(columns={'dateobs','filt','alpha'})
-    elif len(lc_file_g) == 0:
-        alpha_g = pd.DataFrame(columns={'dateobs','filt','alpha'})
-    else:
+    if len(lc_file_i) != 0:
         alpha_i = calculate_mag_diff(lc_file_i)
+    else:
+        alpha_i = pd.DataFrame(columns={'dateobs','filt','alpha'})
+    
+    if len(lc_file_g) != 0:
         alpha_g = calculate_mag_diff(lc_file_g)
+    else:
+        alpha_g = pd.DataFrame(columns={'dateobs','filt','alpha'})
 
     alpha = pd.merge(alpha_i, alpha_g, how='left', on=['dateobs','filt'])
 
