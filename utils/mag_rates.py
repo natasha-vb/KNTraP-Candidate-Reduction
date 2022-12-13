@@ -6,19 +6,20 @@ def calculate_mag_diff(lc):
 
     for i in range(len(lc)):
         lc_row = lc.iloc[i]
-        date = lc_row['dateobs']
+        date_2 = lc_row['dateobs']
         filter = lc_row['filt']
         mag_2 = lc_row['m']
 
-        # Calculate change in mag from previous night, alpha
+        # Calculate change in mag from previous detection, alpha (mag/night)
         if i == 1:
             alpha = 'NaN'
         else:
             lc_prev_row = lc.iloc[i-1]
+            date_1 = lc_prev_row['dateobs']
             mag_1 = lc_prev_row['m']
-            alpha = mag_2 - mag_1
+            alpha = (mag_2 - mag_1) / (date_2 - date_1)
         
-        alpha_temp = alpha_temp.append([{'dateobs': date,
+        alpha_temp = alpha_temp.append([{'dateobs': date_2,
                                          'filt':filter,
                                          'alpha':alpha}])
     return alpha_temp
