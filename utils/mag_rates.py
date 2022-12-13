@@ -11,13 +11,13 @@ def calculate_mag_diff(lc):
         mag_2 = lc_row['m']
 
         # Calculate change in mag from previous detection, alpha (mag/night)
-        if i == 1:
+        if i == 0:
             alpha = 'NaN'
         else:
             lc_prev_row = lc.iloc[i-1]
             date_1 = lc_prev_row['dateobs']
             mag_1 = lc_prev_row['m']
-            alpha = (mag_2 - mag_1) / (date_2 - date_1)
+            alpha = (float(mag_2) - float(mag_1)) / (int(date_2) - int(date_1))
         
         alpha_temp = alpha_temp.append([{'dateobs': date_2,
                                          'filt':filter,
