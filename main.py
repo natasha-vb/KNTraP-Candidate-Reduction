@@ -322,6 +322,11 @@ if __name__ == "__main__":
                             print(df_out[["dateobs","filt","seeing","good_detection"]])
                             print('-----------------------------------------')
 
+                    # Check for star-like objects in template image
+                    df_out['tmpl_star_check'] = df_out.apply(lambda row: True if row['SPREAD_MODEL_TMPL'] < 0.05 and
+                                                                                 row['SPREAD_MODEL_TMPL'] > -0.05 else
+                                                                                 False, axis=1)
+
                     # Calculate magnitude changes per day
                     df_alpha = mag_rates.mag_rates(df_out)
                     df_out = pd.merge(df_out,df_alpha, how='left', on=['dateobs', 'filt'])
@@ -335,9 +340,18 @@ if __name__ == "__main__":
                     # Calculating masterlist data 
                     ra_ave = statistics.mean(df["ra"])
                     dec_ave = statistics.mean(df["dec"])
+                    tmpl_star_check = (df_out['tmpl_star_check'] == True).any()
                     n_det = len(df_out.index)
                     n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
                     n_good_det = len(df_out[df_out["good_detection"] == True])
+
+                    # Checking for KN like rising/ fading rates (-ve means rising, +ve means fading)
+                    i_rise = (df_out['alpha_i'] < -1).any()
+                    i_fade = (df_out['alpha_i'] > 0.3).any()
+                    g_rise = (df_out['alpha_g'] < -1).any()
+                    g_fade = (df_out['alpha_g'] > 0.3).any()
+                    i_inflections = (df_out['alpha_i'] & (df_out['alpha_i'] != df_out['alpha_i'].shift(1))).sum()
+                    g_inflections = (df_out['alpha_g'] & (df_out['alpha_g'] != df_out['alpha_g'].shift(1))).sum()
 
                     # Placing data into temp masterlist
                     masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
@@ -345,6 +359,7 @@ if __name__ == "__main__":
                                                 "CCD": [ccd],
                                                 "RA_AVERAGE": [ra_ave],
                                                 "DEC_AVERAGE": [dec_ave],
+                                                "TMPL_STAR_CHECK": [tmpl_star_check],
                                                 "N_DETECTIONS": [n_det],
                                                 "N_GOOD_DETECTIONS": [n_good_det],
                                                 "N_CONSECUTIVE_DETECTIONS_i": n_conseq_det['i'],
@@ -354,6 +369,12 @@ if __name__ == "__main__":
                                                 "N_CONSECUTIVE_DETECTIONS_ig": n_conseq_det['ig'],
                                                 "N_CONSECUTIVE_DETECTIONS_ig_1h": n_conseq_det['ig_1h'],
                                                 "N_CONSECUTIVE_DETECTIONS_ig_2h": n_conseq_det['ig_2h'],
+                                                "RISE_i": [i_rise],
+                                                "FADE_i": [i_fade],
+                                                "RISE_g": [g_rise],
+                                                "FADE_g": [g_fade],
+                                                "N_INFLECTIONS_i": [i_inflections],
+                                                "N_INFLECTIONS_g": [g_inflections],
                                                 "LC_PATH": [f]})
                     if args.verbose:
                         print('')
