@@ -39,6 +39,6 @@ def mag_rates(lc_file):
     else:
         alpha_g = pd.DataFrame(columns={'dateobs','filt','alpha'})
 
-    alpha = pd.merge(alpha_i, alpha_g, how='left', on=['dateobs','filt'])
+    alpha = pd.merge(alpha_i, alpha_g, how='left', on=['dateobs','filt'], suffixes=('_i','_g'))
 
     return alpha

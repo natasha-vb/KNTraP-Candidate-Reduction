@@ -18,6 +18,7 @@ from astropy.table import Table
 from utils import cat_match
 from utils import consecutive_count
 from utils import crossmatch
+from utils import mag_rates
 from utils import run_sextractor
 from utils import grab_seeing
 
@@ -320,6 +321,10 @@ if __name__ == "__main__":
                             print('GOOD DETECTIONS?')
                             print(df_out[["dateobs","filt","seeing","good_detection"]])
                             print('-----------------------------------------')
+
+                    # Calculate magnitude changes per day
+                    df_alpha = mag_rates.mag_rates(df_out)
+                    df_out = pd.merge(df_out,df_alpha, how='left', on=['dateobs', 'filt'])
 
                     app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
                     df_out.to_csv(f'{lc_outdir}/{app_lc_name}',index=False)
