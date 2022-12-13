@@ -2,12 +2,14 @@ import pandas as pd
 import numpy as np
 import glob
 import re 
+
 import astropy.io.ascii as ascii
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 
-def cat_match(date, ra, dec, filt, field='257A', ccd='1', verbose=False):
-        match_list = glob.glob(f'./cats/{field}/{ccd}/*.{date}.*_{filt}_*.cat')
+def cat_match(datemjd, date, ra, dec, filt, field='257A', ccd='1', verbose=False):
+        # For deep fields use datemjd, for shallow fields use date
+        match_list = glob.glob(f'./cats/{field}/{ccd}/*.{filt}.{datemjd}.*.cat')
         df_cattmp = pd.DataFrame()
 
         df_cattmp["dateobs"] = [f"{date}"]

@@ -1,33 +1,52 @@
 # Based on run_sourceextractor.py code by Jielai Zhang
 
-import docopt, os
-import astropy.io.fits as fits
-import subprocess
-from astropy.io import ascii
-import pandas as pd
-import numpy as np
-import ntpath, shutil
-import time
-import string    
+import ntpath
+import os
 import random
-import glob
+import shutil
+import subprocess
 
 from utils.misc import get_psf
+
+def remove_temp_files(fs):
+    for f in fs:
+        os.remove(f)
+    return None
+
+def remove_temp_dirs(dirs):
+    for d in dirs:
+        shutil.rmtree(d, ignore_errors=True)
+    return None
+
+def make_directory(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    return None
+
 
 def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                     savecats_dir=None , spreadmodel=True, catending=None,
                     fwhm=1.2, detect_minarea=5, detect_thresh=1.5, ccd=1, 
                     field='257A', diff_im=False, verbose=False):
     
-    nnw_path = "./utils/default.nnw"
-    conv_path = "./utils/default.conv" 
-    params_path = "./utils/default.param"
-    config_path = "./utils/default.sex"
-
     if verbose:
         VERBOSE_TYPE = 'NORMAL'
     else:
         VERBOSE_TYPE = 'QUIET'
+
+    rand_tmpname = random.randint(10**11,(10**12)-1)
+
+    # tempdir_path = f"./utils/{rand_tmpname}/"
+
+    # make_directory(tempdir_path)
+
+    # if verbose:
+    #     print(f'Randomised directory name: {rand_tmpname}')
+
+    nnw_path    = f"./utils/SE_files/default.nnw"
+    conv_path   = f"./utils/SE_files/default.conv" 
+    params_path = f"./utils/SE_files/default.param"
+    config_path = f"./utils/SE_files/default.sex"
 
     catfiles = []
     psffiles = []
@@ -56,7 +75,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
                                             psfex_loc=psfex_loc, catending=None, verbose=verbose)
                 PSF_success[ii] = True
             except:
-                print(f'\nSKIPPED: PSF measurement unsuccessful for {f}')
+                print(f'SKIPPED: PSF measurement unsuccessful for {f}\n')
                 continue
         else:
             PSF_success[ii] = True
@@ -107,5 +126,7 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
         
         if diff_im:
             spreadmodel=False
+
+    # remove_temp_dirs([tempdir_path])
 
     return catfiles, catted_fitsfiles

@@ -1,0 +1,46 @@
+import argparse
+import glob
+import pandas as pd 
+import re
+
+from utils import crossmatch
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="Crossmatch candidates from masterlists to Simbad, Gaia, and Pan-STARRS")
+    parser.add_argument(
+            "--field",
+            type=str,
+            help="Selected field"
+    )
+    args = parser.parse_args()
+
+    # Grabbing all masterlists
+    if args.field:
+        masterlists = glob.glob(f'./masterlist/{args.field}/*.allccds.csv')
+    else:
+        masterlists = glob.glob('./masterlist/*/*allccds.csv')
+    
+    print('MASTERLIST/S:')
+    print(masterlists)
+
+    for ml in masterlists:
+        # Directory path to save xmatched masterlists
+        if args.field:
+            field = args.field
+        else:
+            field = re.split(r'[_.]', ml)[2]
+        outdir = f'./masterlist/{field}'
+
+        # Crossmatching candidates with Simbad, Gaia, and Pan-STARRS 1 catalogues
+        ml_file = pd.read_csv(ml)
+        
+        print('Masterlist to be crossmatched:')
+        print(ml_file)
+
+        ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
+
+        print('Crossedmatched Masterlist:')
+        print(ml_xmatch)
+
+        ml_xmatch.to_csv(f'{outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)

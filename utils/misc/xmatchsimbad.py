@@ -1,5 +1,6 @@
+# Code from Anais Moller
+
 import numpy as np
-import pandas as pd
 import io
 import csv
 import logging
@@ -34,24 +35,23 @@ def generate_csv(s, lists):
 
     return s + output.getvalue().replace("\r", "")
 
-
 def xmatch(id, ra, dec, distmaxarcsec):
     table_header = """objectID, ra_in, dec_in\n"""
     table = generate_csv(table_header, [id, ra, dec])
-
+    
     r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
-                       data={"request": "xmatch",
-                             "distMaxArcsec": distmaxarcsec,
-                             "selection": "all",
-                             "RESPONSEFORMAT":"csv",
-                             "cat2": "simbad",
-                             "colRA1": "ra_in",
-                             "colDec1": "dec_in"},
+                    data={"request": "xmatch",
+                            "distMaxArcsec": distmaxarcsec,
+                            "selection": "all",
+                            "RESPONSEFORMAT":"csv",
+                            "cat2": "simbad",
+                            "colRA1": "ra_in",
+                            "colDec1": "dec_in"},
                         files={"cat1": table})
 
     data = r.content.decode().split("\n")[1:-1]
     header = r.content.decode().split("\n")[0].split(",")
-    
+
     # h = open('simbad_text.csv', 'w')
     # h.write(r.text)
     # h.close()
@@ -63,7 +63,7 @@ def crossmatch_alerts_simbad(id_list, ra_list, dec_list):
         return []
     
     try:
-        data, header = xmatch(id_list, ra_list, dec_list, distmaxarcsec=50)
+        data, header = xmatch(id_list, ra_list, dec_list, distmaxarcsec=2)
     except (ConnectionError, TimeoutError, ValueError) as ce:
         logging.warning("XMATCH failed " + repr(ce))
         return []

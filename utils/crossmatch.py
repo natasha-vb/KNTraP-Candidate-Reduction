@@ -1,7 +1,3 @@
-import numpy as np 
-import pandas as pd 
-import os
-
 from utils.misc import xmatchsimbad
 from utils.misc import xmatchgaia
 from utils.misc import xmatchps1
@@ -35,23 +31,26 @@ def crossmatch(candfile, verbose=False):
                                                       candfile["RA_AVERAGE"].to_list(),
                                                       candfile["DEC_AVERAGE"].to_list(),
                                                       ctlg="vizier:II/349/ps1",
-                                                      distmaxarcsec=5)
+                                                      distmaxarcsec=2)
 
     candfile["ps1_objID"] = df_ps1["ObjectID_PS1"]
     candfile["ps1_objID"] = df_ps1["angDist"]
 
     if verbose:
-
+        print('')
         print('===================')
-        print('FIELD CROSSMATCH RESULTS:')
-        print('-------------------')
+        print('CROSSMATCH RESULTS:')
+        print('===================')
         print('SIMBAD:')
+        print('----------------------------------------------------------------------')
         print(candfile[["CAND_ID","simbad_type","simbad_ctlg","simbad_sptype","simbad_redshift"]])
-        print('-------------------')
+        print('')
         print('GAIA:')
+        print('---------------------------------------------------------------')
         print(candfile[["CAND_ID","gaia_DR3_parallax","gaia_DR3_parallaxerr","gaia_sigma"]])
-        print('-------------------')
+        print('')
         print('PAN_STARRS 1:')
+        print('--------------------------------')
         print(candfile[["CAND_ID","ps1_objID","ps1_objID"]])
 
     return candfile

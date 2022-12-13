@@ -1,19 +1,28 @@
 # Code from Jielai Zhang
 
-import docopt, os
-import astropy.io.fits as fits
-import subprocess
-from astropy.io import ascii
-import pandas as pd
-import numpy as np
 import ntpath
+import os
 from pathlib import Path
+import random
+import shutil
+import subprocess
 
-# Create temporary SE files for psf
-conv_name = "./temp_default.conv"
-params_name = "./temp_params.txt"
-config_name = "./temp_default.sex"
-psfconfig_name = "./temp_default.psfex"
+import astropy.io.fits as fits
+
+def remove_temp_dirs(dirs):
+    for d in dirs:
+        shutil.rmtree(d, ignore_errors=True)
+    return None
+
+def remove_temp_files(fs):
+    for f in fs:
+        os.remove(f)
+    return None
+
+def make_directory(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    return None
 
 f_conv = '''CONV NORM
 # 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.
@@ -56,15 +65,22 @@ def create_temp_files(f_conv, f_params, conv_name, params_name,
 
     return None
 
-def remove_temp_files(fs):
-    for f in fs:
-        os.remove(f)
-    return None
-
-
 def get_psf(fitsfiles, outdir='./', savepsffits=False,
             sextractor_loc = sextractor_loc,
             psfex_loc = psfex_loc, catending=None,verbose=False):
+    
+    # Create temporary SE files for psf
+    rand_tmpname = random.randint(10**11,(10**12)-1)
+    tempdir_name = f"./utils/{rand_tmpname}"
+    make_directory(tempdir_name)
+
+    if verbose:
+        print(f'Randomised directory name: {rand_tmpname} \n')
+
+    conv_name      = f"{tempdir_name}/temp_default.conv"
+    params_name    = f"{tempdir_name}/temp_params.txt"
+    config_name    = f"{tempdir_name}/temp_default.sex"
+    psfconfig_name = f"{tempdir_name}/temp_default.psfex"
 
     create_temp_files(f_conv,f_params,conv_name,params_name,
                       config_name,psfconfig_name,
@@ -103,7 +119,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                 print('Above Source Extractor completed successfully!\n')
                 print('PSFEx SE OUTPUT FILE: %s\n' % cat_out_name_temp)
         except subprocess.CalledProcessError as err:
-            print('\nCould not run SExtractor with exit error %s\n'%err)
+            print('Could not run SExtractor with exit error: %s\n'%err)
             print('Command used:\n%s\n'%command)
         
         # Run PSFEx on image 
@@ -127,12 +143,12 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                            f"-PSF_SUFFIX .psf "
                            f"{cat_out_name_temp}")
             if verbose:
-                print('Executing command: %s\n' % command)
+                print('----- Executing command: %s\n' % command)
             subprocess.check_call(command, shell=True)
             if verbose:
                 print('Above PSFEx completed successfully!\n')
         except subprocess.CalledProcessError as err:
-            print('Could not run psfex with exit error %s'%err)
+            print('Could not run PSFEx with exit error: %s'%err)
         
         remove_temp_files([cat_out_name_temp])
 
@@ -155,7 +171,8 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             
         PSFs.append(f_psfbinary)
 
-    remove_temp_files([params_name,conv_name,config_name,psfconfig_name,'psfex.xml'])
+    remove_temp_dirs([tempdir_name])
+    remove_temp_files(['psfex.xml'])
 
     if verbose:
         print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)

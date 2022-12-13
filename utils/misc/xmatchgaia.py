@@ -1,3 +1,5 @@
+# Code from Anais Moller
+
 import numpy as np
 import pandas as pd
 import io
@@ -83,7 +85,7 @@ def cross_match_alerts_raw_gaia(id, ra, dec, ctlg):
         return []
 
     try:
-        data, header = xmatch(id, ra, dec, extcatalog=ctlg, distmaxarcsec=50)
+        data, header = xmatch(id, ra, dec, extcatalog=ctlg, distmaxarcsec=2)
     except (ConnectionError, TimeoutError, ValueError) as ce:
         logging.warning("XMATCH GAIA failed " + repr(ce))
         return []
