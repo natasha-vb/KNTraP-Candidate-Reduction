@@ -323,8 +323,8 @@ if __name__ == "__main__":
                             print('-----------------------------------------')
 
                     # Check for star-like objects in template image
-                    df_out['tmpl_star_check'] = df_out.apply(lambda row: True if row['SPREAD_MODEL_TMPL'] < 0.05 and
-                                                                                 row['SPREAD_MODEL_TMPL'] > -0.05 else
+                    df_out['tmpl_star_check'] = df_out.apply(lambda row: True if row['SPREAD_MODEL_TMPL'] < 0.002 and
+                                                                                 row['SPREAD_MODEL_TMPL'] > -0.002  else
                                                                                  False, axis=1)
 
                     # Calculate magnitude changes per day
@@ -345,7 +345,7 @@ if __name__ == "__main__":
                     n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
                     n_good_det = len(df_out[df_out["good_detection"] == True])
 
-                    # Checking for KN like rising/ fading rates (-ve means rising, +ve means fading)
+                    # Checking for KN-like rising/ fading rates (-ve means rising, +ve means fading)
                     i_rise = (df_out['alpha_i'] < -1).any()
                     i_fade = (df_out['alpha_i'] > 0.3).any()
                     g_rise = (df_out['alpha_g'] < -1).any()
