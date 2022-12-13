@@ -50,19 +50,19 @@ if __name__ == "__main__":
             os.makedirs(priority_outdir)
         
         n_cands = len(mlist)
-        print('')
+        print(' ')
         print('=================================================')
         print(f'FILTERING FOR FIELD {field}')
-        print('')
+        print(' ')
         print(f'INITIAL NUMBER OF CANDIDATES: {n_cands}')
 
-        #######################################################################
+        ############################################################################
         # Filtering candidates:
         # With star-like objects in template image
         mlist = mlist[lambda mlist: mlist.TMPL_STAR_CHECK == True]
 
         n_cands = len(mlist)
-        print('')
+        print(' ')
         print(f'NUMBER AFTER FILTERING CANDIDATES WITH STAR-LIKE OBJECTS IN TEMPLATE IMAGE: {n_cands}')
 
         # With kilonova-like rising and/or fading rates
@@ -70,14 +70,14 @@ if __name__ == "__main__":
                                     (mlist.RISE_g == True) | (mlist.FADE_g == True)]
         
         n_cands = len(mlist)
-        print('')
+        print(' ')
         print(f'NUMBER AFTER FILTERING CANDIDATES ON RISING/ FADING RATES: {n_cands}')
 
         # With more than one inflection point
         mlist = mlist[lambda mlist: (mlist.N_INFLECTIONS_i < 2 | mlist.N_INFLECTIONS_g < 2)]
 
         n_cands = len(mlist)
-        print('')
+        print(' ')
         print(f'NUMBER AFTER FILTERING CANDIDATES WITH LESS THAN 2 INFLECTION POINTS: {n_cands}')
 
         # Iterating over different consecutive count filtering criteria 
