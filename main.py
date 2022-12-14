@@ -346,10 +346,10 @@ if __name__ == "__main__":
                     n_good_det = len(df_out[df_out["good_detection"] == True])
 
                     # Checking for KN-like rising/ fading rates (-ve means rising, +ve means fading)
-                    i_rise = (df_out['alpha_i'] < -1).any()
-                    i_fade = (df_out['alpha_i'] > 0.3).any()
-                    g_rise = (df_out['alpha_g'] < -1).any()
-                    g_fade = (df_out['alpha_g'] > 0.3).any()
+                    i_rise = (float(df_out['alpha_i'])< -1).any()
+                    i_fade = (float(df_out['alpha_i']) > 0.3).any()
+                    g_rise = (float(df_out['alpha_g']) < -1).any()
+                    g_fade = (float(df_out['alpha_g']) > 0.3).any()
                     i_inflections = (df_out['alpha_i'] & (df_out['alpha_i'] != df_out['alpha_i'].shift(1))).sum()
                     g_inflections = (df_out['alpha_g'] & (df_out['alpha_g'] != df_out['alpha_g'].shift(1))).sum()
 
