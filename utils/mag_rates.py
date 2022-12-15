@@ -5,6 +5,7 @@ def calculate_mag_diff(lc, verbose=False):
     alpha_temp = pd.DataFrame()
 
     for i in range(len(lc)):
+       
         lc_row = lc.iloc[i]
         date_2 = lc_row['dateobs']
         filter = lc_row['filt']
@@ -23,6 +24,7 @@ def calculate_mag_diff(lc, verbose=False):
             if verbose:
                 print(f'{filter} mag diff calculation:')
                 print(f'{mag_2} - {mag_1} / {date_2} - {date_1} = {alpha}')
+                print(' ')
         
         alpha_temp = alpha_temp.append([{'dateobs': date_2,
                                          'filt':filter,
@@ -34,6 +36,11 @@ def mag_rates(lc_file, verbose=False):
     lc_file_i = lc_file[lc_file['filt'] == 'i']
     lc_file_g = lc_file[lc_file['filt'] == 'g']
 
+    if verbose:
+        print(' ')
+        print('----------------------------------')
+        print('MAGNITUDE CHANGE RATE CALCULATIONS')
+
     if len(lc_file_i) != 0:
         alpha_i = calculate_mag_diff(lc_file_i, verbose=True)
     else:
@@ -44,16 +51,11 @@ def mag_rates(lc_file, verbose=False):
     else:
         alpha_g = pd.DataFrame(columns={'dateobs','filt','alpha'})
 
-    if verbose:
-        print('Alpha i band values:')
-        print(alpha_i)
-        print('Alpha g band values:')
-        print(alpha_g)
-
-    alpha = pd.merge(alpha_i, alpha_g, how='left', on=['dateobs','filt'], suffixes=('_i','_g'))
+    alpha = pd.merge(alpha_i, alpha_g, how='outer', on=['dateobs','filt'], suffixes=('_i','_g'))
 
     if verbose:
         print('Alpha values:')
         print(alpha)
+        ('----------------------------------')
 
     return alpha
