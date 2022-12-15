@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 def calculate_mag_diff(lc, verbose=False):
@@ -13,7 +14,7 @@ def calculate_mag_diff(lc, verbose=False):
 
         # Calculate change in mag from previous detection, alpha (mag/night)
         if i == 0:
-            alpha = 'NaN'
+            alpha = np.NaN
         else:
             lc_prev_row = lc.iloc[i-1]
             date_1 = lc_prev_row['dateobs']
