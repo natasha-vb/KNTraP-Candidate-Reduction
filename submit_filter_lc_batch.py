@@ -172,7 +172,7 @@ if __name__ == "__main__":
                                 do_not_submit=do_not_submit)
     
     # Command line for light curve script
-    commandfile         = f'python make_lightcurves.py --field {field} --v'
+    commandfile         = f'python make_lightcurves.py --field {field}'
 
     _ = submit_slurm_OzSTAR_batch(commandfile, field,
                                 bashrcfile=bashrcfile,
