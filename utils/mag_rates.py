@@ -57,6 +57,7 @@ def mag_rates(lc_file, verbose=False):
     if verbose:
         print('Alpha values:')
         print(alpha)
-        ('----------------------------------')
+        print('----------------------------------')
+        print(' ')
 
     return alpha
