@@ -20,7 +20,10 @@ def calculate_mag_diff(lc, verbose=False):
             date_1 = lc_prev_row['dateobs']
             mag_1 = lc_prev_row['m']
 
-            alpha = (float(mag_2) - float(mag_1)) / (int(date_2) - int(date_1))
+            if mag_1 == '-' or mag_2 == '-':
+                alpha = (float(mag_2) - float(mag_1)) / (int(date_2) - int(date_1))
+            else:
+                alpha = np.NaN
 
             if verbose:
                 print(f'{filter} mag diff calculation:')
