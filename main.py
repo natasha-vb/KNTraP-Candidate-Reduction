@@ -331,6 +331,9 @@ if __name__ == "__main__":
                     df_alpha = mag_rates.mag_rates(df_out, verbose=True)
                     df_out = pd.merge(df_out,df_alpha, how='left', on=['dateobs', 'filt'])
 
+                    # Calculate magnitude SNR 
+                    df_out['mag_SNR'] = df_out['m'] / df_out['dm']
+
                     app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
                     df_out.to_csv(f'{lc_outdir}/{app_lc_name}',index=False)
 
