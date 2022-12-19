@@ -14,6 +14,7 @@ def calculate_mag_diff(lc, verbose=False):
     lc  = lc['m'].replace('-', np.NaN)
 
     print('magnitudes, dashes removed:')
+    print(lc)
     print(lc['m'])
 
     alpha_temp['dateobs'] = lc['dateobs']
