@@ -312,7 +312,7 @@ if __name__ == "__main__":
                     df_out = pd.merge(df_out,df_seeing, how='left', on=['dateobs', 'filt'])
                     
                     # True/ False for a "good" detection
-                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and ### MAYBE REDUCE TO 0.6
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and 
                                                                                 row["FWHM_IMAGE_DIFF"] < 2*(row["seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel ###MAYBE REDUCE TO 1.8 x 
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.02 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.02 else
@@ -336,7 +336,7 @@ if __name__ == "__main__":
                         print(col)
 
                     # Calculate magnitude SNR 
-                    df_out['mag_SNR'] = df_out['m'].values / df_out['dm'].values
+                    df_out['mag_SNR'] = [float(x) for x in df_out['m']] / [float(x) for x in df_out['dm']]
 
                     app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
                     df_out.to_csv(f'{lc_outdir}/{app_lc_name}',index=False)

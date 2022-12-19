@@ -3,30 +3,21 @@ import pandas as pd
 
 def calculate_mag_diff(lc, verbose=False):
 
-    # print(lc)
-    # for cols in lc.columns:
-    #     print(cols)
-
-    # print(lc['dateobs'])
-
     alpha_temp = pd.DataFrame(columns={'dateobs','filt','mag_diff','date_diff','alpha'})
 
-    # lc['m'].replace('-', np.NaN)
-
-    # print('magnitudes, dashes removed:')
-    # print(lc)
-    # print(lc['m'])
-
+    # Setting up dataframe for magnitude difference calculations
     alpha_temp['dateobs'] = lc['dateobs']
     alpha_temp['dateobs_int'] = [int(x) for x in alpha_temp['dateobs']]
     alpha_temp['m'] = lc['m'].replace('-', np.NaN)
     alpha_temp['m_flt'] = [float(x) for x in alpha_temp['m']]
     alpha_temp['filt'] = lc['filt']
 
+    # Calculating magnitude difference rates
     alpha_temp['mag_diff'] = alpha_temp['m_flt'].diff()
     alpha_temp['date_diff'] = alpha_temp['dateobs_int'].diff()
     alpha_temp['alpha'] = alpha_temp['mag_diff'].values / alpha_temp['date_diff'].values
 
+    # Deleting columns not needed to merge with light curve file
     alpha_temp.drop('dateobs_int', axis=1, inplace=True)
     alpha_temp.drop('m', axis=1, inplace=True)
     alpha_temp.drop('m_flt', axis=1, inplace=True)
