@@ -7,6 +7,8 @@ def calculate_mag_diff(lc, verbose=False):
     for cols in lc.columns:
         print(cols)
 
+    print(lc['dateobs'])
+
     alpha_temp = pd.DataFrame(columns={'dateobs','filt','mag_diff','date_diff','alpha'})
 
     lc  = lc['m'].replace('-', np.NaN)
