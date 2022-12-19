@@ -11,7 +11,7 @@ def calculate_mag_diff(lc, verbose=False):
 
     alpha_temp = pd.DataFrame(columns={'dateobs','filt','mag_diff','date_diff','alpha'})
 
-    lc['m'].replace('-', np.NaN)
+    # lc['m'].replace('-', np.NaN)
 
     # print('magnitudes, dashes removed:')
     # print(lc)
@@ -19,7 +19,7 @@ def calculate_mag_diff(lc, verbose=False):
 
     alpha_temp['dateobs'] = lc['dateobs']
     alpha_temp['dateobs_int'] = [int(x) for x in alpha_temp['dateobs']]
-    alpha_temp['m'] = lc['m']
+    alpha_temp['m'] = lc['m'].replace('-', np.NaN)
     alpha_temp['m_flt'] = [float(x) for x in alpha_temp['m']]
     alpha_temp['filt'] = lc['filt']
 
