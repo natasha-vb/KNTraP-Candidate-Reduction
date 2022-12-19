@@ -4,8 +4,8 @@ import pandas as pd
 def calculate_mag_diff(lc, verbose=False):
 
     print(lc)
-    for c in lc.cols:
-        print(c)
+    for cols in lc.columns:
+        print(cols)
 
     alpha_temp = pd.DataFrame(columns={'dateobs','filt','mag_diff','date_diff','alpha'})
 
