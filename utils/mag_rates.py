@@ -3,19 +3,19 @@ import pandas as pd
 
 def calculate_mag_diff(lc, verbose=False):
 
-    print(lc)
-    for cols in lc.columns:
-        print(cols)
+    # print(lc)
+    # for cols in lc.columns:
+    #     print(cols)
 
-    print(lc['dateobs'])
+    # print(lc['dateobs'])
 
     alpha_temp = pd.DataFrame(columns={'dateobs','filt','mag_diff','date_diff','alpha'})
 
     lc['m'].replace('-', np.NaN)
 
-    print('magnitudes, dashes removed:')
-    print(lc)
-    print(lc['m'])
+    # print('magnitudes, dashes removed:')
+    # print(lc)
+    # print(lc['m'])
 
     alpha_temp['dateobs'] = lc['dateobs']
     alpha_temp['filt'] = lc['filt']
