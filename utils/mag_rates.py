@@ -18,11 +18,11 @@ def calculate_mag_diff(lc, verbose=False):
     # print(lc['m'])
 
     alpha_temp['dateobs'] = lc['dateobs']
-    alpha_temp['dateobs'] = [int(x) for x in alpha_temp['dateobs']]
+    alpha_temp['dateobs_int'] = [int(x) for x in alpha_temp['dateobs']]
     alpha_temp['filt'] = lc['filt']
 
     alpha_temp['mag_diff'] = lc['m'].diff()
-    alpha_temp['date_diff'] = alpha_temp['dateobs'].diff()
+    alpha_temp['date_diff'] = alpha_temp['dateobs_int'].diff()
     alpha_temp['alpha'] = alpha_temp['mag_diff'].values / alpha_temp['date_diff'].values
 
     if verbose:
