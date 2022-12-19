@@ -27,6 +27,12 @@ def calculate_mag_diff(lc, verbose=False):
     alpha_temp['date_diff'] = alpha_temp['dateobs_int'].diff()
     alpha_temp['alpha'] = alpha_temp['mag_diff'].values / alpha_temp['date_diff'].values
 
+    alpha_temp.drop('dateobs_int', axis=1, inplace=True)
+    alpha_temp.drop('m', axis=1, inplace=True)
+    alpha_temp.drop('m_flt', axis=1, inplace=True)
+    alpha_temp.drop('mag_diff', axis=1, inplace=True)
+    alpha_temp.drop('date_diff', axis=1, inplace=True)
+
     if verbose:
         print(alpha_temp)
 
