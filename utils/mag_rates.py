@@ -14,6 +14,9 @@ def calculate_mag_diff(lc, verbose=False):
     alpha_temp['date_diff'] = lc['dateobs'].diff()
     alpha_temp['alpha'] = alpha_temp['mag_diff'].values / alpha_temp['date_diff'].values
 
+    if verbose:
+        print(alpha_temp)
+
     return alpha_temp
 
 
