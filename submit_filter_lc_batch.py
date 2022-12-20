@@ -120,6 +120,16 @@ if __name__ == "__main__":
     # Read in input arguments
     parser = argparse.ArgumentParser()
     parser.add_argument(
+            '--topcands',
+            action='store_true',
+            help='Run top candidates script'
+    )
+    parser.add_argument(
+            '--lightcurves',
+            action='store_true',
+            help='Run make light curves script'
+    )
+    parser.add_argument(
             '--field',
             type=str,
             help='Selected field'
@@ -159,23 +169,24 @@ if __name__ == "__main__":
     if args.field:
         field           = args.field
 
-    # Command line for candidate filtering script
-    commandfile         = f'python top_candidates.py --field {field} --v'
     # Optional arguments (with defaults set)
     bashrcfile          = args.bashrcfile
     memory_request      = int(args.memory_request)
 
-    _ = submit_slurm_OzSTAR_batch(commandfile, field,
-                                bashrcfile=bashrcfile,
-                                memory_request = memory_request,
-                                verbose=verbose,
-                                do_not_submit=do_not_submit)
-    
+    # Command line for candidate filtering script
+    if args.topcands:
+        commandfile         = f'python top_candidates.py --field {field} --v'
+        _ = submit_slurm_OzSTAR_batch(commandfile, field,
+                                    bashrcfile=bashrcfile,
+                                    memory_request = memory_request,
+                                    verbose=verbose,
+                                    do_not_submit=do_not_submit)
+        
     # Command line for light curve script
-    commandfile         = f'python make_lightcurves.py --field {field}'
-
-    _ = submit_slurm_OzSTAR_batch(commandfile, field,
-                                bashrcfile=bashrcfile,
-                                memory_request = memory_request,
-                                verbose=verbose,
-                                do_not_submit=do_not_submit)
+    if args.lightcurves:
+        commandfile         = f'python make_lightcurves.py --field {field}'
+        _ = submit_slurm_OzSTAR_batch(commandfile, field,
+                                    bashrcfile=bashrcfile,
+                                    memory_request = memory_request,
+                                    verbose=verbose,
+                                    do_not_submit=do_not_submit)
