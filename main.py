@@ -336,7 +336,7 @@ if __name__ == "__main__":
                         print(col)
 
                     # Calculate magnitude SNR 
-                    df_out['mag_SNR'] = df_out['m'].astype(float) / df_out['dm'].astype(float)
+                    df_out['mag_SNR'] = df_out['m'].replace('-', np.NaN).astype(float) / df_out['dm'].replace('-', np.NaN).astype(float)
 
                     app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
                     df_out.to_csv(f'{lc_outdir}/{app_lc_name}',index=False)
