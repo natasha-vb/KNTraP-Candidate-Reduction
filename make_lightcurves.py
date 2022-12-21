@@ -81,18 +81,14 @@ if __name__ == "__main__":
             # Creating i and g band subsets, and removing '-' magnitude values
             unf_i = unflc_df[unflc_df['filt'] == 'i']
             unf_g = unflc_df[unflc_df['filt'] == 'g']
-            unf__mi = unf_i[unf_i['m'] != '-']
-            unf__mg = unf_g[unf_g['m'] != '-']
-            unf_mi = unf__mi[unf__mi['dm'] != '-']
-            unf_mg = unf__mg[unf__mg['dm'] != '-']
+            unf_mi = unf_i[(unf_i['m'] != '-') & (unf_i['dm'] != '-')]
+            unf_mg = unf_g[(unf_g['m'] != '-') & (unf_g['dm'] != '-')]
 
             f_i = flc_df[flc_df['filt'] == 'i']
             f_g = flc_df[flc_df['filt'] == 'g']
 
-            f__mi = f_i[f_i['m'] != '-']
-            f__mg = f_g[f_g['m'] != '-']
-            f_mi = f__mi[f__mi['dm'] == '-']
-            f_mg = f__mg[f__mg['dm'] == '-']
+            f_mi = f_i[(f_i['m'] != '-') & (f_i['dm'] != '-')]
+            f_mg = f_g[(f_g['m'] != '-') & (f_g['dm'] != '-')]
             f_limi = f_i[f_i['m'] == '-']
             f_limg = f_g[f_g['m'] == '-']
             
