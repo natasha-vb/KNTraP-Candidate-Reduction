@@ -5,6 +5,7 @@ from utils.misc import xmatchps1
 def crossmatch(candfile, verbose=False):
 
     # SIMBAD crossmatch
+    print('Crossmatching with Simbad...')
     z, sptype, typ, ctlg = xmatchsimbad.crossmatch_simbad(candfile["CAND_ID"].to_list(),
                                                           candfile["RA_AVERAGE"].to_list(),
                                                           candfile["DEC_AVERAGE"].to_list())
@@ -15,6 +16,7 @@ def crossmatch(candfile, verbose=False):
     candfile["simbad_redshift"] = z 
 
     # GAIA Crossmatch
+    print('Crossmatching with Gaia...')
     (source_dr3, ragaia_dr3, decgaia_dr3, plx_dr3, plxerr_dr3, gmag_dr3, angdist_dr3) = xmatchgaia.cross_match_gaia( 
                                                                                         candfile["CAND_ID"].to_list(),
                                                                                         candfile["RA_AVERAGE"].to_list(),
@@ -27,6 +29,7 @@ def crossmatch(candfile, verbose=False):
                               candfile["gaia_DR3_parallaxerr"][candfile["gaia_DR3_parallaxerr"] != "Unknown"].astype(float))
     
     # Pan-STARRS 1 crossmatch
+    print('Crossmatching with Pan-STARRS...')
     df_ps1 = xmatchps1.cross_match_alerts_raw_generic(candfile["CAND_ID"].to_list(),
                                                       candfile["RA_AVERAGE"].to_list(),
                                                       candfile["DEC_AVERAGE"].to_list(),
