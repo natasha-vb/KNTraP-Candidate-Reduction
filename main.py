@@ -429,7 +429,7 @@ if __name__ == "__main__":
             ml = pd.read_csv(masterlist_list[i])
             masterlist_allccds = masterlist_allccds.append(ml,sort=False)
         except:
-            print('Masterlist empty or corrupted')
+            print(f'Masterlist empty or corrupted: masterlist_{args.field}_ccd{ccd}.csv')
 
     masterlist_allccds = masterlist_allccds.sort_values(by = ['CCD', 'CAND_ID'] )
 
