@@ -19,8 +19,6 @@ def xmatch(id, ra, dec, extcatalog, distmaxarcsec):
     table = generate_csv(table_header, [id, ra, dec])
 
     print('test spot 1')
-    print('TABLE')
-    print(table)
 
     r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
                        data={"request": "xmatch",

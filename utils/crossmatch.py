@@ -40,6 +40,7 @@ def crossmatch(candfile, verbose=False):
     candfile["ps1_objID"] = df_ps1["ObjectID_PS1"]
     candfile["ps1_objID"] = df_ps1["angDist"]
     print('test spot 2')
+    print(candfile)
 
     if verbose:
         print('')
