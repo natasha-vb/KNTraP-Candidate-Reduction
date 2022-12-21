@@ -255,6 +255,7 @@ if __name__ == "__main__":
             print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
             for ii, f in enumerate(difflc_files):
                 print(difflc_files[ii])
+                print(' ')
         
         masterlist = pd.DataFrame()
         empty_lc_files = []
@@ -424,12 +425,11 @@ if __name__ == "__main__":
     masterlist_list = glob.glob(f'{masterlist_outdir}/*{args.field}_*.csv')
     masterlist_allccds = pd.DataFrame()
     for i, m in enumerate(masterlist_list):
-        ml = pd.read_csv(masterlist_list[i])
-        if ml.empty:
-            print('MASTERLIST EMPTY:')
-            print(masterlist_list[i])
-        else:
+        try:
+            ml = pd.read_csv(masterlist_list[i])
             masterlist_allccds = masterlist_allccds.append(ml,sort=False)
+        except:
+            print('Masterlist empty or corrupted')
 
     masterlist_allccds = masterlist_allccds.sort_values(by = ['CCD', 'CAND_ID'] )
 
