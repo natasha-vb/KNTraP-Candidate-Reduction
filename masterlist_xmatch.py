@@ -40,6 +40,7 @@ if __name__ == "__main__":
             print(ml_file)
 
             ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
+            print('Crossmatching complete!')
 
             print('Crossedmatched Masterlist:')
             print(ml_xmatch)
