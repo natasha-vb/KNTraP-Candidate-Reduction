@@ -36,8 +36,10 @@ def crossmatch(candfile, verbose=False):
                                                       ctlg="vizier:II/349/ps1",
                                                       distmaxarcsec=2)
 
+    print('test spot 1')
     candfile["ps1_objID"] = df_ps1["ObjectID_PS1"]
     candfile["ps1_objID"] = df_ps1["angDist"]
+    print('test spot 2')
 
     if verbose:
         print('')
