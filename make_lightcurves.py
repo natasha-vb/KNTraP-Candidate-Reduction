@@ -93,8 +93,8 @@ if __name__ == "__main__":
             f__mg = f_g[f_g['m'] != '-']
             f_mi = f__mi[f__mi['dm'] == '-']
             f_mg = f__mg[f__mg['dm'] == '-']
-            f__limi = f_i[f_i['m'] == '-']
-            f__limg = f_g[f_g['m'] == '-']
+            f_limi = f_i[f_i['m'] == '-']
+            f_limg = f_g[f_g['m'] == '-']
             
 
             f_mi_cut = f_mi[~np.round(f_mi['MJD'], 5).isin(np.round(unf_mi['MJD'], 5))]
