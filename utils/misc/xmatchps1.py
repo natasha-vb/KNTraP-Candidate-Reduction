@@ -31,11 +31,6 @@ def xmatch(id, ra, dec, extcatalog, distmaxarcsec):
     data = r.content.decode().split("\n")[1:-1]
     header = r.content.decode().split("\n")[0].split(",")
 
-    print('data')
-    print(data)
-    print('header')
-    print(header)
-
     # h = open('ps1_text.csv', 'w')
     # h.write(r.text)
     # h.close()
