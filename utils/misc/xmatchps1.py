@@ -18,6 +18,10 @@ def xmatch(id, ra, dec, extcatalog, distmaxarcsec):
     table_header = """ObjectID, ra_in, dec_in\n"""
     table = generate_csv(table_header, [id, ra, dec])
 
+    print('test spot 1')
+    print('TABLE')
+    print(table)
+
     r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
                        data={"request": "xmatch",
                              "distMaxArcsec": distmaxarcsec,
@@ -30,6 +34,8 @@ def xmatch(id, ra, dec, extcatalog, distmaxarcsec):
 
     data = r.content.decode().split("\n")[1:-1]
     header = r.content.decode().split("\n")[0].split(",")
+
+    print('test spot 2')
 
     # h = open('ps1_text.csv', 'w')
     # h.write(r.text)
@@ -45,8 +51,9 @@ def cross_match_alerts_raw_generic(oid, ra, dec, ctlg, distmaxarcsec):
         data, header = xmatch(oid, ra, dec, extcatalog=ctlg, distmaxarcsec=distmaxarcsec)
     except (ConnectionError, TimeoutError, ValueError) as ce:
         logging.warning("XMATCH failed " + repr(ce))
+        print('test spot 3')
         return []
-
+        
     if len(data) > 0 and "504 Gateway Time-out" in data[0]:
         msg_head = "CDS xmatch service probably down"
         msg_foot = "Check at http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync"
