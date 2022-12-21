@@ -19,6 +19,12 @@ if __name__ == "__main__":
 
     matplotlib.use('Agg') 
 
+    print(' ')
+    print('======================================')
+    print('MAKING LIGHT CURVES FOR TOP CANDIDATES')
+    print('======================================')
+    print(' ')
+
     # Grab all masterlists of filtered candidates 
     if args.field:
         filtered_mlists = glob.glob(f'./masterlist/{args.field}/priority/*.csv')
