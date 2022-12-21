@@ -39,10 +39,10 @@ echo Job .out is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.
 echo Job .err is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.err
 echo `date`
 SECONDS=0
-echo -------- --------
+echo ----------------
 source BASHRCFILE
 COMMAND
-echo -------- --------
+echo ----------------
 echo `date`
 duration=$SECONDS
 echo Slurm Job JOB_NAME done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
