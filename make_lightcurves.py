@@ -83,8 +83,6 @@ if __name__ == "__main__":
             unf_g = unflc_df[unflc_df['filt'] == 'g']
             unf_mi = unf_i[(unf_i['m'] != '-') & (unf_i['dm'] != '-')]
             unf_mg = unf_g[(unf_g['m'] != '-') & (unf_g['dm'] != '-')]
-            print(unf_mi[['dateobs','m','dm']])
-            print(unf_mg[['dateobs','m','dm']])
 
             f_i = flc_df[flc_df['filt'] == 'i']
             f_g = flc_df[flc_df['filt'] == 'g']
