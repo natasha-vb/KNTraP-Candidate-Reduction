@@ -118,8 +118,8 @@ if __name__ == "__main__":
             # Plot unforced photometry data points
             ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
             ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
-            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_i['dm'].astype(float), ecolor='r')
-            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_g['dm'].astype(float), ecolor='b')
+            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_mi['dm'].astype(float), ecolor='r')
+            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_mg['dm'].astype(float), ecolor='b')
 
             # Mark "good" detections
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
