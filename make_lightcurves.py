@@ -112,8 +112,8 @@ if __name__ == "__main__":
             # Plot forced photometry data points
             ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolor=None, marker='o')
             ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolor=None, marker='o')
-            ax.errorbar(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), yerr=f_mi_cut['dm'].astype(float), ecolor='r')
-            ax.errorbar(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), yerr=f_mg_cut['dm'].astype(float), ecolor='b')
+            ax.errorbar(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), yerr=f_mi_cut['dm'].astype(float), fmt='None', capsize=0.2, linestyle='None', ecolor='r')
+            ax.errorbar(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), yerr=f_mg_cut['dm'].astype(float), fmt='None', capsize=0.2, linestyle='None', ecolor='b')
             
             # Plot limiting magnitudes
             ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
@@ -122,8 +122,8 @@ if __name__ == "__main__":
             # Plot unforced photometry data points
             ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
             ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
-            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_mi['dm'].astype(float), ecolor='r')
-            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_mg['dm'].astype(float), ecolor='b')
+            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_mi['dm'].astype(float), fmt='None', capsize=0.2, linestyle='None', ecolor='r')
+            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_mg['dm'].astype(float), fmt='None', capsize=0.2, linestyle='None', ecolor='b')
 
             # Mark "good" detections
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
