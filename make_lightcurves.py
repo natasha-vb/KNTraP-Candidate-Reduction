@@ -83,6 +83,8 @@ if __name__ == "__main__":
             unf_g = unflc_df[unflc_df['filt'] == 'g']
             unf_mi = unf_i[unf_i['m'] != '-']
             unf_mg = unf_g[unf_g['m'] != '-']
+            unf_mi = unf_i[unf_i['dm'] != '-']
+            unf_mg = unf_g[unf_g['dm'] != '-']
 
             f_i = flc_df[flc_df['filt'] == 'i']
             f_g = flc_df[flc_df['filt'] == 'g']
@@ -91,6 +93,8 @@ if __name__ == "__main__":
             f_mg = f_g[f_g['m'] != '-']
             f_limi = f_i[f_i['m'] == '-']
             f_limg = f_g[f_g['m'] == '-']
+            f_limi = f_i[f_i['dm'] == '-']
+            f_limg = f_g[f_g['dm'] == '-']
 
             f_mi_cut = f_mi[~np.round(f_mi['MJD'], 5).isin(np.round(unf_mi['MJD'], 5))]
             f_mg_cut = f_mg[~np.round(f_mg['MJD'], 5).isin(np.round(unf_mg['MJD'], 5))]
