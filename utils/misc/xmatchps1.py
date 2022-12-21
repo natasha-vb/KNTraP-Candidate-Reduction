@@ -18,8 +18,6 @@ def xmatch(id, ra, dec, extcatalog, distmaxarcsec):
     table_header = """ObjectID, ra_in, dec_in\n"""
     table = generate_csv(table_header, [id, ra, dec])
 
-    print('test spot 1')
-
     r = requests.post("http://cdsxmatch.u-strasbg.fr/xmatch/api/v1/sync", 
                        data={"request": "xmatch",
                              "distMaxArcsec": distmaxarcsec,
@@ -33,7 +31,10 @@ def xmatch(id, ra, dec, extcatalog, distmaxarcsec):
     data = r.content.decode().split("\n")[1:-1]
     header = r.content.decode().split("\n")[0].split(",")
 
-    print('test spot 2')
+    print('data')
+    print(data)
+    print('header')
+    print(header)
 
     # h = open('ps1_text.csv', 'w')
     # h.write(r.text)
