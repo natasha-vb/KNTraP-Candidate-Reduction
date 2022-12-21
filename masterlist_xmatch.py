@@ -33,14 +33,18 @@ if __name__ == "__main__":
         outdir = f'./masterlist/{field}'
 
         # Crossmatching candidates with Simbad, Gaia, and Pan-STARRS 1 catalogues
-        ml_file = pd.read_csv(ml)
-        
-        print('Masterlist to be crossmatched:')
-        print(ml_file)
+        try:
+            ml_file = pd.read_csv(ml)
+            
+            print('Masterlist to be crossmatched:')
+            print(ml_file)
 
-        ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
+            ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
 
-        print('Crossedmatched Masterlist:')
-        print(ml_xmatch)
+            print('Crossedmatched Masterlist:')
+            print(ml_xmatch)
 
-        ml_xmatch.to_csv(f'{outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)
+            ml_xmatch.to_csv(f'{outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)
+        except:
+            print('Masterlist is empty or corrupted:')
+            print(ml)
