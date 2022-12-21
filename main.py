@@ -331,10 +331,6 @@ if __name__ == "__main__":
                     df_alpha = mag_rates.mag_rates(df_out, verbose=True)
                     df_out = pd.merge(df_out,df_alpha, how='left', on=['dateobs', 'filt'])
 
-                    print(df_out)
-                    for col in df_out.columns:
-                        print(col)
-
                     # Calculate magnitude SNR 
                     df_out['mag_SNR'] = df_out['m'].replace('-', np.NaN).astype(float) / df_out['dm'].replace('-', np.NaN).astype(float)
 
@@ -429,7 +425,12 @@ if __name__ == "__main__":
     masterlist_allccds = pd.DataFrame()
     for i, m in enumerate(masterlist_list):
         ml = pd.read_csv(masterlist_list[i])
-        masterlist_allccds = masterlist_allccds.append(ml,sort=False)
+        if ml.empty:
+            print('MASTERLIST EMPTY:')
+            print(masterlist_list[i])
+        else:
+            masterlist_allccds = masterlist_allccds.append(ml,sort=False)
+
     masterlist_allccds = masterlist_allccds.sort_values(by = ['CCD', 'CAND_ID'] )
 
     masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}.allccds.csv')
@@ -440,20 +441,3 @@ if __name__ == "__main__":
     
     # ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     # ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)
-
-####### CHANGE CRITERIA DEPENDING ON BEST CHOICE FROM TOP_CANDIDATES #######
-    # Separating top tier candidates into a list
-    # t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 3) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 3) |
-    #                                        (ml_xmatch.N_CONSECUTIVE_DETECTIONS_ig >= 2)] 
-    # t1_cands = t1_cands.reset_index()
-    # t1_cands.to_csv(f'{priority_outdir}/tier1_candidates_{args.field}.csv', index=False)
-
-    # if args.verbose:
-    #     top_cand_num = len(t1_cands)
-    #     print('')
-    #     print('=================================')
-    #     print(f'TOP {top_cand_num} CANDIDATES IN FIELD {args.field}:')
-    #     print('=================================')
-    #     print(t1_cands[['CAND_ID','CCD','RA_AVERAGE','DEC_AVERAGE','N_CONSECUTIVE_DETECTIONS_i', 'N_CONSECUTIVE_DETECTIONS_g']])
-
-### MAKE PRIORITY MASTERLIST COMPILING ALL FIELDS?
