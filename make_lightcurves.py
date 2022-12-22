@@ -110,30 +110,30 @@ if __name__ == "__main__":
             fig, ax = plt.subplots()
 
             # Plot forced photometry data points
-            ax.errorbar(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), yerr=f_mi_cut['dm'].astype(float), fmt='None', capsize=10, 
+            ax.errorbar(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), yerr=f_mi_cut['dm'].astype(float), fmt='None', capsize=2, 
             fillstyle='None', linestyle='None', ecolor='r')
-            ax.errorbar(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), yerr=f_mg_cut['dm'].astype(float), fmt='None', capsize=10, 
+            ax.errorbar(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), yerr=f_mg_cut['dm'].astype(float), fmt='None', capsize=12 
             fillstyle='None', linestyle='None', ecolor='b')
             # ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolor=None, marker='o')
             # ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolor=None, marker='o')
 
-            ax.plot(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), lw=0, c='r', marker='s', ms=2)
-            ax.plot(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), lw=0, c='b', marker='s', ms=2)
+            ax.plot(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), lw=0, c='r', marker='s', ms=8)
+            ax.plot(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), lw=0, c='b', marker='s', ms=8)
             
             # Plot limiting magnitude
             ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
             ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'], c='b', marker='v', alpha=0.2) 
 
             # Plot unforced photometry data points
-            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_mi['dm'].astype(float), fmt='None', capsize=10,
+            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_mi['dm'].astype(float), fmt='None', capsize=2,
             fillstyle='None', linestyle='None', ecolor='r')
-            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_mg['dm'].astype(float), fmt='None', capsize=10,
+            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_mg['dm'].astype(float), fmt='None', capsize=2,
             fillstyle='None', linestyle='None', ecolor='b')
             # ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
             # ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
 
-            ax.plot(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), lw=0, c='r', marker='.', ms=2, label='i band')
-            ax.plot(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), lw=0, c='b', marker='.', ms=2, label='g band')
+            ax.plot(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), lw=0, c='r', marker='.', ms=8, label='i band')
+            ax.plot(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), lw=0, c='b', marker='.', ms=8, label='g band')
 
             # Mark "good" detections
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
