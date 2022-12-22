@@ -114,8 +114,8 @@ if __name__ == "__main__":
             fillstyle='None', linestyle='None', ecolor='r')
             ax.errorbar(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), yerr=f_mg_cut['dm'].astype(float), fmt='None', capsize=3, 
             fillstyle='None', linestyle='None', ecolor='b')
-            ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolor=None, fillstyle='None', marker='o')
-            ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolor=None, fillstyle='None', marker='o')
+            ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolor=None, marker='.')
+            ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolor=None, marker='.')
             
             # Plot limiting magnitudes
             ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
