@@ -73,12 +73,13 @@ if __name__ == "__main__":
         print(' ')
         print(f'NUMBER AFTER FILTERING CANDIDATES ON RISING/ FADING RATES: {n_cands}')
 
-        # With more than one inflection point
-        mlist = mlist[lambda mlist: (mlist.N_INFLECTIONS_i < 2 | mlist.N_INFLECTIONS_g < 2)]
+        # # With more than one inflection point
+        #### NEED TO THINK THIS PART THROUGH MORE, AS THERE CAN BE SMALL INFLECTIONS IN A SLOPE ###
+        # mlist = mlist[lambda mlist: (mlist.N_INFLECTIONS_i < 2 | mlist.N_INFLECTIONS_g < 2)]
 
-        n_cands = len(mlist)
-        print(' ')
-        print(f'NUMBER AFTER FILTERING CANDIDATES WITH LESS THAN 2 INFLECTION POINTS: {n_cands}')
+        # n_cands = len(mlist)
+        # print(' ')
+        # print(f'NUMBER AFTER FILTERING CANDIDATES WITH LESS THAN 2 INFLECTION POINTS: {n_cands}')
 
         # Iterating over different consecutive count filtering criteria 
         for i in range (2,5,1):

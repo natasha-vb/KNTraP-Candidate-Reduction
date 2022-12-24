@@ -255,6 +255,7 @@ if __name__ == "__main__":
             print(f'DIFFERENCE LIGHT CURVE FILES, CCD {ccd}:')
             for ii, f in enumerate(difflc_files):
                 print(difflc_files[ii])
+                print(' ')
         
         masterlist = pd.DataFrame()
         empty_lc_files = []
@@ -312,7 +313,7 @@ if __name__ == "__main__":
                     df_out = pd.merge(df_out,df_seeing, how='left', on=['dateobs', 'filt'])
                     
                     # True/ False for a "good" detection
-                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and ### MAYBE REDUCE TO 0.6
+                    df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and 
                                                                                 row["FWHM_IMAGE_DIFF"] < 2*(row["seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel ###MAYBE REDUCE TO 1.8 x 
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.02 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.02 else
@@ -323,13 +324,16 @@ if __name__ == "__main__":
                             print('-----------------------------------------')
 
                     # Check for star-like objects in template image
-                    df_out['tmpl_star_check'] = df_out.apply(lambda row: True if row['SPREAD_MODEL_TMPL'] < 0.05 and
-                                                                                 row['SPREAD_MODEL_TMPL'] > -0.05 else
+                    df_out['tmpl_star_check'] = df_out.apply(lambda row: True if row['SPREAD_MODEL_TMPL'] < 0.002 and
+                                                                                 row['SPREAD_MODEL_TMPL'] > -0.002  else
                                                                                  False, axis=1)
 
                     # Calculate magnitude changes per day
-                    df_alpha = mag_rates.mag_rates(df_out)
+                    df_alpha = mag_rates.mag_rates(df_out, verbose=True)
                     df_out = pd.merge(df_out,df_alpha, how='left', on=['dateobs', 'filt'])
+
+                    # Calculate magnitude SNR 
+                    df_out['mag_SNR'] = df_out['m'].replace('-', np.NaN).astype(float) / df_out['dm'].replace('-', np.NaN).astype(float)
 
                     app_lc_name = (f'cand{cand_id}.unforced.difflc.app.txt')
                     df_out.to_csv(f'{lc_outdir}/{app_lc_name}',index=False)
@@ -345,13 +349,19 @@ if __name__ == "__main__":
                     n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
                     n_good_det = len(df_out[df_out["good_detection"] == True])
 
-                    # Checking for KN like rising/ fading rates (-ve means rising, +ve means fading)
+                    # Checking for KN-like rising/ fading rates (-ve means rising, +ve means fading)
+                    df_out['alpha_i'] = df_out['alpha_i'].apply(lambda x: float(x))
+                    df_out['alpha_g'] = df_out['alpha_g'].apply(lambda x: float(x))
+
                     i_rise = (df_out['alpha_i'] < -1).any()
                     i_fade = (df_out['alpha_i'] > 0.3).any()
                     g_rise = (df_out['alpha_g'] < -1).any()
                     g_fade = (df_out['alpha_g'] > 0.3).any()
-                    i_inflections = (df_out['alpha_i'] & (df_out['alpha_i'] != df_out['alpha_i'].shift(1))).sum()
-                    g_inflections = (df_out['alpha_g'] & (df_out['alpha_g'] != df_out['alpha_g'].shift(1))).sum()
+
+                    i_pos = (df_out['alpha_i'].dropna() > 0)
+                    g_pos = (df_out['alpha_g'].dropna() > 0)
+                    i_inflections = (i_pos & (i_pos != i_pos.shift(1))).sum()
+                    g_inflections = (g_pos & (g_pos != g_pos.shift(1))).sum()
 
                     # Placing data into temp masterlist
                     masterlist_tmp = pd.DataFrame({"CAND_ID": [cand_id],
@@ -415,8 +425,12 @@ if __name__ == "__main__":
     masterlist_list = glob.glob(f'{masterlist_outdir}/*{args.field}_*.csv')
     masterlist_allccds = pd.DataFrame()
     for i, m in enumerate(masterlist_list):
-        ml = pd.read_csv(masterlist_list[i])
-        masterlist_allccds = masterlist_allccds.append(ml,sort=False)
+        try:
+            ml = pd.read_csv(masterlist_list[i])
+            masterlist_allccds = masterlist_allccds.append(ml,sort=False)
+        except:
+            print(f'Masterlist empty or corrupted: masterlist_{args.field}_ccd{ccd}.csv')
+
     masterlist_allccds = masterlist_allccds.sort_values(by = ['CCD', 'CAND_ID'] )
 
     masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}.allccds.csv')
@@ -427,20 +441,3 @@ if __name__ == "__main__":
     
     # ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
     # ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)
-
-####### CHANGE CRITERIA DEPENDING ON BEST CHOICE FROM TOP_CANDIDATES #######
-    # Separating top tier candidates into a list
-    # t1_cands = ml_xmatch[lambda ml_xmatch: (ml_xmatch.N_CONSECUTIVE_DETECTIONS_i >= 3) | (ml_xmatch.N_CONSECUTIVE_DETECTIONS_g >= 3) |
-    #                                        (ml_xmatch.N_CONSECUTIVE_DETECTIONS_ig >= 2)] 
-    # t1_cands = t1_cands.reset_index()
-    # t1_cands.to_csv(f'{priority_outdir}/tier1_candidates_{args.field}.csv', index=False)
-
-    # if args.verbose:
-    #     top_cand_num = len(t1_cands)
-    #     print('')
-    #     print('=================================')
-    #     print(f'TOP {top_cand_num} CANDIDATES IN FIELD {args.field}:')
-    #     print('=================================')
-    #     print(t1_cands[['CAND_ID','CCD','RA_AVERAGE','DEC_AVERAGE','N_CONSECUTIVE_DETECTIONS_i', 'N_CONSECUTIVE_DETECTIONS_g']])
-
-### MAKE PRIORITY MASTERLIST COMPILING ALL FIELDS?

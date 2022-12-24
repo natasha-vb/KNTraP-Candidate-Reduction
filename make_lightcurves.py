@@ -19,6 +19,12 @@ if __name__ == "__main__":
 
     matplotlib.use('Agg') 
 
+    print(' ')
+    print('======================================')
+    print('MAKING LIGHT CURVES FOR TOP CANDIDATES')
+    print('======================================')
+    print(' ')
+
     # Grab all masterlists of filtered candidates 
     if args.field:
         filtered_mlists = glob.glob(f'./masterlist/{args.field}/priority/*.csv')
@@ -81,17 +87,18 @@ if __name__ == "__main__":
             # Creating i and g band subsets, and removing '-' magnitude values
             unf_i = unflc_df[unflc_df['filt'] == 'i']
             unf_g = unflc_df[unflc_df['filt'] == 'g']
-            unf_mi = unf_i[unf_i['m'] != '-']
-            unf_mg = unf_g[unf_g['m'] != '-']
+            unf_mi = unf_i[(unf_i['m'] != '-') & (unf_i['dm'] != '-')]
+            unf_mg = unf_g[(unf_g['m'] != '-') & (unf_g['dm'] != '-')]
 
             f_i = flc_df[flc_df['filt'] == 'i']
             f_g = flc_df[flc_df['filt'] == 'g']
 
-            f_mi = f_i[f_i['m'] != '-']
-            f_mg = f_g[f_g['m'] != '-']
+            f_mi = f_i[(f_i['m'] != '-') & (f_i['dm'] != '-')]
+            f_mg = f_g[(f_g['m'] != '-') & (f_g['dm'] != '-')]
             f_limi = f_i[f_i['m'] == '-']
             f_limg = f_g[f_g['m'] == '-']
-
+            
+            # Removing forced photometry data points on dates where there are unforced photometry data points
             f_mi_cut = f_mi[~np.round(f_mi['MJD'], 5).isin(np.round(unf_mi['MJD'], 5))]
             f_mg_cut = f_mg[~np.round(f_mg['MJD'], 5).isin(np.round(unf_mg['MJD'], 5))]
 
@@ -102,14 +109,33 @@ if __name__ == "__main__":
             # Plot light curve
             fig, ax = plt.subplots()
 
-            ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float),edgecolors='r', facecolor=None, marker='o')
-            ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'],    c='r', marker='v', alpha=0.2)
-            ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolor=None, marker='o')
-            ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'],    c='b', marker='v', alpha=0.2) 
+            # Plot forced photometry data points
+            ax.errorbar(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), yerr=f_mi_cut['dm'].astype(float), fmt='None', capsize=2, 
+            fillstyle='None', linestyle='None', ecolor='r')
+            ax.errorbar(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), yerr=f_mg_cut['dm'].astype(float), fmt='None', capsize=2, 
+            fillstyle='None', linestyle='None', ecolor='b')
+            # ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolor=None, marker='o')
+            # ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolor=None, marker='o')
 
-            ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
-            ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
+            ax.plot(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), lw=0, c='r', marker='s', ms=4)
+            ax.plot(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), lw=0, c='b', marker='s', ms=4)
+            
+            # Plot limiting magnitude
+            ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
+            ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'], c='b', marker='v', alpha=0.2) 
 
+            # Plot unforced photometry data points
+            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_mi['dm'].astype(float), fmt='None', capsize=2,
+            fillstyle='None', linestyle='None', ecolor='r')
+            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_mg['dm'].astype(float), fmt='None', capsize=2,
+            fillstyle='None', linestyle='None', ecolor='b')
+            # ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
+            # ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
+
+            ax.plot(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), lw=0, c='r', marker='.', ms=4, label='i band')
+            ax.plot(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), lw=0, c='b', marker='.', ms=4, label='g band')
+
+            # Mark "good" detections
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
             ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
             

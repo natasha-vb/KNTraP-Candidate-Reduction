@@ -41,14 +41,20 @@ echo `date`
 SECONDS=0
 echo ----------------
 source BASHRCFILE
-COMMAND
-echo ----------------
+COMMAND1
 echo `date`
 duration=$SECONDS
-echo Slurm Job JOB_NAME done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
+echo Slurm Job JOB_NAME1 done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
+echo ----------------
+SECONDS=0
+COMMAND2
+echo `date`
+duration=$SECONDS
+echo Slurm Job JOB_NAME1 done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
+echo ---------------- 
 '''
 
-def submit_slurm_OzSTAR_batch(commandfile,
+def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
                                 bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
                                 memory_request=8000,
                                 verbose=False,
@@ -57,39 +63,17 @@ def submit_slurm_OzSTAR_batch(commandfile,
     pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction'
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
-        walltime='17:00:00'
+        walltime='5:00:00'
 
+    
     # with open(commandfile) as fp:
-        pipecommand = commandfile.strip()
+        pipecommand1 = commandfile1.strip()
+        pipecommand2 = commandfile2.strip()
 
         # Define slurm job name
-        # Remove full path to "main.py"
-        if 'main.py' in pipecommand:
-            pipe_command_clean  = pipecommand.split('main.py')[1].strip()
+        fieldname = field
 
-        # Join spaces with _ and replace ' and * and / and < and > and - with nothing
-        # replace __ with _
-        slurm_job_name      = '_'.join(pipe_command_clean.split(' '))
-        slurm_job_name      = slurm_job_name.replace("'",'')
-        slurm_job_name      = slurm_job_name.replace("*",'')
-        slurm_job_name      = slurm_job_name.replace("/",'')
-        slurm_job_name      = slurm_job_name.replace("<",'')
-        slurm_job_name      = slurm_job_name.replace(">",'')
-        slurm_job_name      = slurm_job_name.replace("-",'')
-        slurm_job_name      = slurm_job_name.replace("__",'_')
-        slurm_job_name      = slurm_job_name[0:200]
-
-        # when doing websniff, commands are pipeloop and not pipemaster due to batch4amp. To get ccd# in the job name, do this:
-        if 'main.py' in pipecommand:
-            if len(slurm_job_name.split(',')) > 3:
-                slurm_job_name = slurm_job_name.split(',')[0]+',etc,'+slurm_job_name.split(',')[-1]
-                slurm_job_name.replace('tmpl_','')
-
-        # This is always the fieldname
-        fieldname           = slurm_job_name.split('_')[0]
-        print('----------------')
-        print('fieldname:', fieldname)
-        print('ccd', ccd)
+        slurm_job_name = f'{fieldname}_topcandidates_makelightcurves'
 
         # Figure out where to save the slurm script
         slurm_script_dir    = pipedata_dir+f'/logs/ozstar/{fieldname}'
@@ -103,13 +87,14 @@ def submit_slurm_OzSTAR_batch(commandfile,
 
         # Create slurm batch bash script
         script_string = batch_script_template.replace('JOB_NAME',slurm_job_name)
-        script_string = script_string.replace('PIPE_DATA_DIR',pipedata_dir)
-        script_string = script_string.replace('COMMAND',pipecommand)
-        script_string = script_string.replace('BASHRCFILE',bashrcfile)
-        script_string = script_string.replace('FIELDNAME',fieldname)
-        script_string = script_string.replace('MEM_REQUEST',str(int(np.ceil(memory_request/1000.))) )
-        script_string = script_string.replace('JOB_BASH_SCRIPT',slurm_script_path)
-        script_string = script_string.replace('OZSTARWALLTIME',walltime)
+        script_string = script_string.replace(f'PIPE_DATA_DIR',pipedata_dir)
+        script_string = script_string.replace(f'COMMAND1',pipecommand1)
+        script_string = script_string.replace(f'COMMAND2',pipecommand2)
+        script_string = script_string.replace(f'BASHRCFILE',bashrcfile)
+        script_string = script_string.replace(f'FIELDNAME',fieldname)
+        script_string = script_string.replace(f'MEM_REQUEST',str(int(np.ceil(memory_request/1000.))) )
+        script_string = script_string.replace(f'JOB_BASH_SCRIPT',slurm_script_path)
+        script_string = script_string.replace(f'OZSTARWALLTIME',walltime)
 
         # Write the bash script to file
         f = open(slurm_script_path,'w')
@@ -140,19 +125,9 @@ if __name__ == "__main__":
     # Read in input arguments
     parser = argparse.ArgumentParser()
     parser.add_argument(
-            'field',
+            '--field',
             type=str,
             help='Selected field'
-    )
-    parser.add_argument(
-            '--ccd',
-            type=int,
-            help='Selected CCD'
-    )
-    parser.add_argument(
-            "--skip_se",
-            action="store_true",
-            help="Skip Source Extractor process"
     )
     parser.add_argument(
             '--debugmode',
@@ -180,31 +155,29 @@ if __name__ == "__main__":
             help='Request this much memory'
     )
     args = parser.parse_args()
+    
+    # Code running mode arguments
+    if args.debugmode:
+        print(args)
+    do_not_submit       = args.do_not_submit
+    verbose             = args.verbose
+    if args.field:
+        field           = args.field
 
-    if args.ccd:
-        ccds = [args.ccd]
-    else:
-        ccds = range(1,63,1)
+    # Optional arguments (with defaults set)
+    bashrcfile          = args.bashrcfile
+    memory_request      = int(args.memory_request)
 
-    for ccd in ccds:
-        
-        # Code running mode arguments
-        if args.debugmode:
-            print(args)
-        do_not_submit       = args.do_not_submit
-        verbose             = args.verbose
-        # Required arguments
-        field               = args.field
-        if args.skip_se:
-            commandfile         = f'python main.py {field} --ccd {ccd} --skip_se --v'
-        else:
-            commandfile         = f'python main.py {field} --ccd {ccd} --v'
-        # Optional arguments (with defaults set)
-        bashrcfile          = args.bashrcfile
-        memory_request      = int(args.memory_request)
+    # Command line for candidate filtering script
+    commandfile1         = f'python top_candidates.py --field {field} --v'
 
-        _ = submit_slurm_OzSTAR_batch(commandfile,
+    # Command line for making light curves script
+    commandfile2         = f'python make_lightcurves.py --field {field}'
+    
+    _ = submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
                                     bashrcfile=bashrcfile,
                                     memory_request = memory_request,
                                     verbose=verbose,
                                     do_not_submit=do_not_submit)
+
+    
