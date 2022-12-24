@@ -23,8 +23,8 @@ def create_dir_ifnot(directory):
 batch_script_template = '''#!/bin/bash
 
 #SBATCH --job-name=JOB_NAME
-#SBATCH --output=/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.out
-#SBATCH --error=/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.err
+#SBATCH --output=/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.out
+#SBATCH --error=/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.err
 
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -35,8 +35,8 @@ RESERVATION_LINE
 
 echo Slurm Job JOB_NAME start
 echo Job bash script is: JOB_BASH_SCRIPT
-echo Job .out is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.out
-echo Job .err is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.err
+echo Job .out is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.out
+echo Job .err is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.err
 echo `date`
 SECONDS=0
 echo ----------------
@@ -55,12 +55,12 @@ echo ----------------
 '''
 
 def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
-                                bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
+                                bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
                                 memory_request=8000,
                                 verbose=False,
                                 do_not_submit=False):
     # Get environment variables for pipeline set up
-    pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction'
+    pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction'
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
         walltime='5:00:00'
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
             '--bashrcfile',
-            default='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
+            default='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
             help='Path to bashrc file'
     )
     parser.add_argument(
