@@ -9,7 +9,7 @@ from astropy import units as u
 
 def cat_match(datemjd, date, ra, dec, filt, field='257A', ccd='1', verbose=False):
         # For deep fields use datemjd, for shallow fields use date
-        match_list = glob.glob(f'./cats/{field}/{ccd}/*.{filt}.{datemjd}.*.cat')
+        match_list = glob.glob(f'./cats/{field}/{ccd}/*.{filt}.{date}.*.cat')
         df_cattmp = pd.DataFrame()
 
         df_cattmp["dateobs"] = [f"{date}"]
