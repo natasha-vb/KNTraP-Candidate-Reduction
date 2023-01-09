@@ -304,9 +304,6 @@ if __name__ == "__main__":
                         # Matching detection coordinates to source in SE catalogs
                         match_cat_table = cat_match.cat_match(datemjd, date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
                         cat_matches = pd.concat([cat_matches,match_cat_table],sort=False)
-                    print('CAT MATCHES')
-                    for col in cat_matches.columns:
-                        print(col)
 
                     # Merging light curve (df) with matched SExtractor catalogue data (cat_matches)
                     df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
@@ -315,11 +312,7 @@ if __name__ == "__main__":
                     df_seeing = grab_seeing.grab_seeing(df,args.field,ccd)
                     df_out = pd.merge(df_out,df_seeing, how='left', on=['dateobs', 'filt'])
 
-                    print('DF OUT')
-                    for col in df_out.columns:
-                        print(col)
-
-                    df_out['ELLIPTICITY_DIFF'] = [int(x) for x in df_out['ELLIPTICITY_DIFF']]
+                    # df_out['ELLIPTICITY_DIFF'] = [int(x) for x in df_out['ELLIPTICITY_DIFF']]
                     
                     # True/ False for a "good" detection
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and 
