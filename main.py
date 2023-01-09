@@ -312,6 +312,9 @@ if __name__ == "__main__":
                     df_seeing = grab_seeing.grab_seeing(df,args.field,ccd)
                     df_out = pd.merge(df_out,df_seeing, how='left', on=['dateobs', 'filt'])
 
+                    for col in df_out.columns:
+                        print(col)
+                        
                     df_out['ELLIPTICITY_DIFF'] = [int(x) for x in df_out['ELLIPTICITY_DIFF']]
                     
                     # True/ False for a "good" detection
