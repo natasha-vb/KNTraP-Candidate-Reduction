@@ -112,8 +112,13 @@ if __name__ == "__main__":
         # Read in fits files
         sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
         diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
-        tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits")
+        tmpl_list = glob.glob(f"./templates/{args.field}/*ccd{ccd}_tmpl.fits") # Archival templates
 
+        arch_tmpl = 1
+        if len(tmpl_list) == 0:
+            tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits") # First night templates
+            arch_tmpl = 0
+        
         # Sort files in order of date
         sci_list.sort()
         diff_list.sort()
@@ -314,7 +319,7 @@ if __name__ == "__main__":
                     
                     # True/ False for a "good" detection
                     df_out["good_detection"] = df_out.apply(lambda row: True if row["ELLIPTICITY_DIFF"] < 0.7 and 
-                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["seeing"]/0.263)  and  # DECam: 0.263 arcsec/pixel ###MAYBE REDUCE TO 1.8 x 
+                                                                                row["FWHM_IMAGE_DIFF"] < 2*(row["seeing"]/0.263) and 
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.02 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.02 else
                                                                                 False, axis=1)
