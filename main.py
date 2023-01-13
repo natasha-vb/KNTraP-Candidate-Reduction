@@ -112,13 +112,11 @@ if __name__ == "__main__":
         # Read in fits files
         sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
         diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
-        tmpl_list = glob.glob(f"./templates/{args.field}/*ccd{ccd}_tmpl.fits") # Archival templates
+        tmpl_list = glob.glob(f"./templates/{args.field}/*/*ccd{ccd}_tmpl.fits") # Archival templates
 
-        arch_tmpl = 1
         if len(tmpl_list) == 0:
             tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits") # First night templates
-            arch_tmpl = 0
-        
+
         # Sort files in order of date
         sci_list.sort()
         diff_list.sort()
