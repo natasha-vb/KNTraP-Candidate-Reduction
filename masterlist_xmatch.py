@@ -13,6 +13,11 @@ if __name__ == "__main__":
             type=str,
             help="Selected field"
     )
+    parser.add_argument(
+            "--skip_ps1",
+            action='store_true',
+            help="Skip Pan-STARRS crossmatching"
+    )
     args = parser.parse_args()
 
     # Grabbing all masterlists
@@ -39,7 +44,7 @@ if __name__ == "__main__":
             print('Masterlist to be crossmatched:')
             print(ml_file)
 
-            ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
+            ml_xmatch = crossmatch.crossmatch(ml_file, skip_ps1=args.skip_ps1, verbose=True)
             print('Crossmatching complete!')
             print(' ')
 
