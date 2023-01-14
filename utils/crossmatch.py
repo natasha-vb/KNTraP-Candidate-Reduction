@@ -53,8 +53,9 @@ def crossmatch(candfile, skip_ps1=True, verbose=False):
         print('---------------------------------------------------------------')
         print(candfile[["CAND_ID","gaia_DR3_parallax","gaia_DR3_parallaxerr","gaia_sigma"]])
         print('')
-        print('PAN_STARRS 1:')
-        print('--------------------------------')
-        print(candfile[["CAND_ID","ps1_objID","ps1_objID"]])
+        if skip_ps1 == False:
+            print('PAN_STARRS 1:')
+            print('--------------------------------')
+            print(candfile[["CAND_ID","ps1_objID","ps1_objID"]])
 
     return candfile
