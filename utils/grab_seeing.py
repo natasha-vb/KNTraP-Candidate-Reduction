@@ -11,6 +11,12 @@ def grab_seeing(lcfile, field, ccd):
         field = 'KNTRAP1'
     elif field == 'FOURHR':
         field == '4hr'
+    elif field == 'KNTRAP12':
+        field == 'KNTraP12'
+    elif field == 'KNTRAP13':
+        field == 'KNTraP13'
+    elif field == 'KNTRAP14':
+        field == 'KNTraP14'
 
     for i in range(len(lcfile)):
         lc_row = lcfile.iloc[i]
