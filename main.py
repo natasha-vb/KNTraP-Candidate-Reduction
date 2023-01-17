@@ -325,6 +325,15 @@ if __name__ == "__main__":
                             print('GOOD DETECTIONS?')
                             print(df_out[["dateobs","filt","seeing","good_detection"]])
                             print('-----------------------------------------')
+                    
+                    print(' ')
+                    print('=================================================')
+                    print('DF OUT CHECK')
+                    print(df_out)
+                    for cols in df_out.columns:
+                        print(cols)
+                    print('=================================================')
+                    print(' ')
 
                     # Check for star-like objects in template image
                     df_out['tmpl_star_check'] = df_out.apply(lambda row: True if row['SPREAD_MODEL_TMPL'] < 0.002 and
