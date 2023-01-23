@@ -154,6 +154,9 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
 
         f_filestub = Path(ntpath.basename(f)).stem
 
+        print('f_filestub:')
+        print(f_filestub)
+
         if savepsffits:
             proto_file = './proto_'+f_filestub+'.fits'
             d_psf = fits.getdata(proto_file)[0:25,0:25]
@@ -168,8 +171,14 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             f_psfbinary = outdir+'/'+f_filestub+'_'+catending+'.psf'
         else:
             f_psfbinary = outdir+'/'+f_filestub+'.psf'
+        
+        print('f_psfbinary:')
+        print(f_psfbinary)
             
         PSFs.append(f_psfbinary)
+
+        print('PSFs:')
+        print(PSFs)
 
     remove_temp_dirs([tempdir_name])
     remove_temp_files(['psfex.xml'])
