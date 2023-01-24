@@ -1,5 +1,6 @@
 # Code from Jielai Zhang
 
+import glob
 import ntpath
 import os
 from pathlib import Path
@@ -171,7 +172,19 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             
         PSFs.append(f_psfbinary)
 
+<<<<<<< HEAD
+=======
+        print('PSFs:')
+        print(PSFs)
+
+    print('tempdir_name:')
+    print(tempdir_name)
+>>>>>>> ea1c36b... debugging
     remove_temp_dirs([tempdir_name])
+
+    psfex_xml = glob.glob('./psfex.xml')
+    print('psfex_xml:')
+    print(psfex_xml)
     remove_temp_files(['psfex.xml'])
 
     if verbose:
