@@ -179,6 +179,9 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
 
     print('tempdir_name:')
     print(tempdir_name)
+<<<<<<< HEAD
+>>>>>>> ea1c36b... debugging
+=======
 >>>>>>> ea1c36b... debugging
     remove_temp_dirs([tempdir_name])
 
