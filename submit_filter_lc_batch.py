@@ -73,7 +73,7 @@ def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
         # Define slurm job name
         fieldname = field
 
-        slurm_job_name = f'{fieldname}_topcandidates_makelightcurves'
+        slurm_job_name = f'{fieldname}_filter_makelightcurves'
 
         # Figure out where to save the slurm script
         slurm_script_dir    = pipedata_dir+f'/logs/ozstar/{fieldname}'
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     memory_request      = int(args.memory_request)
 
     # Command line for candidate filtering script
-    commandfile1         = f'python top_candidates.py --field {field} --v'
+    commandfile1         = f'python filter_candidates.py --field {field} --v'
 
     # Command line for making light curves script
     commandfile2         = f'python make_lightcurves.py --field {field}'
