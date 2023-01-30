@@ -71,7 +71,8 @@ if __name__ == "__main__":
                 flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
                 print('Forced light curve file:', forced_lc)
             else:
-                flc_df = pd.DataFrame(columns={'MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl'})
+                flc_df = pd.DataFrame(np.empty, index=[0], columns={'MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type',
+                                                                    'chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl'})
                 flc_df.iloc[0] = ['-']
                 print('Forced light curve file is empty')
 
