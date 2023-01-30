@@ -67,8 +67,13 @@ if __name__ == "__main__":
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
             flc_df = pd.read_csv(forced_lc[0], delim_whitespace=True)
             flc_df = flc_df.drop(columns=['tmpl'])
-            flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
-            print('Forced light curve file:', forced_lc)
+            if len(flc_df) > 1:
+                flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
+                print('Forced light curve file:', forced_lc)
+            else:
+                flc_df = pd.DataFrame(columns={'MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl'})
+                flc_df.iloc[0] = ['-']
+                print('Forced light curve file is empty')
 
             # Converting date format to match forced lc format: YYMMDD
             det_dates = flc_df['dateobs'].values 

@@ -77,6 +77,7 @@ if __name__ == "__main__":
         # Primary candidates: >= 3 decections with 1 hole in i band
         # Secondary candidates >= 3 detections with 1 hole in g band
         ########################################################################
+        ####################### PRIMARY CANDIDATES #############################
         mcut_i_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_i_1h >= 3]
         mcut_i_1h = mcut_i_1h.reset_index()
         mcut_i_1h_len = len(mcut_i_1h)
@@ -107,7 +108,8 @@ if __name__ == "__main__":
             print(f'{mcut_i_1h_len}')                
 
         ########################################################################
-        mcut_g_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= 3]
+        ###################### SECONDARY CANDIDATES ############################
+        mcut_g_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= 3] ## MAYBE ALSO INCLUDE 2 I BAND DETECTIONS??
         mcut_g_1h = mcut_g_1h.reset_index()
         mcut_g_1h_len = len(mcut_g_1h)
 
