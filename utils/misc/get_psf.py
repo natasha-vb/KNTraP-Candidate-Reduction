@@ -175,23 +175,18 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             f_psfbinary = outdir+'/'+f_filestub+'_'+catending+'.psf'
         else:
             f_psfbinary = outdir+'/'+f_filestub+'.psf'
-        
-        print('f_psfbinary:')
-        print(f_psfbinary)
             
         PSFs.append(f_psfbinary)
 
         print('PSFs:')
         print(PSFs)
 
+    tempdir_files = glob.glob(f'./{tempdir_name}/*')
     print('tempdir_name:')
     print(tempdir_name)
+    print('tempdir contents:')
+    print(tempdir_files)
     remove_temp_dirs([tempdir_name])
-
-    psfex_xml = glob.glob('./psfex.xml')
-    print('psfex_xml:')
-    print(psfex_xml)
-    # remove_temp_files(['psfex.xml'])
 
     if verbose:
         print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)
