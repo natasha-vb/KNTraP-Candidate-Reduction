@@ -2,7 +2,7 @@ from utils.misc import xmatchsimbad
 from utils.misc import xmatchgaia
 from utils.misc import xmatchps1
 
-def crossmatch(candfile, verbose=False):
+def crossmatch(candfile, skip_ps1=True, verbose=False):
 
     # SIMBAD crossmatch
     print('Crossmatching with Simbad...')
@@ -30,14 +30,15 @@ def crossmatch(candfile, verbose=False):
     
     # Pan-STARRS 1 crossmatch
     ##### NEED TO FIX THIS ###
-    print('Crossmatching with Pan-STARRS...')
-    df_ps1 = xmatchps1.cross_match_alerts_raw_generic(candfile["CAND_ID"].to_list(),
-                                                      candfile["RA_AVERAGE"].to_list(),
-                                                      candfile["DEC_AVERAGE"].to_list(),
-                                                      ctlg="vizier:II/349/ps1",
-                                                      distmaxarcsec=2)
-    candfile["ps1_objID"] = df_ps1["ObjectID_PS1"]
-    candfile["ps1_objID"] = df_ps1["angDist"]
+    if skip_ps1 == False:
+        print('Crossmatching with Pan-STARRS...')
+        df_ps1 = xmatchps1.cross_match_alerts_raw_generic(candfile["CAND_ID"].to_list(),
+                                                        candfile["RA_AVERAGE"].to_list(),
+                                                        candfile["DEC_AVERAGE"].to_list(),
+                                                        ctlg="vizier:II/349/ps1",
+                                                        distmaxarcsec=2)
+        candfile["ps1_objID"] = df_ps1["ObjectID_PS1"]
+        candfile["ps1_objID"] = df_ps1["angDist"]
     
     if verbose:
         print('')
@@ -52,8 +53,9 @@ def crossmatch(candfile, verbose=False):
         print('---------------------------------------------------------------')
         print(candfile[["CAND_ID","gaia_DR3_parallax","gaia_DR3_parallaxerr","gaia_sigma"]])
         print('')
-        print('PAN_STARRS 1:')
-        print('--------------------------------')
-        print(candfile[["CAND_ID","ps1_objID","ps1_objID"]])
+        if skip_ps1 == False:
+            print('PAN_STARRS 1:')
+            print('--------------------------------')
+            print(candfile[["CAND_ID","ps1_objID","ps1_objID"]])
 
     return candfile

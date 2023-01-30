@@ -55,6 +55,7 @@ echo ----------------
 '''
 
 def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
+                                top_candidates=False,
                                 bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
                                 memory_request=8000,
                                 verbose=False,
@@ -73,7 +74,10 @@ def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
         # Define slurm job name
         fieldname = field
 
-        slurm_job_name = f'{fieldname}_topcandidates_makelightcurves'
+        if top_candidates == True:
+            slurm_job_name = f'{fieldname}_topcandidates_makelightcurves'
+        else:
+            slurm_job_name = f'{fieldname}_filtercandidates_makelightcurves'
 
         # Figure out where to save the slurm script
         slurm_script_dir    = pipedata_dir+f'/logs/ozstar/{fieldname}'
@@ -130,6 +134,11 @@ if __name__ == "__main__":
             help='Selected field'
     )
     parser.add_argument(
+            '--top_candidates',
+            action='store_true',
+            help='Only filter out the best candidates'
+    )
+    parser.add_argument(
             '--debugmode',
             action='store_true',
             help="Activating debug mode"
@@ -169,14 +178,18 @@ if __name__ == "__main__":
     memory_request      = int(args.memory_request)
 
     # Command line for candidate filtering script
-    commandfile1         = f'python top_candidates.py --field {field} --v'
+    if args.top_candidates:
+        commandfile1     = f'python top_candidates.py --field {field} --v'
+    else:
+        commandfile1     = f'python filter_candidates.py --field {field} --v'
 
     # Command line for making light curves script
     commandfile2         = f'python make_lightcurves.py --field {field}'
     
     _ = submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
+                                    top_candidates=args.top_candidates,
                                     bashrcfile=bashrcfile,
-                                    memory_request = memory_request,
+                                    memory_request=memory_request,
                                     verbose=verbose,
                                     do_not_submit=do_not_submit)
 

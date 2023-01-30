@@ -34,15 +34,6 @@ def run_sextractor(fitsfiles, sextractor_loc='sex', psfex_loc='psfex',
     else:
         VERBOSE_TYPE = 'QUIET'
 
-    rand_tmpname = random.randint(10**11,(10**12)-1)
-
-    # tempdir_path = f"./utils/{rand_tmpname}/"
-
-    # make_directory(tempdir_path)
-
-    # if verbose:
-    #     print(f'Randomised directory name: {rand_tmpname}')
-
     nnw_path    = f"./utils/SE_files/default.nnw"
     conv_path   = f"./utils/SE_files/default.conv" 
     params_path = f"./utils/SE_files/default.param"

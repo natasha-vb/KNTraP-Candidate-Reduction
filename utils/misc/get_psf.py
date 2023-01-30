@@ -1,5 +1,6 @@
 # Code from Jielai Zhang
 
+import glob
 import ntpath
 import os
 from pathlib import Path
@@ -81,6 +82,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
     params_name    = f"{tempdir_name}/temp_params.txt"
     config_name    = f"{tempdir_name}/temp_default.sex"
     psfconfig_name = f"{tempdir_name}/temp_default.psfex"
+    psfxml_name   = f"{tempdir_name}/psfex.xml"
 
     create_temp_files(f_conv,f_params,conv_name,params_name,
                       config_name,psfconfig_name,
@@ -132,6 +134,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                            f"-CHECKIMAGE_TYPE PROTOTYPES "
                            f"-CHECKIMAGE_NAME  proto.fits "
                            f"-PSF_SUFFIX .psf "
+                           f"-XML_NAME {psfxml_name}"
                            f"{cat_out_name_temp}")
             else:
                 command = (f"{psfex_loc} "
@@ -141,6 +144,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                            f"-CHECKIMAGE_TYPE NONE "
                            f"-CHECKIMAGE_NAME  NONE "
                            f"-PSF_SUFFIX .psf "
+                           f"-XML_NAME {psfxml_name}"
                            f"{cat_out_name_temp}")
             if verbose:
                 print('----- Executing command: %s\n' % command)
@@ -153,6 +157,9 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
         remove_temp_files([cat_out_name_temp])
 
         f_filestub = Path(ntpath.basename(f)).stem
+
+        print('f_filestub:')
+        print(f_filestub)
 
         if savepsffits:
             proto_file = './proto_'+f_filestub+'.fits'
@@ -171,8 +178,15 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             
         PSFs.append(f_psfbinary)
 
+        print('PSFs:')
+        print(PSFs)
+
+    tempdir_files = glob.glob(f'./{tempdir_name}/*')
+    print('tempdir_name:')
+    print(tempdir_name)
+    print('tempdir contents:')
+    print(tempdir_files)
     remove_temp_dirs([tempdir_name])
-    remove_temp_files(['psfex.xml'])
 
     if verbose:
         print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)
