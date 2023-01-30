@@ -100,6 +100,9 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
     if savepsffits:
         PSFfits = []
 
+    print('PSFs:')
+    print(PSFs)
+
     for f in fitsfiles:
         cat_out_name_temp = f.replace('.fits', '.psfcat')
 
@@ -150,7 +153,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                 print('Above PSFEx completed successfully!\n')
         except subprocess.CalledProcessError as err:
             print('Could not run PSFEx with exit error: %s'%err)
-        
+
         remove_temp_files([cat_out_name_temp])
 
         f_filestub = Path(ntpath.basename(f)).stem
@@ -172,23 +175,9 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
             
         PSFs.append(f_psfbinary)
 
-<<<<<<< HEAD
-=======
-        print('PSFs:')
-        print(PSFs)
-
     print('tempdir_name:')
     print(tempdir_name)
-<<<<<<< HEAD
->>>>>>> ea1c36b... debugging
-=======
->>>>>>> ea1c36b... debugging
     remove_temp_dirs([tempdir_name])
-
-    psfex_xml = glob.glob('./psfex.xml')
-    print('psfex_xml:')
-    print(psfex_xml)
-    remove_temp_files(['psfex.xml'])
 
     if verbose:
         print('PSFEx OUTPUT (f_psf): %s\n' % PSFs)
