@@ -134,7 +134,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                            f"-CHECKIMAGE_TYPE PROTOTYPES "
                            f"-CHECKIMAGE_NAME  proto.fits "
                            f"-PSF_SUFFIX .psf "
-                           f"-XML_NAME {psfxml_name}"
+                           f"-XML_NAME {psfxml_name} "
                            f"{cat_out_name_temp}")
             else:
                 command = (f"{psfex_loc} "
@@ -144,7 +144,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
                            f"-CHECKIMAGE_TYPE NONE "
                            f"-CHECKIMAGE_NAME  NONE "
                            f"-PSF_SUFFIX .psf "
-                           f"-XML_NAME {psfxml_name}"
+                           f"-XML_NAME {psfxml_name} "
                            f"{cat_out_name_temp}")
             if verbose:
                 print('----- Executing command: %s\n' % command)
