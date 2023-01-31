@@ -85,7 +85,7 @@ if __name__ == "__main__":
             # Calculate limiting magnitudes
             flc_df['limiting_mag'] = 0.0
             for ii, row in flc_df.iterrows():
-                if row['flux_c'] >= 0:
+                if row['flux_c'].astype(float) >= 0:
                     flc_df['limiting_mag'][ii] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
                 else:
                     flc_df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
