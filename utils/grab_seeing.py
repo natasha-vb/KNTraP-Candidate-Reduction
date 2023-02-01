@@ -7,15 +7,15 @@ def grab_seeing(lcfile, field, ccd):
     
     if field == 'SCVZ':
         field = 'S-CVZ'
-    elif field == 'KNTRAPaa':
+    if field == 'KNTRAPaa':
         field = 'KNTRAP1'
-    elif field == 'FOURHR':
+    if field == 'FOURHR':
         field == '4hr'
-    elif field == 'KNTRAP12':
+    if field == 'KNTRAP12':
         field == 'KNTraP12'
-    elif field == 'KNTRAP13':
+    if field == 'KNTRAP13':
         field == 'KNTraP13'
-    elif field == 'KNTRAP14':
+    if field == 'KNTRAP14':
         field == 'KNTraP14'
 
     for i in range(len(lcfile)):
