@@ -37,7 +37,7 @@ if __name__ == "__main__":
         top = '*_candidates'
     else:
         top = ''
-        
+
     if args.field:
         filtered_mlists = glob.glob(f'./masterlist/{args.field}/priority/{top}*.csv')
     else:
@@ -80,28 +80,58 @@ if __name__ == "__main__":
             forced_lc = glob.glob(f'../../web/web/sniff/{field}_tmpl/{ccd}/*/*_cand{cand_id}.forced.*')
             flc_df = pd.read_csv(forced_lc[0], delim_whitespace=True)
             flc_df = flc_df.drop(columns=['tmpl'])
+
+            # Plot light curve
+            fig, ax = plt.subplots()
+
+
             if len(flc_df) > 1:
                 flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
                 print('Forced light curve file:', forced_lc)
+
+                 # Converting date format to match forced lc format: YYMMDD
+                det_dates = flc_df['dateobs'].values 
+                det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
+                flc_df['dateobs'] = det_dates
+                flc_df = flc_df.sort_values(by='dateobs')
+
+                # Calculate limiting magnitudes
+                flc_df['limiting_mag'] = 0.0
+                for ii, row in flc_df.iterrows():
+                    if row['flux_c'] >= 0:
+                        flc_df['limiting_mag'][ii] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
+                    else:
+                        flc_df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
+                
+                f_i = flc_df[flc_df['filt'] == 'i']
+                f_g = flc_df[flc_df['filt'] == 'g']
+
+                f_mi = f_i[(f_i['m'] != '-') & (f_i['dm'] != '-')]
+                f_mg = f_g[(f_g['m'] != '-') & (f_g['dm'] != '-')]
+                f_limi = f_i[f_i['m'] == '-']
+                f_limg = f_g[f_g['m'] == '-']
+                
+                # Removing forced photometry data points on dates where there are unforced photometry data points
+                f_mi_cut = f_mi[~np.round(f_mi['MJD'], 5).isin(np.round(unf_mi['MJD'], 5))]
+                f_mg_cut = f_mg[~np.round(f_mg['MJD'], 5).isin(np.round(unf_mg['MJD'], 5))]
+
+                # Plot forced photometry data points
+                ax.errorbar(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), yerr=f_mi_cut['dm'].astype(float), fmt='None', capsize=2, 
+                fillstyle='None', linestyle='None', ecolor='r')
+                ax.errorbar(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), yerr=f_mg_cut['dm'].astype(float), fmt='None', capsize=2, 
+                fillstyle='None', linestyle='None', ecolor='b')
+                ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolors='none', marker='o')
+                ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolors='none', marker='o')
+
+                # ax.plot(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), lw=0, c='r', marker='s', ms=4)
+                # ax.plot(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), lw=0, c='b', marker='s', ms=4)
+
             else:
-                flc_df = pd.DataFrame(np.empty, index=[0], columns={'MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type',
-                                                                    'chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl'})
-                flc_df.iloc[0] = ['-']
+                # flc_df = pd.DataFrame(np.empty, index=[0], columns={'MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type',
+                #                                                     'chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl'})
+                # flc_df.iloc[0] = ['-']
                 print('Forced light curve file is empty')
 
-            # Converting date format to match forced lc format: YYMMDD
-            det_dates = flc_df['dateobs'].values 
-            det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
-            flc_df['dateobs'] = det_dates
-            flc_df = flc_df.sort_values(by='dateobs')
-
-            # Calculate limiting magnitudes
-            flc_df['limiting_mag'] = 0.0
-            for ii, row in flc_df.iterrows():
-                if row['flux_c'] >= 0:
-                    flc_df['limiting_mag'][ii] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
-                else:
-                    flc_df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
 
             # Creating i and g band subsets, and removing '-' magnitude values
             unf_i = unflc_df[unflc_df['filt'] == 'i']
@@ -109,35 +139,9 @@ if __name__ == "__main__":
             unf_mi = unf_i[(unf_i['m'] != '-') & (unf_i['dm'] != '-')]
             unf_mg = unf_g[(unf_g['m'] != '-') & (unf_g['dm'] != '-')]
 
-            f_i = flc_df[flc_df['filt'] == 'i']
-            f_g = flc_df[flc_df['filt'] == 'g']
-
-            f_mi = f_i[(f_i['m'] != '-') & (f_i['dm'] != '-')]
-            f_mg = f_g[(f_g['m'] != '-') & (f_g['dm'] != '-')]
-            f_limi = f_i[f_i['m'] == '-']
-            f_limg = f_g[f_g['m'] == '-']
-            
-            # Removing forced photometry data points on dates where there are unforced photometry data points
-            f_mi_cut = f_mi[~np.round(f_mi['MJD'], 5).isin(np.round(unf_mi['MJD'], 5))]
-            f_mg_cut = f_mg[~np.round(f_mg['MJD'], 5).isin(np.round(unf_mg['MJD'], 5))]
-
             # Changing markers for good detections
             good_unf_i = unf_mi[unf_mi['good_detection'] == True]
             good_unf_g = unf_mg[unf_mg['good_detection'] == True]
-
-            # Plot light curve
-            fig, ax = plt.subplots()
-
-            # Plot forced photometry data points
-            ax.errorbar(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), yerr=f_mi_cut['dm'].astype(float), fmt='None', capsize=2, 
-            fillstyle='None', linestyle='None', ecolor='r')
-            ax.errorbar(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), yerr=f_mg_cut['dm'].astype(float), fmt='None', capsize=2, 
-            fillstyle='None', linestyle='None', ecolor='b')
-            ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolors='none', marker='o')
-            ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolors='none', marker='o')
-
-            # ax.plot(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), lw=0, c='r', marker='s', ms=4)
-            # ax.plot(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), lw=0, c='b', marker='s', ms=4)
             
             # Plot limiting magnitude
             ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
