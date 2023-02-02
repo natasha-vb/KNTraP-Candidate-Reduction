@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
+import re
 import ipdb 
 
 if __name__ == "__main__":
@@ -14,6 +15,12 @@ if __name__ == "__main__":
             "--field",
             type=str,
             help="Selected field"
+    )
+    parser.add_argument(
+            "--top_cands",
+            action="store_true",
+            help="Create light curves for only top candidates"
+
     )
     args = parser.parse_args()
 
@@ -26,10 +33,15 @@ if __name__ == "__main__":
     print(' ')
 
     # Grab all masterlists of filtered candidates 
-    if args.field:
-        filtered_mlists = glob.glob(f'./masterlist/{args.field}/priority/*.csv')
+    if args.top_cands:
+        top = '*_candidates'
     else:
-        filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
+        top = ''
+        
+    if args.field:
+        filtered_mlists = glob.glob(f'./masterlist/{args.field}/priority/{top}*.csv')
+    else:
+        filtered_mlists = glob.glob(f'./masterlist/*/priority/{top}*.csv')
 
     for f in filtered_mlists:
 
@@ -41,6 +53,7 @@ if __name__ == "__main__":
 
         lc_dir_name = f.split('/')[-1].replace('.csv','')
         lc_outdir = (f'./lc_files/{field}/filtered_candidates/{lc_dir_name}')
+
         if not os.path.exists(lc_outdir):
             os.makedirs(lc_outdir)
 

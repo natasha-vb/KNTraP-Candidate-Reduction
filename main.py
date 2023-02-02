@@ -166,7 +166,6 @@ if __name__ == "__main__":
         if args.verbose:
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
         
-        
         if not args.skip_se:
             # Run SE on science image
             if args.verbose:
@@ -453,9 +452,3 @@ if __name__ == "__main__":
 
     masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}.allccds.csv')
     masterlist_allccds.to_csv(masterlist_allccds_path, index=False)
-
-    # # Crossmatching candidates with Simbad, Gaia, and Pan-STARRS 1 catalogues
-    # ml_file = pd.read_csv(masterlist_allccds_path)
-    
-    # ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
-    # ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)
