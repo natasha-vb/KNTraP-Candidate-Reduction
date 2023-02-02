@@ -10,13 +10,13 @@ def grab_seeing(lcfile, field, ccd):
     if field == 'KNTRAPaa':
         field = 'KNTRAP1'
     if field == 'FOURHR':
-        field == '4hr'
+        field = '4hr'
     if field == 'KNTRAP12':
-        field == 'KNTraP12'
+        field = 'KNTraP12'
     if field == 'KNTRAP13':
-        field == 'KNTraP13'
+        field = 'KNTraP13'
     if field == 'KNTRAP14':
-        field == 'KNTraP14'
+        field = 'KNTraP14'
 
     for i in range(len(lcfile)):
         lc_row = lcfile.iloc[i]
