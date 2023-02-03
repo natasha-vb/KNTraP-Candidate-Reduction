@@ -139,8 +139,8 @@ if __name__ == "__main__":
 
                 f_mi = f_i[(f_i['m'] != '-') & (f_i['dm'] != '-')]
                 f_mg = f_g[(f_g['m'] != '-') & (f_g['dm'] != '-')]
-                f_limi = f_i[f_i['m'] == '-' & f_i['limiting_mag'] == 0.0]
-                f_limg = f_g[f_g['m'] == '-' & f_i['limiting_mag'] == 0.0]
+                f_limi = f_i[(f_i['m'] == '-') & (f_i['limiting_mag'] != 0.0)]
+                f_limg = f_g[(f_g['m'] == '-') & (f_g['limiting_mag'] != 0.0)]
                 
                 # Removing forced photometry data points on dates where there are unforced photometry data points
                 f_mi_cut = f_mi[~np.round(f_mi['MJD'], 5).isin(np.round(unf_mi['MJD'], 5))]
