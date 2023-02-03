@@ -185,4 +185,6 @@ if __name__ == "__main__":
             print(f'Light curve saved as: {lc_outdir}/{fig_name}')
             print('')
 
-    print('All light curve plots created!')
+    print(' ')
+    print('ALL LIGHT CURVE PLOTS CREATED!')
+    print(' ')
