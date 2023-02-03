@@ -139,8 +139,8 @@ if __name__ == "__main__":
 
                 f_mi = f_i[(f_i['m'] != '-') & (f_i['dm'] != '-')]
                 f_mg = f_g[(f_g['m'] != '-') & (f_g['dm'] != '-')]
-                f_limi = f_i[f_i['m'] == '-']
-                f_limg = f_g[f_g['m'] == '-']
+                f_limi = f_i[f_i['m'] == '-' & f_i['limiting_mag'] == 0.0]
+                f_limg = f_g[f_g['m'] == '-' & f_i['limiting_mag'] == 0.0]
                 
                 # Removing forced photometry data points on dates where there are unforced photometry data points
                 f_mi_cut = f_mi[~np.round(f_mi['MJD'], 5).isin(np.round(unf_mi['MJD'], 5))]
@@ -179,7 +179,7 @@ if __name__ == "__main__":
             fig_name = f'{field}_ccd{ccd}_cand{cand_id}_unforced.png'
 
             plt.savefig(f'{lc_outdir}/{fig_name}')
-            
+
             plt.close()
 
             print(f'Light curve saved as: {lc_outdir}/{fig_name}')
