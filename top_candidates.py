@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
         ########################################################################
         ###################### SECONDARY CANDIDATES ############################
-        mcut_g_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= 3 | mlist.N_CONSECUTIVE_DETECTIONS_i_1h >= 2]
+        mcut_g_1h = mlist[lambda mlist: (mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= 3) | (mlist.N_CONSECUTIVE_DETECTIONS_i_1h >= 2)]
         mcut_g_1h = mcut_g_1h.reset_index()
         mcut_g_1h_len = len(mcut_g_1h)
 
