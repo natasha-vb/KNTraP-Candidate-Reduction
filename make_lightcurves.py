@@ -8,6 +8,18 @@ import pandas as pd
 import re
 import ipdb 
 
+def limiting_mag(df):
+    df['limiting_mag'] = 0.0
+
+    for ii, row in unflc_df.iterrows():
+        if row['flux_c'] >= 0:
+            df['limiting_mag'][ii] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
+        else:
+            df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
+
+    return df
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Run Source Extractor to filter transient candidates")
@@ -72,6 +84,9 @@ if __name__ == "__main__":
             print(f'CANDIDATE ID: {cand_id}')
             print(f'CCD: {ccd}')
 
+            # Plot light curve
+            fig, ax = plt.subplots()
+
             # Grab corresponding appended light curve and forced light curve files for candidate
             unforced_lc_app = glob.glob(f'./lc_files/{field}/{ccd}/cand{cand_id}*')
             unflc_df = pd.read_csv(unforced_lc_app[0])
@@ -81,9 +96,30 @@ if __name__ == "__main__":
             flc_df = pd.read_csv(forced_lc[0], delim_whitespace=True)
             flc_df = flc_df.drop(columns=['tmpl'])
 
-            # Plot light curve
-            fig, ax = plt.subplots()
+            # Creating i and g band subsets, and removing '-' magnitude values
+            unf_i = unflc_df[unflc_df['filt'] == 'i']
+            unf_g = unflc_df[unflc_df['filt'] == 'g']
+            unf_mi = unf_i[(unf_i['m'] != '-') & (unf_i['dm'] != '-')]
+            unf_mg = unf_g[(unf_g['m'] != '-') & (unf_g['dm'] != '-')]
 
+            # Changing markers for good detections
+            good_unf_i = unf_mi[unf_mi['good_detection'] == True]
+            good_unf_g = unf_mg[unf_mg['good_detection'] == True]
+
+            # Plot unforced photometry data points
+            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_mi['dm'].astype(float), fmt='None', capsize=2,
+            fillstyle='None', linestyle='None', ecolor='r')
+            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_mg['dm'].astype(float), fmt='None', capsize=2,
+            fillstyle='None', linestyle='None', ecolor='b')
+            ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
+            ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
+
+            # ax.plot(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), lw=0, c='r', marker='.', ms=4, label='i band')
+            # ax.plot(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), lw=0, c='b', marker='.', ms=4, label='g band')
+
+            # Mark "good" detections
+            ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
+            ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
 
             if len(flc_df) > 1:
                 flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
@@ -96,12 +132,7 @@ if __name__ == "__main__":
                 flc_df = flc_df.sort_values(by='dateobs')
 
                 # Calculate limiting magnitudes
-                flc_df['limiting_mag'] = 0.0
-                for ii, row in flc_df.iterrows():
-                    if row['flux_c'] >= 0:
-                        flc_df['limiting_mag'][ii] = -2.5*(np.log10(row['flux_c'] + 3*(row['dflux_c']))) + row['ZPTMAG_c']
-                    else:
-                        flc_df['limiting_mag'][ii] = -2.5*(np.log10(3*(row['dflux_c']))) + row['ZPTMAG_c']
+                flc_df = limiting_mag(flc_df)
                 
                 f_i = flc_df[flc_df['filt'] == 'i']
                 f_g = flc_df[flc_df['filt'] == 'g']
@@ -126,42 +157,21 @@ if __name__ == "__main__":
                 # ax.plot(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), lw=0, c='r', marker='s', ms=4)
                 # ax.plot(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), lw=0, c='b', marker='s', ms=4)
 
+                # Plot limiting magnitude
+                ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
+                ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'], c='b', marker='v', alpha=0.2) 
+
             else:
-                # flc_df = pd.DataFrame(np.empty, index=[0], columns={'MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type',
-                #                                                     'chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl'})
-                # flc_df.iloc[0] = ['-']
                 print('Forced light curve file is empty')
 
+                # Plot limiting magnitude using unforced photometry
+                unf_limi = limiting_mag(unf_mi)
+                unf_limg = limiting_mag(unf_mi)
+                
+                # Plot limiting magnitudes
+                ax.scatter(unf_limi['dateobs'].astype(float), unf_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
+                ax.scatter(unf_limg['dateobs'].astype(float), unf_limg['limiting_mag'], c='b', marker='v', alpha=0.2)
 
-            # Creating i and g band subsets, and removing '-' magnitude values
-            unf_i = unflc_df[unflc_df['filt'] == 'i']
-            unf_g = unflc_df[unflc_df['filt'] == 'g']
-            unf_mi = unf_i[(unf_i['m'] != '-') & (unf_i['dm'] != '-')]
-            unf_mg = unf_g[(unf_g['m'] != '-') & (unf_g['dm'] != '-')]
-
-            # Changing markers for good detections
-            good_unf_i = unf_mi[unf_mi['good_detection'] == True]
-            good_unf_g = unf_mg[unf_mg['good_detection'] == True]
-            
-            # Plot limiting magnitude
-            ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
-            ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'], c='b', marker='v', alpha=0.2) 
-
-            # Plot unforced photometry data points
-            ax.errorbar(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), yerr=unf_mi['dm'].astype(float), fmt='None', capsize=2,
-            fillstyle='None', linestyle='None', ecolor='r')
-            ax.errorbar(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), yerr=unf_mg['dm'].astype(float), fmt='None', capsize=2,
-            fillstyle='None', linestyle='None', ecolor='b')
-            ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
-            ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
-
-            # ax.plot(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), lw=0, c='r', marker='.', ms=4, label='i band')
-            # ax.plot(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), lw=0, c='b', marker='.', ms=4, label='g band')
-
-            # Mark "good" detections
-            ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
-            ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
-            
             ax.set_title(f'Candidate {cand_id}')
             ax.set_xlabel('date of observation')
             ax.set_ylabel('mag')
