@@ -154,9 +154,6 @@ if __name__ == "__main__":
                 ax.scatter(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), edgecolors='r', facecolors='none', marker='o')
                 ax.scatter(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), edgecolors='b', facecolors='none', marker='o')
 
-                # ax.plot(f_mi_cut['dateobs'].astype(float), f_mi_cut['m'].astype(float), lw=0, c='r', marker='s', ms=4)
-                # ax.plot(f_mg_cut['dateobs'].astype(float), f_mg_cut['m'].astype(float), lw=0, c='b', marker='s', ms=4)
-
                 # Plot limiting magnitude
                 ax.scatter(f_limi['dateobs'].astype(float), f_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
                 ax.scatter(f_limg['dateobs'].astype(float), f_limg['limiting_mag'], c='b', marker='v', alpha=0.2) 
@@ -182,6 +179,8 @@ if __name__ == "__main__":
             fig_name = f'{field}_ccd{ccd}_cand{cand_id}_unforced.png'
 
             plt.savefig(f'{lc_outdir}/{fig_name}')
+            
+            plt.close()
 
             print(f'Light curve saved as: {lc_outdir}/{fig_name}')
             print('')
