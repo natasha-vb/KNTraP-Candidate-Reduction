@@ -59,7 +59,7 @@ if __name__ == "__main__":
         ############################################################################
         # Filtering candidates:
         # With star-like objects in template image
-        mlist = mlist[lambda mlist: mlist.TMPL_STAR_CHECK == True]
+        mlist = mlist[lambda mlist: mlist.TMPL_STAR_CHECK == False]
 
         n_cands = len(mlist)
         print(' ')
@@ -77,6 +77,7 @@ if __name__ == "__main__":
         # Primary candidates: >= 3 decections with 1 hole in i band
         # Secondary candidates >= 3 detections with 1 hole in g band
         ########################################################################
+        ####################### PRIMARY CANDIDATES #############################
         mcut_i_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_i_1h >= 3]
         mcut_i_1h = mcut_i_1h.reset_index()
         mcut_i_1h_len = len(mcut_i_1h)
@@ -94,7 +95,7 @@ if __name__ == "__main__":
         #
         {}""" % (ellipticity, fwhm, spread_model,3, mcut_i_1h_len)
 
-        with open(f'{priority_outdir}/primary_candidates.csv', 'w') as fp:
+        with open(f'{priority_outdir}/primary_candidates_{field}.csv', 'w') as fp:
             fp.write(text.format(mcut_i_1h.to_csv(index=False)))
 
         if args.verbose:
@@ -107,7 +108,8 @@ if __name__ == "__main__":
             print(f'{mcut_i_1h_len}')                
 
         ########################################################################
-        mcut_g_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= 3]
+        ###################### SECONDARY CANDIDATES ############################
+        mcut_g_1h = mlist[lambda mlist: (mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= 3) | (mlist.N_CONSECUTIVE_DETECTIONS_i_1h >= 2)]
         mcut_g_1h = mcut_g_1h.reset_index()
         mcut_g_1h_len = len(mcut_g_1h)
 
@@ -124,14 +126,14 @@ if __name__ == "__main__":
         #
         {}""" % (ellipticity, fwhm, spread_model,3 , mcut_g_1h_len)
 
-        with open(f'{priority_outdir}/secondary_candidates.csv', 'w') as fp:
+        with open(f'{priority_outdir}/secondary_candidates_{field}.csv', 'w') as fp:
             fp.write(text.format(mcut_g_1h.to_csv(index=False)))
 
         if args.verbose:
             print(' ')
             print('-------------------------------------------------')
             print('CRITERIA:')
-            print(f'NUMBER OF CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= 3')
+            print(f'NUMBER OF CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= 3 | I BAND WITH ONE HOLE >= 2')
             print(' ')
             print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
             print(f'{mcut_g_1h_len}')                

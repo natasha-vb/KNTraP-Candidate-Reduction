@@ -187,7 +187,6 @@ if __name__ == "__main__":
         ccds = range(1,63,1)
 
     for ccd in ccds:
-        
         # Code running mode arguments
         if args.debugmode:
             print(args)
@@ -195,10 +194,22 @@ if __name__ == "__main__":
         verbose             = args.verbose
         # Required arguments
         field               = args.field
+        # Optional arguements
         if args.skip_se:
-            commandfile         = f'python main.py {field} --ccd {ccd} --skip_se --v'
+            skip_se         = '--skip_se'
         else:
-            commandfile         = f'python main.py {field} --ccd {ccd} --v'
+            skip_se         = ''
+        if args.debugmode:
+            debug           = '--debug'
+        else:
+            debug           = ''
+        if args.verbose:
+            verbose         = '--v'
+        else:
+            verbose         - ''
+
+        commandfile         = f'python main.py {field} --ccd {ccd} {skip_se} {debug} {verbose}'
+    
         # Optional arguments (with defaults set)
         bashrcfile          = args.bashrcfile
         memory_request      = int(args.memory_request)
