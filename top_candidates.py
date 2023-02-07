@@ -133,7 +133,7 @@ if __name__ == "__main__":
             print(' ')
             print('-------------------------------------------------')
             print('CRITERIA:')
-            print(f'NUMBER OF CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= 3')
+            print(f'NUMBER OF CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= 3 | I BAND WITH ONE HOLE >= 2')
             print(' ')
             print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
             print(f'{mcut_g_1h_len}')                
