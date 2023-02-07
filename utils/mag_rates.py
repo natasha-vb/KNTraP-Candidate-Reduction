@@ -3,6 +3,9 @@ import pandas as pd
 
 def calculate_mag_diff(lc, verbose=False):
 
+    # Dealing with dividing by 0 error
+    np.seterr(divide='ignore',invalid='ignore')
+
     alpha_temp = pd.DataFrame(columns={'dateobs','filt','mag_diff','date_diff','alpha'})
 
     # Setting up dataframe for magnitude difference calculations

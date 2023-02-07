@@ -180,11 +180,13 @@ if __name__ == "__main__":
     # Command line for candidate filtering script
     if args.top_candidates:
         commandfile1     = f'python top_candidates.py --field {field} --v'
+        commandfile2     = f'python make_lightcurves.py --field {field} --top_cands'
     else:
         commandfile1     = f'python filter_candidates.py --field {field} --v'
+        commandfile2     = f'python make_lightcurves.py --field {field}'
 
     # Command line for making light curves script
-    commandfile2         = f'python make_lightcurves.py --field {field}'
+    
     
     _ = submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
                                     top_candidates=args.top_candidates,

@@ -84,6 +84,11 @@ if __name__ == "__main__":
             help="Process one set of images only"
     )
     parser.add_argument(
+            "--debug",
+            action="store_true",
+            help="Produce more print statements for debugging"
+    )
+    parser.add_argument(
             "--skip_se",
             action="store_true",
             help="Skip Source Extractor process"
@@ -160,7 +165,6 @@ if __name__ == "__main__":
 
         if args.verbose:
             print('SAVE CATALOG DIRECTORY: %s\n' % savecats_dir)
-        
         
         if not args.skip_se:
             # Run SE on science image
@@ -326,14 +330,15 @@ if __name__ == "__main__":
                             print(df_out[["dateobs","filt","seeing","good_detection"]])
                             print('-----------------------------------------')
                     
-                    print(' ')
-                    print('=================================================')
-                    print('DF OUT CHECK')
-                    print(df_out)
-                    for cols in df_out.columns:
-                        print(cols)
-                    print('=================================================')
-                    print(' ')
+                    if args.debug:
+                        print(' ')
+                        print('=================================================')
+                        print('DF OUT CHECK')
+                        print(df_out)
+                        for cols in df_out.columns:
+                            print(cols)
+                        print('=================================================')
+                        print(' ')
 
                     # Check for star-like objects in template image
                     df_out['tmpl_star_check'] = df_out.apply(lambda row: True if row['SPREAD_MODEL_TMPL'] < 0.002 and
@@ -447,9 +452,3 @@ if __name__ == "__main__":
 
     masterlist_allccds_path = (f'{masterlist_outdir}/masterlist_{args.field}.allccds.csv')
     masterlist_allccds.to_csv(masterlist_allccds_path, index=False)
-
-    # # Crossmatching candidates with Simbad, Gaia, and Pan-STARRS 1 catalogues
-    # ml_file = pd.read_csv(masterlist_allccds_path)
-    
-    # ml_xmatch = crossmatch.crossmatch(ml_file,verbose=True)
-    # ml_xmatch.to_csv(f'{masterlist_outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)

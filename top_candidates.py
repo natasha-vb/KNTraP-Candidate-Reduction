@@ -95,7 +95,7 @@ if __name__ == "__main__":
         #
         {}""" % (ellipticity, fwhm, spread_model,3, mcut_i_1h_len)
 
-        with open(f'{priority_outdir}/primary_candidates.csv', 'w') as fp:
+        with open(f'{priority_outdir}/primary_candidates_{field}.csv', 'w') as fp:
             fp.write(text.format(mcut_i_1h.to_csv(index=False)))
 
         if args.verbose:
@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
         ########################################################################
         ###################### SECONDARY CANDIDATES ############################
-        mcut_g_1h = mlist[lambda mlist: mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= 3] ## MAYBE ALSO INCLUDE 2 I BAND DETECTIONS??
+        mcut_g_1h = mlist[lambda mlist: (mlist.N_CONSECUTIVE_DETECTIONS_g_1h >= 3) | (mlist.N_CONSECUTIVE_DETECTIONS_i_1h >= 2)]
         mcut_g_1h = mcut_g_1h.reset_index()
         mcut_g_1h_len = len(mcut_g_1h)
 
@@ -126,14 +126,14 @@ if __name__ == "__main__":
         #
         {}""" % (ellipticity, fwhm, spread_model,3 , mcut_g_1h_len)
 
-        with open(f'{priority_outdir}/secondary_candidates.csv', 'w') as fp:
+        with open(f'{priority_outdir}/secondary_candidates_{field}.csv', 'w') as fp:
             fp.write(text.format(mcut_g_1h.to_csv(index=False)))
 
         if args.verbose:
             print(' ')
             print('-------------------------------------------------')
             print('CRITERIA:')
-            print(f'NUMBER OF CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= 3')
+            print(f'NUMBER OF CONSECUTIVE DETECTIONS IN G BAND WITH ONE HOLE >= 3 | I BAND WITH ONE HOLE >= 2')
             print(' ')
             print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
             print(f'{mcut_g_1h_len}')                

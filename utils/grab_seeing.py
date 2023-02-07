@@ -7,16 +7,16 @@ def grab_seeing(lcfile, field, ccd):
     
     if field == 'SCVZ':
         field = 'S-CVZ'
-    elif field == 'KNTRAPaa':
+    if field == 'KNTRAPaa':
         field = 'KNTRAP1'
-    elif field == 'FOURHR':
-        field == '4hr'
-    elif field == 'KNTRAP12':
-        field == 'KNTraP12'
-    elif field == 'KNTRAP13':
-        field == 'KNTraP13'
-    elif field == 'KNTRAP14':
-        field == 'KNTraP14'
+    if field == 'FOURHR':
+        field = '4hr'
+    if field == 'KNTRAP12':
+        field = 'KNTraP12'
+    if field == 'KNTRAP13':
+        field = 'KNTraP13'
+    if field == 'KNTRAP14':
+        field = 'KNTraP14'
 
     for i in range(len(lcfile)):
         lc_row = lcfile.iloc[i]
@@ -37,9 +37,17 @@ def grab_seeing(lcfile, field, ccd):
         df_obslog.columns = ['#expid', 'ra', 'dec', 'ut', 'filt', 'time', 'secz', 'psf', 'sky', 'cloud', 'teff', 'Object']
 
         df_obslog_field = df_obslog[df_obslog['Object'] == field]
+        print(f'All seeing values for field {field}')
+        print(df_obslog_field)
+
         df_obslog_seeing = df_obslog_field['psf'][df_obslog_field['filt'] == filter]
+        print(f'Seeing values for {filter} band')
+        print(df_obslog_seeing)
 
         df_obslog_seeing_vals = [float(x) for x in df_obslog_seeing.to_list()]
+
+        print(f'Seeing values list for field {field}:')
+        print(df_obslog_seeing_vals)
 
         if len(df_obslog_seeing_vals) > 1:
             # sum up all the seeing values and average them
