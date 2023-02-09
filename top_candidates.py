@@ -137,39 +137,3 @@ if __name__ == "__main__":
             print(' ')
             print(f'NUMBER OF CANDIDATES FOUND IN FIELD {field}:')
             print(f'{mcut_g_1h_len}')                
-                
-        
-        # Count number of candidates in each reduced masterlist for each CCD
-        ccds = range(1,63,1)
-        for ccd in ccds:
-            mcut_list = glob.glob(f'{priority_outdir}/*_candidates.csv')
-            mcut_list = sorted(mcut_list)
-            
-            print('----------------------------------------------------------------------------------------')
-            print(f'NUMBER OF CANDIDATES FOR THE FOLLOWING SELECTION CRITERIA IN FIELD {field} CCD {ccd}:')
-
-            if len(mcut_list) == 0:
-                if args.verbose:
-                    print(f'CCD {ccd} masterlist not found')
-
-            else:
-                for m in mcut_list:
-                    m_df = pd.read_csv(m, sep=',', comment='#', header=11, skipinitialspace=True) 
-                    
-                    if len(m_df) > 1:
-                        m_ccd = m_df[m_df['CCD'] == ccd]
-                        m_ccd_len = len(m_ccd)
-
-                        p_primary = re.compile("primary")
-                        primary = p_primary.search(m)
-
-                        if primary:
-                            print(f'{m_ccd_len} PRIMARY CANDIDATES FOUND')
-                        else:
-                            print(f'{m_ccd_len} SECONDARY CANDIDATES FOUND')
-
-                    else:
-                        if args.verbose:
-                            print('No candidates found in masterlist:', m)
-                    
-            print('----------------------------------------------------------------------------------------')
