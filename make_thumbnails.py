@@ -9,6 +9,9 @@ from astropy.nddata import Cutout2D
 from astropy import units as u
 from astropy.wcs import WCS
 from astropy.coordinates import SkyCoord
+from astropy.visualization import LinearStretch
+from astropy.visualization import ZScaleInterval
+from astropy.visualization import ImageNormalize
 
 
 ## grab list of primary candidates from ./masterlists/field/priority/primary_candidates_{field}.csv ***might add secondary candidates as an option***
@@ -20,13 +23,33 @@ from astropy.coordinates import SkyCoord
 ## plot template, science and difference images in a grid, showing evolution over all nights
 ## save evolution grid as .png
 
+# From Jielai Zhang
+def imshow_zscale(image,fits=False,grid=True,ticks=False):
+    if fits==True:
+        d = fits.getdata(image)
+    else:
+        d=image
+    norm = ImageNormalize(d, interval=ZScaleInterval(),stretch=LinearStretch())
+    plt.imshow(d, cmap=plt.cm.gray, norm=norm, interpolation='none')
+    if ticks:
+        plt.tick_params(labelsize=16)
+    if grid:
+        plt.grid()
+    return None
+
 def make_thumbnail_grid(cand_id, field, primary=False, secondary=False):
     if primary:
         cand_directory = 'primary_candidates'
     if secondary:
         cand_directory = 'secondary_candidates'
+    
+    # Grab i and g band cutouts 
     i_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*.i.*')
     g_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*.g.*')
+
+    fig, ax = plt.subplots(nrows=3, ncols=11)
+    for fits in i_thumbnails:
+        imshow_zscale(fits,grid=False,ticks=False)
 
 
 # From Jielai Zhang 
