@@ -37,6 +37,7 @@ def imshow_zscale(image,fits=False,grid=True,ticks=False):
         plt.grid()
     return None
 
+
 def make_thumbnail_grid(cand_id, field, primary=False, secondary=False):
     if primary:
         cand_directory = 'primary_candidates'
@@ -65,7 +66,8 @@ def create_cutout_centre(fitsfile,RA,DEC,image_size,verbose=False,debug=False):
     h.update(cutout.wcs.to_header())
     return cutout.data, h
 
-def create_cutout_files(cand_list, field, primary=False, secondary=False):
+
+def create_cutout_files(cand_list, field, primary=False, secondary=False, verbose=False):
     # Iterate over masterlist to get candidate data
     for i in range(len(cand_list)):
         cand    = cand_list.iloc[i]
@@ -73,22 +75,42 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False):
         dec     = cand['DEC_AVERAGE']
         ccd     = cand['CCD']
         cand_id = cand['CAND_ID']
+
+        print('-------------------------------')
+        print(f'Creating thumbnails for candidate {cand_id}')
+        print(' ')
+        print(f'CCD: {ccd}')
+        print(f'RA: {ra}')
+        print(f'DEC: {dec}')
+        print(' ')
         
-        sci_images = glob.glob(f'../../workspace/{field}_tmpl/{ccd}/*.diff.im.fits')
+        sci_images  = glob.glob(f'../../workspace/{field}_tmpl/{ccd}/*.diff.im.fits')
         diff_images = glob.glob(f'../../workspace/{field}_tmpl/{ccd}/*.diff.fits')
         tmpl_images = glob.glob(f'../../workspace/{field}_tmpl/{ccd}/*.diff.tmpl.fits')
+
+        if verbose:
+            print('Images found:')
+            print(sci_images)
+            print(' ')
+            print(diff_images)
+            print(' ')
+            print(tmpl_images)
+            print(' ')
 
         # Looping over single night images for science, difference, and template images
         images_list = [sci_images, diff_images, tmpl_images]
         for images in images_list:
             for fits in images:
                 # Make cutout of candidate
-                data, header = create_cutout_centre(i, ra, dec, 100) # look into image size???
+                data, header = create_cutout_centre(fits, ra, dec, 100) # look into image size???
 
                 # Save cutout as .fits to appropriate path
                 fits_name = fits.split('/')[-1]
                 fits_name = fits.replace(f'.fits', '.cutout.fits')
                 candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
+
+                print(f'Image thumbnail filename: {candfits_name}')
+
                 if primary:
                     cand_directory = 'primary_candidates'
                 if secondary:
@@ -101,7 +123,9 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False):
 
                 fits.writeto(f'{thumbnail_outdir}/{candfits_name}', data, header=header, overwrite=True)
 
-        # From saved 
+                print(f'Thumbnail saved to: {thumbnail_outdir}')
+
+        # From saved thumbnails, create .png evolution grid of images
         _ = make_thumbnail_grid(cand_id, field=field, primary=primary, secondary=secondary)
 
 
@@ -114,27 +138,34 @@ if __name__ == "__main__":
             help="Selected field"
     )
     parser.add_argument(
-            "--primary",
+            "--no_primary",
             action="store_true",
-            help="Use primary candidates"
+            default="store_false",
+            help="Do not use primary candidates"
     )
     parser.add_argument(
             "--secondary",
             action="store_true",
+            default="store_false",
             help="Use secondary candidates"
+    )
+    parser.add_argument(
+            "--verbose", "--v",
+            action="store_true",
+            help="Print more information"
     )
     args = parser.parse_args()
 
     # Grab masterlist of primary/ secondary candidates
-    if args.primary:
+    if not args.no_primary:
         m_pri = glob.glob(f'./masterlists/{args.field}/priority/primary_candidates*')
         print('Found masterlist: ', m_pri)
 
-        _ = create_cutout_files(m_pri, args.field, primary=True)
+        _ = create_cutout_files(m_pri, args.field, primary=True, verbose=args.verbose)
 
     if args.secondary:
         m_sec = glob.glob(f'./masterlists/{args.field}/priority/secondary_candidates*')
         print('Found masterlist: ', m_sec)
 
-        _ = create_cutout_files(m_sec, args.field, secondary=True)
+        _ = create_cutout_files(m_sec, args.field, secondary=True, verbose=args.verbose)
 
