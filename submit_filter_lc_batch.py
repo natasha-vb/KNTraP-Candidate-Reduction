@@ -55,12 +55,8 @@ echo ----------------
 '''
 
 def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
-<<<<<<< HEAD
                                 bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
-=======
                                 top_candidates=False,
-                                bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
->>>>>>> d6bcc21... top candidates addition
                                 memory_request=8000,
                                 verbose=False,
                                 do_not_submit=False):
