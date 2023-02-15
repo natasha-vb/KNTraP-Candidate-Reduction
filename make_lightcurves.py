@@ -114,9 +114,6 @@ if __name__ == "__main__":
             ax.scatter(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), c='r', marker='.', label='i band')
             ax.scatter(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), c='b', marker='.', label='g band')
 
-            # ax.plot(unf_mi['dateobs'].astype(float), unf_mi['m'].astype(float), lw=0, c='r', marker='.', ms=4, label='i band')
-            # ax.plot(unf_mg['dateobs'].astype(float), unf_mg['m'].astype(float), lw=0, c='b', marker='.', ms=4, label='g band')
-
             # Mark "good" detections
             ax.scatter(good_unf_i['dateobs'].astype(float), good_unf_i['m'].astype(float), c='r', marker='x')
             ax.scatter(good_unf_g['dateobs'].astype(float), good_unf_g['m'].astype(float), c='b', marker='x')
@@ -125,13 +122,13 @@ if __name__ == "__main__":
                 flc_df.columns = ['MJD', 'dateobs', 'photcode', 'filt', 'flux_c', 'dflux_c', 'type','chisqr', 'ZPTMAG_c', 'm', 'dm', 'ra', 'dec', 'cmpfile', 'tmpl']
                 print('Forced light curve file:', forced_lc)
 
-                 # Converting date format to match forced lc format: YYMMDD
+                # Converting date format to match forced lc format: YYMMDD
                 det_dates = flc_df['dateobs'].values 
                 det_dates = [d.replace('-','')[2:8] for d in flc_df['dateobs'].values]
                 flc_df['dateobs'] = det_dates
                 flc_df = flc_df.sort_values(by='dateobs')
 
-                # Calculate limiting magnitudes
+                # Calculate limiting magnitudes 
                 flc_df = limiting_mag(flc_df)
                 
                 f_i = flc_df[flc_df['filt'] == 'i']
@@ -139,8 +136,12 @@ if __name__ == "__main__":
 
                 f_mi = f_i[(f_i['m'] != '-') & (f_i['dm'] != '-')]
                 f_mg = f_g[(f_g['m'] != '-') & (f_g['dm'] != '-')]
-                f_limi = f_i[(f_i['m'] == '-') & (f_i['limiting_mag'] != 0.0)]
-                f_limg = f_g[(f_g['m'] == '-') & (f_g['limiting_mag'] != 0.0)]
+                # f_limi = f_i[(f_i['m'] == '-') & (f_i['limiting_mag'] != 0.0)]
+                # f_limg = f_g[(f_g['m'] == '-') & (f_g['limiting_mag'] != 0.0)]
+
+                ###### PLOT ALL LIMITING MAGS FOR ALL DAYS #####
+                f_limi = f_i[f_i['limiting_mag'] != 0.0]
+                f_limg = f_g[f_g['limiting_mag'] != 0.0]
                 
                 # Removing forced photometry data points on dates where there are unforced photometry data points
                 f_mi_cut = f_mi[~np.round(f_mi['MJD'], 5).isin(np.round(unf_mi['MJD'], 5))]

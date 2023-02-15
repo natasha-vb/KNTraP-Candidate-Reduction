@@ -375,6 +375,17 @@ if __name__ == "__main__":
                     g_rise = (df_out['alpha_g'] < -1).any()
                     g_fade = (df_out['alpha_g'] > 0.3).any()
 
+                    # Checking for both rise and fae
+                    if i_rise == True & i_fade == True:
+                        i_rate = True
+                    else:
+                        i_rate = False
+                    
+                    if g_rise == True & g_fade == True:
+                        g_rate = True
+                    else:
+                        g_rate = False
+
                     i_pos = (df_out['alpha_i'].dropna() > 0)
                     g_pos = (df_out['alpha_g'].dropna() > 0)
                     i_inflections = (i_pos & (i_pos != i_pos.shift(1))).sum()
@@ -396,6 +407,8 @@ if __name__ == "__main__":
                                                 "N_CONSECUTIVE_DETECTIONS_ig": n_conseq_det['ig'],
                                                 "N_CONSECUTIVE_DETECTIONS_ig_1h": n_conseq_det['ig_1h'],
                                                 "N_CONSECUTIVE_DETECTIONS_ig_2h": n_conseq_det['ig_2h'],
+                                                "RATE_i": [i_rate],
+                                                "RATE_G": [g_rate],
                                                 "RISE_i": [i_rise],
                                                 "FADE_i": [i_fade],
                                                 "RISE_g": [g_rise],
