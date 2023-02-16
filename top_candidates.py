@@ -70,7 +70,7 @@ if __name__ == "__main__":
         #                             (mlist.RISE_g == True) | (mlist.FADE_g == True)]
         
         # Requiring both rise and fade rates
-        mlist = mlist[lambda: mlist (mlist.RATE_i == True) | (mlist.RATE_g == True)]
+        mlist = mlist[lambda mlist: (mlist.RATE_i == True) | (mlist.RATE_g == True)]
         
         n_cands = len(mlist)
         print(' ')
