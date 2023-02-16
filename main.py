@@ -408,7 +408,7 @@ if __name__ == "__main__":
                                                 "N_CONSECUTIVE_DETECTIONS_ig_1h": n_conseq_det['ig_1h'],
                                                 "N_CONSECUTIVE_DETECTIONS_ig_2h": n_conseq_det['ig_2h'],
                                                 "RATE_i": [i_rate],
-                                                "RATE_G": [g_rate],
+                                                "RATE_g": [g_rate],
                                                 "RISE_i": [i_rise],
                                                 "FADE_i": [i_fade],
                                                 "RISE_g": [g_rise],
