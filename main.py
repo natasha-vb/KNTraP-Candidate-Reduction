@@ -316,7 +316,7 @@ if __name__ == "__main__":
                     df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
 
                     # Adding column for seeing for each night
-                    df_seeing = grab_seeing.grab_seeing(df,args.field,ccd)
+                    df_seeing = grab_seeing.grab_seeing(df,args.field,ccd, debug=args.debug)
                     df_out = pd.merge(df_out,df_seeing, how='left', on=['dateobs', 'filt'])
                     
                     # True/ False for a "good" detection
