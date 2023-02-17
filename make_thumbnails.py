@@ -40,7 +40,7 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
     n_rows = np.shape(fitsfiles_2Darray)[0]
     n_cols = np.shape(fitsfiles_2Darray)[1]   
 
-    if debug:
+    if verbose:
         print(f"cutout shape: {np.shape(cutout)}")
         
     # start figure with pixel axis
@@ -127,7 +127,8 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
             ccd     = cand['CCD']
             cand_id = cand['CAND_ID']
 
-            print('--------------------------------------')
+            print(' ')
+            print('------------------------------------------------------------------------------------------------')
             print(f'Creating thumbnails for candidate {cand_id}')
             print(' ')
             print(f'CCD: {ccd}')
@@ -160,8 +161,6 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                     fits_name = fits_name.replace(f'.fits', '.cutout.fits')
                     candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
 
-                    print(f'Image thumbnail filename: {candfits_name}')
-
                     if primary:
                         cand_directory = 'primary_candidates_test'
                     if secondary:
@@ -174,7 +173,8 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
 
                     fits.writeto(f'{thumbnail_outdir}/{candfits_name}', data, header=header, overwrite=True)
 
-                    print(f'Thumbnail saved to: {thumbnail_outdir}')
+                    print(' ')
+                    print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
 
             # From saved thumbnails, create .png evolution grid of images
             _ = make_thumbnail_grid(cand_id, ra, dec, field=field, primary=primary, secondary=secondary)
