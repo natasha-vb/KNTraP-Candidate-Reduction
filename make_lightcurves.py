@@ -163,8 +163,11 @@ if __name__ == "__main__":
                 print('Forced light curve file is empty')
 
                 # Plot limiting magnitude using unforced photometry
-                unf_limi = limiting_mag(unf_mi)
-                unf_limg = limiting_mag(unf_mi)
+                unf_limi_ = limiting_mag(unf_mi)
+                unf_limg_ = limiting_mag(unf_mi)
+
+                unf_limi = unf_limi_[unf_limi_['limiting_mag'] != 0.0]
+                unf_limg = unf_limg_[unf_limg_['limiting_mag'] != 0.0]
                 
                 # Plot limiting magnitudes
                 ax.scatter(unf_limi['dateobs'].astype(float), unf_limi['limiting_mag'], c='r', marker='v', alpha=0.2)
