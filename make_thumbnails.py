@@ -92,7 +92,7 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
 
     return output
 
-def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False, verbose=False):
+def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary=False, verbose=False):
     if primary:
         cand_directory = f'primary_candidates_test_{field}'
     if secondary:
@@ -111,7 +111,7 @@ def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False,
             print(thumbnail_array)
             print(' ')
 
-        output_name = f'./lc_files/{field}/filtered_candidates/thumbnails/cand{cand_id}_{filt}_thumbnail_grid.png'
+        output_name = f'{outdir}/cand{cand_id}_{filt}_thumbnail_grid.png'
         print('output_name:', output_name)
 
         make_stamps(ra,dec,thumbnail_array,output=output_name,labels=True, verbose=verbose)
@@ -182,7 +182,7 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                     print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
 
             # From saved thumbnails, create .png evolution grid of images
-            _ = make_thumbnail_grid(cand_id, ra, dec, field=field, primary=primary, secondary=secondary, verbose=verbose)
+            _ = make_thumbnail_grid(cand_id, ra, dec, field=field, outdir=thumbnail_outdir, primary=primary, secondary=secondary, verbose=verbose)
 
 
 if __name__ == "__main__":
