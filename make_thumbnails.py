@@ -119,6 +119,10 @@ def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False)
 def create_cutout_files(cand_list, field, primary=False, secondary=False, verbose=False):
     # Iterate over masterlist to get candidate data
     for i in range(len(cand_list)):
+        print('cand_list:')
+        print(cand_list)
+        print(' ')
+        print(cand_list[i])
         cand_list_csv = pd.read_csv(cand_list[i],sep=',', comment='#', header=11, skipinitialspace=True)
         for ii in range(len(cand_list_csv)):
             cand    = cand_list.iloc[ii]
