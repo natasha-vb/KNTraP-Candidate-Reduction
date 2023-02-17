@@ -151,13 +151,13 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
             # Looping over single night images for science, difference, and template images
             images_list = [sci_images, diff_images, tmpl_images]
             for images in images_list:
-                for fits in images:
+                for fitsfile in images:
                     # Make cutout of candidate
-                    data, header = create_cutout_centre(fits, ra, dec, 100) # look into image size???
+                    data, header = create_cutout_centre(fitsfile, ra, dec, 100) # look into image size???
 
                     # Save cutout as .fits to appropriate path
-                    fits_name = fits.split('/')[-1]
-                    fits_name = fits.replace(f'.fits', '.cutout.fits')
+                    fits_name = fitsfile.split('/')[-1]
+                    fits_name = fitsfile.replace(f'.fits', '.cutout.fits')
                     candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
 
                     print(f'Image thumbnail filename: {candfits_name}')
