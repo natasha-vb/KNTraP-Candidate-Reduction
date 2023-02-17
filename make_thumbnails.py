@@ -40,7 +40,7 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
     n_rows = np.shape(fitsfiles_2Darray)[0]
     n_cols = np.shape(fitsfiles_2Darray)[1]   
 
-    if verbose:
+    if args.verbose:
         print(f"cutout shape: {np.shape(cutout)}")
         
     # start figure with pixel axis
