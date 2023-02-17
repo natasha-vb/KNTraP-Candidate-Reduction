@@ -162,9 +162,9 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                     candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
 
                     if primary:
-                        cand_directory = 'primary_candidates_test'
+                        cand_directory = f'primary_candidates_test_{field}'
                     if secondary:
-                        cand_directory = 'secondary_candidates_test'
+                        cand_directory = f'secondary_candidates_test_{field}'
 
                     # Create directory for thumbnail if not already existing
                     thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
