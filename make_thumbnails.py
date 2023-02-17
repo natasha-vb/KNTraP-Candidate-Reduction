@@ -94,9 +94,9 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
 
 def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False):
     if primary:
-        cand_directory = 'primary_candidates'
+        cand_directory = 'primary_candidates_test'
     if secondary:
-        cand_directory = 'secondary_candidates'
+        cand_directory = 'secondary_candidates_test'
     
     # Grab i and g band cutouts 
     filters = ['i','g']
