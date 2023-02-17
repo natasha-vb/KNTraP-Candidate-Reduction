@@ -163,9 +163,9 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                     print(f'Image thumbnail filename: {candfits_name}')
 
                     if primary:
-                        cand_directory = 'primary_candidates'
+                        cand_directory = 'primary_candidates_test'
                     if secondary:
-                        cand_directory = 'secondary_candidates'
+                        cand_directory = 'secondary_candidates_test'
 
                     # Create directory for thumbnail if not already existing
                     thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
@@ -209,13 +209,13 @@ if __name__ == "__main__":
 
     # Grab masterlist of primary/ secondary candidates
     if not args.no_primary:
-        m_pri = glob.glob(f'./masterlists/{args.field}/priority/primary_candidates*')
+        m_pri = glob.glob(f'./masterlist/{args.field}/priority/primary_candidates*')
         print('Found masterlist: ', m_pri)
 
         _ = create_cutout_files(m_pri, args.field, primary=True, verbose=args.verbose)
 
     if args.secondary:
-        m_sec = glob.glob(f'./masterlists/{args.field}/priority/secondary_candidates*')
+        m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates*')
         print('Found masterlist: ', m_sec)
 
         _ = create_cutout_files(m_sec, args.field, secondary=True, verbose=args.verbose)
