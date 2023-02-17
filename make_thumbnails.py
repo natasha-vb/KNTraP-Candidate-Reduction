@@ -111,7 +111,7 @@ def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False)
 
         make_stamps(ra,dec,thumbnail_array,output=output_name,labels=True)
 
-        print('Thumbnail grid for candidate {cand_id} saved!')
+        print(f'Thumbnail grid for candidate {cand_id} saved!')
         print('Save location:', output_name)
 
    
