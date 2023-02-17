@@ -159,7 +159,7 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                     print('fitsfile:',fitsfile)
                     fits_name = fitsfile.split('/')[-1]
                     print('fits_name:',fits_name)
-                    fits_name = fitsfile.replace(f'.fits', '.cutout.fits')
+                    fits_name = fits_name.replace(f'.fits', '.cutout.fits')
                     print('fits_name:',fits_name)
                     candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
                     print('candfits_name:',candfits_name)
