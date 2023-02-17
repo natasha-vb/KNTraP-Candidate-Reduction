@@ -29,7 +29,7 @@ def create_cutout_centre(fitsfile,RA,DEC,image_size,verbose=False,debug=False):
     return cutout.data, h
 
 # From Jielai Zhang
-def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50,debug=False):
+def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50,debug=False, verbose=False):
     '''fitsfiles_2Darray should be a 2D array that specifies the number of rows and columns in output stamps.
     E.g. [[temp_1.fits,temp_2.fits],[sci_1.fits,sci2.fits],[sub_1.fits,sub_2.fits]] gives 3 rows and 2 columns.
     '''
@@ -92,7 +92,7 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
 
     return output
 
-def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False):
+def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False, verbose=False):
     if primary:
         cand_directory = 'primary_candidates_test'
     if secondary:
@@ -106,10 +106,15 @@ def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False)
         diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*_{filt}*diff.cutout.fits')
         thumbnail_array = [tmpl_thumbnails,sci_thumbnails,diff_thumbnails]
         
+        if verbose:
+            print('thumbnail_array:')
+            print(thumbnail_array)
+            print(' ')
+
         output_name = f'./lc_files/{field}/filtered_candidates/thumbnails/cand{cand_id}_{filt}_thumbnail_grid.png'
         print('output_name:', output_name)
 
-        make_stamps(ra,dec,thumbnail_array,output=output_name,labels=True)
+        make_stamps(ra,dec,thumbnail_array,output=output_name,labels=True, verbose=verbose)
 
         print(f'Thumbnail grid for candidate {cand_id} saved!')
         print('Save location:', output_name)
@@ -177,7 +182,7 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                     print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
 
             # From saved thumbnails, create .png evolution grid of images
-            _ = make_thumbnail_grid(cand_id, ra, dec, field=field, primary=primary, secondary=secondary)
+            _ = make_thumbnail_grid(cand_id, ra, dec, field=field, primary=primary, secondary=secondary, verbose=verbose)
 
 
 if __name__ == "__main__":
