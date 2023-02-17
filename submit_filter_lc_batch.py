@@ -199,7 +199,8 @@ if __name__ == "__main__":
     # Command line for making light curves script
     
     
-    _ = submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
+    _ = submit_slurm_OzSTAR_batch(commandfile1, commandfile2, commandfile3,
+                                    field,
                                     top_candidates=args.top_candidates,
                                     bashrcfile=bashrcfile,
                                     memory_request=memory_request,

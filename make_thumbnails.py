@@ -106,7 +106,7 @@ def make_thumbnail_grid(cand_id, ra, dec, field, primary=False, secondary=False)
         diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*_{filt}*diff.cutout.fits')
         thumbnail_array = [tmpl_thumbnails,sci_thumbnails,diff_thumbnails]
         
-        output_name = f'cand{cand_id}_{filt}_thumbnail_grid.png'
+        output_name = f'./lc_files/{field}/filtered_candidates/thumbnails/cand{cand_id}_{filt}_thumbnail_grid.png'
         print('output_name:', output_name)
 
         make_stamps(ra,dec,thumbnail_array,output=output_name,labels=True)
