@@ -156,13 +156,9 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                     data, header = create_cutout_centre(fitsfile, ra, dec, 100) # look into image size???
 
                     # Save cutout as .fits to appropriate path
-                    print('fitsfile:',fitsfile)
                     fits_name = fitsfile.split('/')[-1]
-                    print('fits_name:',fits_name)
                     fits_name = fits_name.replace(f'.fits', '.cutout.fits')
-                    print('fits_name:',fits_name)
                     candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
-                    print('candfits_name:',candfits_name)
 
                     print(f'Image thumbnail filename: {candfits_name}')
 
