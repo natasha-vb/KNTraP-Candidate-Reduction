@@ -113,6 +113,12 @@ def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary
         sci_thumbnails  = sci_thumbnails.sort()
         diff_thumbnails = diff_thumbnails.sort()
 
+        print(' ')
+        print('THUMBNAILS SORTED')
+        print(tmpl_thumbnails)
+        print(sci_thumbnails)
+        print(diff_thumbnails)
+
         ### separate out thumbnails of candidates appearing in multiple ccds ##
 
         thumbnail_array = [tmpl_thumbnails,sci_thumbnails,diff_thumbnails]
