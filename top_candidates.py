@@ -59,7 +59,7 @@ if __name__ == "__main__":
         ############################################################################
         # Filtering candidates:
         # With star-like objects in template image
-        mlist = mlist[lambda mlist: mlist.TMPL_STAR_CHECK == False]
+        mlist = mlist[lambda mlist: mlist.TMPL_STAR_CHECK == True]
 
         n_cands = len(mlist)
         print(' ')
