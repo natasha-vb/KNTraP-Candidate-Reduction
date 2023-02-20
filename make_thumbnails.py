@@ -109,9 +109,9 @@ def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary
         print(sci_thumbnails)
         print(diff_thumbnails)
 
-        tmpl_thumbnails = tmpl_thumbnails.sort()
-        sci_thumbnails  = sci_thumbnails.sort()
-        diff_thumbnails = diff_thumbnails.sort()
+        tmpl_thumbnails.sort()
+        sci_thumbnails.sort()
+        diff_thumbnails.sort()
 
         print(' ')
         print('THUMBNAILS SORTED')
