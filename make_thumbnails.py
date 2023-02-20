@@ -16,14 +16,14 @@ from astropy.visualization import ImageNormalize
 
 
 # From Jielai Zhang 
-def create_cutout_centre(fitsfile,RA,DEC,image_size,verbose=False,debug=False):
+def create_cutout_centre(fitsfile,RA,DEC,size=50,verbose=False,debug=False):
     # Read data
     d,h = fits.getdata(fitsfile,header=True)
     w = WCS(h)
     # Get position in SkyCoords
     pos = SkyCoord(RA, DEC, unit=u.deg)
     # Create cutout
-    cutout = Cutout2D(d, size=image_size, position=pos, wcs=w)
+    cutout = Cutout2D(d, size=size, position=pos, wcs=w)
     # Create new cutout header with right WCS
     h.update(cutout.wcs.to_header())
     return cutout.data, h
@@ -55,7 +55,7 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
                 
             # Read in data, get cutout
             cutout,cutout_h = create_cutout_centre(fitsfiles_2Darray[row][col],
-                                            RA,DEC,size,verbose=debug,debug=debug)
+                                            RA,DEC,size=size,verbose=debug,debug=debug)
             
             # imshow, with pixel value normalisation
             norm = ImageNormalize(cutout, interval=ZScaleInterval(),stretch=LinearStretch())
@@ -126,7 +126,7 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=F
         print('Save location:', output_name)
 
 
-def create_cutout_files(cand_list, field, image_size=50, save_fits=False, primary=False, secondary=False, verbose=False):
+def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=False, secondary=False, verbose=False):
     # Iterate over masterlist to get candidate data
     for i in range(len(cand_list)):
         cand_list_csv = pd.read_csv(cand_list[i],sep=',', comment='#', header=11, skipinitialspace=True)
@@ -165,7 +165,7 @@ def create_cutout_files(cand_list, field, image_size=50, save_fits=False, primar
                 for images in images_list:
                     for fitsfile in images:
                         # Make cutout of candidate
-                        data, header = create_cutout_centre(fitsfile, ra, dec, image_size) # look into image size???
+                        data, header = create_cutout_centre(fitsfile, ra, dec, size) # look into image size???
 
                         # Save cutout as .fits to appropriate path
                         fits_name = fitsfile.split('/')[-1]
@@ -188,7 +188,7 @@ def create_cutout_files(cand_list, field, image_size=50, save_fits=False, primar
                         print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
 
             # From saved thumbnails, create .png evolution grid of images
-            _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, size=image_size, primary=primary, secondary=secondary, verbose=verbose)
+            _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, size=size, primary=primary, secondary=secondary, verbose=verbose)
 
 
 if __name__ == "__main__":
@@ -234,10 +234,10 @@ if __name__ == "__main__":
         m_pri = glob.glob(f'./masterlist/{args.field}/priority/primary_candidates*')
         print('Found masterlist: ', m_pri)
 
-        _ = create_cutout_files(m_pri, args.field, image_size=args.image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
+        _ = create_cutout_files(m_pri, args.field, size=args.image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
 
     if args.secondary:
         m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates*')
         print('Found masterlist: ', m_sec)
 
-        _ = create_cutout_files(m_sec, args.field, image_size=args.image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
+        _ = create_cutout_files(m_sec, args.field, size=args.image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
