@@ -28,6 +28,7 @@ def create_cutout_centre(fitsfile,RA,DEC,size=50,verbose=False,debug=False):
     h.update(cutout.wcs.to_header())
     return cutout.data, h
 
+
 # From Jielai Zhang
 def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50,debug=False, verbose=False):
     '''fitsfiles_2Darray should be a 2D array that specifies the number of rows and columns in output stamps.
@@ -91,6 +92,7 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
     plt.close()
 
     return output
+
 
 def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=False, secondary=False, verbose=False):
     if primary:
@@ -165,7 +167,7 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=Fals
                 for images in images_list:
                     for fitsfile in images:
                         # Make cutout of candidate
-                        data, header = create_cutout_centre(fitsfile, ra, dec, size) # look into image size???
+                        data, header = create_cutout_centre(fitsfile, ra, dec, size=size) # look into image size???
 
                         # Save cutout as .fits to appropriate path
                         fits_name = fitsfile.split('/')[-1]
