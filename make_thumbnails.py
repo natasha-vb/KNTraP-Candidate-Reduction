@@ -23,8 +23,6 @@ def create_cutout_centre(fitsfile,RA,DEC,size=50,verbose=False,debug=False):
     # Get position in SkyCoords
     pos = SkyCoord(RA, DEC, unit=u.deg)
     # Create cutout
-    print('CUTOUT SIZE CHECK:')
-    print('SIZE=',size)
     cutout = Cutout2D(d, size=size, position=pos, wcs=w)
     # Create new cutout header with right WCS
     h.update(cutout.wcs.to_header())
