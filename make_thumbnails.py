@@ -241,14 +241,19 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Grab masterlist of primary/ secondary candidates
+    if args.image_size:
+        image_size = args.image_size
+    else:
+        image_size=50
+
     if not args.no_primary:
         m_pri = glob.glob(f'./masterlist/{args.field}/priority/primary_candidates*')
         print('Found masterlist: ', m_pri)
 
-        _ = create_cutout_files(m_pri, args.field, size=args.image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
+        _ = create_cutout_files(m_pri, args.field, size=image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
 
     if args.secondary:
         m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates*')
         print('Found masterlist: ', m_sec)
 
-        _ = create_cutout_files(m_sec, args.field, size=args.image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
+        _ = create_cutout_files(m_sec, args.field, size=image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
