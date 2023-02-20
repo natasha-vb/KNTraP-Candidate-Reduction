@@ -23,6 +23,8 @@ def create_cutout_centre(fitsfile,RA,DEC,size=50,verbose=False,debug=False):
     # Get position in SkyCoords
     pos = SkyCoord(RA, DEC, unit=u.deg)
     # Create cutout
+    print('CUTOUT SIZE CHECK:')
+    print('SIZE=',size)
     cutout = Cutout2D(d, size=size, position=pos, wcs=w)
     # Create new cutout header with right WCS
     h.update(cutout.wcs.to_header())
@@ -177,7 +179,7 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=Fals
                 for images in images_list:
                     for fitsfile in images:
                         # Make cutout of candidate
-                        data, header = create_cutout_centre(fitsfile, ra, dec, size=size) # look into image size???
+                        data, header = create_cutout_centre(fitsfile, ra, dec, size=size)
 
                         # Save cutout as .fits to appropriate path
                         fits_name = fitsfile.split('/')[-1]
