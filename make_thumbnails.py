@@ -105,6 +105,10 @@ def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary
         sci_thumbnails  = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*diff.im.cutout.fits')
         diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*diff.cutout.fits')
 
+        print(tmpl_thumbnails)
+        print(sci_thumbnails)
+        print(diff_thumbnails)
+
         tmpl_thumbnails = tmpl_thumbnails.sort()
         sci_thumbnails  = sci_thumbnails.sort()
         diff_thumbnails = diff_thumbnails.sort()
