@@ -109,10 +109,12 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=F
         sci_thumbnails  = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*stk_{ccd}.diff.im.cutout.fits')
         diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*stk_{ccd}.diff.cutout.fits')
 
+        # Sorting thumbnails into order of date
         tmpl_thumbnails.sort()
         sci_thumbnails.sort()
         diff_thumbnails.sort()
 
+        # Make array of thumbanil images 
         thumbnail_array = [tmpl_thumbnails,sci_thumbnails,diff_thumbnails]
         if verbose:
             print(' ')
@@ -123,7 +125,8 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=F
         output_name = f'{outdir}/cand{cand_id}_{filt}_thumbnail_grid.png'
         if verbose:
             print('Output name:', output_name)
-
+        
+        # Create thumbnail evolution grid
         make_stamps(ra, dec, thumbnail_array, output=output_name, labels=True, size=size, verbose=verbose)
 
         print(f'Thumbnail grid for candidate {cand_id} saved!')
@@ -162,37 +165,41 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=Fals
                 print(' ')
                 print(tmpl_images)
                 print(' ')
-            
-            # Create directory for thumbnail if not already existing
-            if primary:
-                cand_directory = f'primary_candidates_test_{field}'
-            if secondary:
-                cand_directory = f'secondary_candidates_test_{field}'
-
-            thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
-            if not os.path.exists(thumbnail_outdir):
-                os.makedirs(thumbnail_outdir)
                 
             # Looping over single night images for science, difference, and template images
-            if save_fits: 
-                images_list = [sci_images, diff_images, tmpl_images]
-                for images in images_list:
-                    for fitsfile in images:
-                        # Make cutout of candidate
-                        data, header = create_cutout_centre(fitsfile, ra, dec, size=size)
+        
+            images_list = [sci_images, diff_images, tmpl_images]
+            for images in images_list:
+                for fitsfile in images:
+                    # Make cutout of candidate
+                    data, header = create_cutout_centre(fitsfile, ra, dec, size=size)
 
-                        # Save cutout as .fits to appropriate path
-                        fits_name = fitsfile.split('/')[-1]
-                        fits_name = fits_name.replace(f'.fits', '.cutout.fits')
-                        candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
+                    # Save cutout as .fits to appropriate path
+                    fits_name = fitsfile.split('/')[-1]
+                    fits_name = fits_name.replace(f'.fits', '.cutout.fits')
+                    candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
 
-                        fits.writeto(f'{thumbnail_outdir}/{candfits_name}', data, header=header, overwrite=True)
+                    # Create directory for thumbnail if not already existing
+                    if primary:
+                        cand_directory = f'primary_candidates_test_{field}'
+                    if secondary:
+                        cand_directory = f'secondary_candidates_test_{field}'
 
-                        print(' ')
-                        print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
+                    thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
+                    if not os.path.exists(thumbnail_outdir):
+                        os.makedirs(thumbnail_outdir)
+
+                    fits.writeto(f'{thumbnail_outdir}/{candfits_name}', data, header=header, overwrite=True)
+
+                    print(' ')
+                    print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
 
             # From saved thumbnails, create .png evolution grid of images
             _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, size=size, primary=primary, secondary=secondary, verbose=verbose)
+
+            # Remove fits thumbnail images if not wanted
+            if not save_fits:
+                os.remove(f'{thumbnail_outdir}/*.fits')
 
 
 if __name__ == "__main__":
