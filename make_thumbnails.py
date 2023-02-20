@@ -92,7 +92,7 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
 
     return output
 
-def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary=False, verbose=False):
+def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir,primary=False, secondary=False, verbose=False):
     if primary:
         cand_directory = f'primary_candidates_test_{field}'
     if secondary:
@@ -101,9 +101,9 @@ def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary
     # Grab i and g band cutouts 
     filters = ['i','g']
     for filt in filters:
-        tmpl_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*diff.tmpl.cutout.fits')
-        sci_thumbnails  = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*diff.im.cutout.fits')
-        diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*diff.cutout.fits')
+        tmpl_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*stk_{ccd}.diff.tmpl.cutout.fits')
+        sci_thumbnails  = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*stk_{ccd}.diff.im.cutout.fits')
+        diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*stk_{ccd}.diff.cutout.fits')
 
         print(tmpl_thumbnails)
         print(sci_thumbnails)
@@ -118,8 +118,6 @@ def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary
         print(tmpl_thumbnails)
         print(sci_thumbnails)
         print(diff_thumbnails)
-
-        ### separate out thumbnails of candidates appearing in multiple ccds ##
 
         thumbnail_array = [tmpl_thumbnails,sci_thumbnails,diff_thumbnails]
         if verbose:
@@ -199,7 +197,7 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                     print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
 
             # From saved thumbnails, create .png evolution grid of images
-            _ = make_thumbnail_grid(cand_id, ra, dec, field=field, outdir=thumbnail_outdir, primary=primary, secondary=secondary, verbose=verbose)
+            _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, primary=primary, secondary=secondary, verbose=verbose)
 
 
 if __name__ == "__main__":
