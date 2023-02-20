@@ -92,7 +92,7 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
 
     return output
 
-def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir,primary=False, secondary=False, verbose=False):
+def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=False, secondary=False, verbose=False):
     if primary:
         cand_directory = f'primary_candidates_test_{field}'
     if secondary:
@@ -105,19 +105,9 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir,primary=False, seco
         sci_thumbnails  = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*stk_{ccd}.diff.im.cutout.fits')
         diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*stk_{ccd}.diff.cutout.fits')
 
-        print(tmpl_thumbnails)
-        print(sci_thumbnails)
-        print(diff_thumbnails)
-
         tmpl_thumbnails.sort()
         sci_thumbnails.sort()
         diff_thumbnails.sort()
-
-        print(' ')
-        print('THUMBNAILS SORTED')
-        print(tmpl_thumbnails)
-        print(sci_thumbnails)
-        print(diff_thumbnails)
 
         thumbnail_array = [tmpl_thumbnails,sci_thumbnails,diff_thumbnails]
         if verbose:
@@ -130,13 +120,13 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir,primary=False, seco
         if verbose:
             print('Output name:', output_name)
 
-        make_stamps(ra,dec,thumbnail_array,output=output_name,labels=True, verbose=verbose)
+        make_stamps(ra, dec, thumbnail_array, output=output_name, labels=True, size=size, verbose=verbose)
 
         print(f'Thumbnail grid for candidate {cand_id} saved!')
         print('Save location:', output_name)
 
 
-def create_cutout_files(cand_list, field, primary=False, secondary=False, verbose=False):
+def create_cutout_files(cand_list, field, image_size=50, save_fits=False, primary=False, secondary=False, verbose=False):
     # Iterate over masterlist to get candidate data
     for i in range(len(cand_list)):
         cand_list_csv = pd.read_csv(cand_list[i],sep=',', comment='#', header=11, skipinitialspace=True)
@@ -170,34 +160,35 @@ def create_cutout_files(cand_list, field, primary=False, secondary=False, verbos
                 print(' ')
 
             # Looping over single night images for science, difference, and template images
-            images_list = [sci_images, diff_images, tmpl_images]
-            for images in images_list:
-                for fitsfile in images:
-                    # Make cutout of candidate
-                    data, header = create_cutout_centre(fitsfile, ra, dec, 100) # look into image size???
+            if save_fits: 
+                images_list = [sci_images, diff_images, tmpl_images]
+                for images in images_list:
+                    for fitsfile in images:
+                        # Make cutout of candidate
+                        data, header = create_cutout_centre(fitsfile, ra, dec, image_size) # look into image size???
 
-                    # Save cutout as .fits to appropriate path
-                    fits_name = fitsfile.split('/')[-1]
-                    fits_name = fits_name.replace(f'.fits', '.cutout.fits')
-                    candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
+                        # Save cutout as .fits to appropriate path
+                        fits_name = fitsfile.split('/')[-1]
+                        fits_name = fits_name.replace(f'.fits', '.cutout.fits')
+                        candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
 
-                    if primary:
-                        cand_directory = f'primary_candidates_test_{field}'
-                    if secondary:
-                        cand_directory = f'secondary_candidates_test_{field}'
+                        if primary:
+                            cand_directory = f'primary_candidates_test_{field}'
+                        if secondary:
+                            cand_directory = f'secondary_candidates_test_{field}'
 
-                    # Create directory for thumbnail if not already existing
-                    thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
-                    if not os.path.exists(thumbnail_outdir):
-                        os.makedirs(thumbnail_outdir)
+                        # Create directory for thumbnail if not already existing
+                        thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
+                        if not os.path.exists(thumbnail_outdir):
+                            os.makedirs(thumbnail_outdir)
 
-                    fits.writeto(f'{thumbnail_outdir}/{candfits_name}', data, header=header, overwrite=True)
+                        fits.writeto(f'{thumbnail_outdir}/{candfits_name}', data, header=header, overwrite=True)
 
-                    print(' ')
-                    print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
+                        print(' ')
+                        print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
 
             # From saved thumbnails, create .png evolution grid of images
-            _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, primary=primary, secondary=secondary, verbose=verbose)
+            _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, size=image_size, primary=primary, secondary=secondary, verbose=verbose)
 
 
 if __name__ == "__main__":
@@ -207,6 +198,11 @@ if __name__ == "__main__":
             "field",
             type=str,
             help="Selected field"
+    )
+    parser.add_argument(
+            "--image_size",
+            type=int,
+            help="Thumbnail image size"
     )
     parser.add_argument(
             "--no_primary",
@@ -221,6 +217,12 @@ if __name__ == "__main__":
             help="Use secondary candidates"
     )
     parser.add_argument(
+            "--save_fits",
+            action="store_true",
+            default="store_false",
+            help="Save all individual fits thumbnails"
+    )
+    parser.add_argument(
             "--verbose", "--v",
             action="store_true",
             help="Print more information"
@@ -232,10 +234,10 @@ if __name__ == "__main__":
         m_pri = glob.glob(f'./masterlist/{args.field}/priority/primary_candidates*')
         print('Found masterlist: ', m_pri)
 
-        _ = create_cutout_files(m_pri, args.field, primary=True, verbose=args.verbose)
+        _ = create_cutout_files(m_pri, args.field, image_size=args.image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
 
     if args.secondary:
         m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates*')
         print('Found masterlist: ', m_sec)
 
-        _ = create_cutout_files(m_sec, args.field, secondary=True, verbose=args.verbose)
+        _ = create_cutout_files(m_sec, args.field, image_size=args.image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
