@@ -112,21 +112,21 @@ def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary
         ### separate out thumbnails of candidates appearing in multiple ccds ##
 
         thumbnail_array = [tmpl_thumbnails,sci_thumbnails,diff_thumbnails]
-        
         if verbose:
-            print('thumbnail_array:')
+            print(' ')
+            print('Thumbnail array:')
             print(thumbnail_array)
             print(' ')
 
         output_name = f'{outdir}/cand{cand_id}_{filt}_thumbnail_grid.png'
-        print('output_name:', output_name)
+        if verbose:
+            print('Output name:', output_name)
 
         make_stamps(ra,dec,thumbnail_array,output=output_name,labels=True, verbose=verbose)
 
         print(f'Thumbnail grid for candidate {cand_id} saved!')
         print('Save location:', output_name)
 
-   
 
 def create_cutout_files(cand_list, field, primary=False, secondary=False, verbose=False):
     # Iterate over masterlist to get candidate data
