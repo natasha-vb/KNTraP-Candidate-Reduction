@@ -160,7 +160,17 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=Fals
                 print(' ')
                 print(tmpl_images)
                 print(' ')
+            
+            # Create directory for thumbnail if not already existing
+            if primary:
+                cand_directory = f'primary_candidates_test_{field}'
+            if secondary:
+                cand_directory = f'secondary_candidates_test_{field}'
 
+            thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
+            if not os.path.exists(thumbnail_outdir):
+                os.makedirs(thumbnail_outdir)
+                
             # Looping over single night images for science, difference, and template images
             if save_fits: 
                 images_list = [sci_images, diff_images, tmpl_images]
@@ -173,16 +183,6 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=Fals
                         fits_name = fitsfile.split('/')[-1]
                         fits_name = fits_name.replace(f'.fits', '.cutout.fits')
                         candfits_name = 'cand' + cand_id.astype(str) + '_' + fits_name
-
-                        if primary:
-                            cand_directory = f'primary_candidates_test_{field}'
-                        if secondary:
-                            cand_directory = f'secondary_candidates_test_{field}'
-
-                        # Create directory for thumbnail if not already existing
-                        thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
-                        if not os.path.exists(thumbnail_outdir):
-                            os.makedirs(thumbnail_outdir)
 
                         fits.writeto(f'{thumbnail_outdir}/{candfits_name}', data, header=header, overwrite=True)
 
