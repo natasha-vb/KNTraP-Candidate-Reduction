@@ -196,7 +196,7 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=Fals
             _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, size=size, primary=primary, secondary=secondary, verbose=verbose)
 
             # Remove fits thumbnail images if not wanted
-            if not save_fits:
+            if save_fits == False:
                 os.remove(f'{thumbnail_outdir}/*.fits')
 
 
