@@ -101,9 +101,9 @@ def make_thumbnail_grid(cand_id, ra, dec, field, outdir,primary=False, secondary
     # Grab i and g band cutouts 
     filters = ['i','g']
     for filt in filters:
-        tmpl_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*_{filt}*diff.tmpl.cutout.fits')
-        sci_thumbnails  = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*_{filt}*diff.im.cutout.fits')
-        diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*_{filt}*diff.cutout.fits')
+        tmpl_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*diff.tmpl.cutout.fits')
+        sci_thumbnails  = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*diff.im.cutout.fits')
+        diff_thumbnails = glob.glob(f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails/cand{cand_id}*{filt}.*diff.cutout.fits')
 
         tmpl_thumbnails = tmpl_thumbnails.sort()
         sci_thumbnails  = sci_thumbnails.sort()
