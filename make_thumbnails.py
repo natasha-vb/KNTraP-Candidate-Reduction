@@ -228,7 +228,6 @@ if __name__ == "__main__":
     parser.add_argument(
             "--save_fits",
             action="store_true",
-            default="store_false",
             help="Save all individual fits thumbnails"
     )
     parser.add_argument(
