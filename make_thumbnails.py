@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
+import warnings
 
 import astropy.io.fits as fits
 from astropy.nddata import Cutout2D
@@ -131,7 +132,7 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=F
         print('Save location:', output_name)
 
 
-def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=False, secondary=False, verbose=False):
+def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True, secondary=False, verbose=False):
     # Iterate over masterlist to get candidate data
     for i in range(len(cand_list)):
         cand_list_csv = pd.read_csv(cand_list[i],sep=',', comment='#', header=11, skipinitialspace=True)
@@ -240,6 +241,9 @@ if __name__ == "__main__":
             help="Print more information"
     )
     args = parser.parse_args()
+
+    # Suppress warnings
+    warnings.filterwarnings('ignore', category=UserWarning, append=True)
 
     # Grab masterlist of primary/ secondary candidates
     if args.image_size:
