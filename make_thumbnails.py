@@ -196,8 +196,13 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True
             # From saved thumbnails, create .png evolution grid of images
             _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, size=size, primary=primary, verbose=verbose)
 
+            print(' ')
+            print('SAVE FITS:')
+            print(save_fits)
+            print(' ')
+
             # Remove fits thumbnail images if not wanted
-            if not save_fits:
+            if save_fits == False:
                 if verbose:
                     print('Removing fits thumbnails...')
                     print(' ')
