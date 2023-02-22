@@ -95,10 +95,10 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
     return output
 
 
-def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=False, secondary=False, verbose=False):
+def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=True, verbose=False):
     if primary:
         cand_directory = f'primary_candidates_{field}'
-    if secondary:
+    else:
         cand_directory = f'secondary_candidates_{field}'
     
     # Grab i and g band cutouts 
@@ -132,7 +132,7 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=F
         print('Save location:', output_name)
 
 
-def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True, secondary=False, verbose=False):
+def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True, verbose=False):
     # Iterate over masterlist to get candidate data
     for i in range(len(cand_list)):
         cand_list_csv = pd.read_csv(cand_list[i],sep=',', comment='#', header=11, skipinitialspace=True)
@@ -181,7 +181,7 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True
                     # Create directory for thumbnail if not already existing
                     if primary:
                         cand_directory = f'primary_candidates_{field}'
-                    if secondary:
+                    else:
                         cand_directory = f'secondary_candidates_{field}'
 
                     thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
@@ -194,7 +194,7 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True
                     print(f'Thumbnail saved to: {thumbnail_outdir}/{candfits_name}')
 
             # From saved thumbnails, create .png evolution grid of images
-            _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, size=size, primary=primary, secondary=secondary, verbose=verbose)
+            _ = make_thumbnail_grid(cand_id, ccd, ra, dec, field=field, outdir=thumbnail_outdir, size=size, primary=primary, verbose=verbose)
 
             # Remove fits thumbnail images if not wanted
             if save_fits == False:
@@ -218,18 +218,6 @@ if __name__ == "__main__":
             help="Thumbnail image size"
     )
     parser.add_argument(
-            "--no_primary",
-            action="store_true",
-            default="store_false",
-            help="Do not use primary candidates"
-    )
-    parser.add_argument(
-            "--secondary",
-            action="store_true",
-            default="store_false",
-            help="Use secondary candidates"
-    )
-    parser.add_argument(
             "--save_fits",
             action="store_true",
             default="store_false",
@@ -251,14 +239,16 @@ if __name__ == "__main__":
     else:
         image_size=50
 
-    if not args.no_primary:
-        m_pri = glob.glob(f'./masterlist/{args.field}/priority/primary_candidates*')
-        print('Found masterlist: ', m_pri)
+    # Run primary candidates
+    m_pri = glob.glob(f'./masterlist/{args.field}/priority/primary_candidates*')
+    print('Found masterlist: ', m_pri)
 
-        _ = create_cutout_files(m_pri, args.field, size=image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
+    _ = create_cutout_files(m_pri, args.field, size=image_size, save_fits=args.save_fits, primary=True, verbose=args.verbose)
 
-    if args.secondary:
-        m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates*')
-        print('Found masterlist: ', m_sec)
+    # Run secondary candidates
+    m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates*')
+    print('Found masterlist: ', m_sec)
 
-        _ = create_cutout_files(m_sec, args.field, size=image_size, save_fits=args.save_fits, secondary=True, verbose=args.verbose)
+    _ = create_cutout_files(m_sec, args.field, size=image_size, save_fits=args.save_fits, primary=False, verbose=args.verbose)
+
+        
