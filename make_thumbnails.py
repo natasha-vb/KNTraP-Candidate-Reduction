@@ -201,8 +201,11 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True
                 if verbose:
                     print('Removing fits thumbnails...')
                     print(' ')
-                os.remove(f'{thumbnail_outdir}/cand{cand_id}*cutout.fits')
+                    thumbnail_list = glob.glob(f'{thumbnail_outdir}/cand{cand_id}*cutout.fits')
 
+                    for thumbnail in thumbnail_list:
+                        os.remove(thumbnail)
+                    
 
 if __name__ == "__main__":
 
