@@ -96,9 +96,9 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
 
 def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=False, secondary=False, verbose=False):
     if primary:
-        cand_directory = f'primary_candidates_test_{field}'
+        cand_directory = f'primary_candidates_{field}'
     if secondary:
-        cand_directory = f'secondary_candidates_test_{field}'
+        cand_directory = f'secondary_candidates_{field}'
     
     # Grab i and g band cutouts 
     filters = ['i','g']
@@ -179,9 +179,9 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=Fals
 
                     # Create directory for thumbnail if not already existing
                     if primary:
-                        cand_directory = f'primary_candidates_test_{field}'
+                        cand_directory = f'primary_candidates_{field}'
                     if secondary:
-                        cand_directory = f'secondary_candidates_test_{field}'
+                        cand_directory = f'secondary_candidates_{field}'
 
                     thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
                     if not os.path.exists(thumbnail_outdir):
