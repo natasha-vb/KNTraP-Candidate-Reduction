@@ -197,7 +197,10 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=Fals
 
             # Remove fits thumbnail images if not wanted
             if save_fits == False:
-                os.remove(f'{thumbnail_outdir}/*.fits')
+                if verbose:
+                    print('Removing fits thumbnails...')
+                    print(' ')
+                os.remove(f'{thumbnail_outdir}/cand{cand_id}*cutout.fits')
 
 
 if __name__ == "__main__":
