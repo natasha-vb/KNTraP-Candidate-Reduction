@@ -121,7 +121,7 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=T
             print(thumbnail_array)
             print(' ')
 
-        output_name = f'{outdir}/cand{cand_id}_{filt}_thumbnail_grid.png'
+        output_name = f'{outdir}/{field}_ccd{ccd}_cand{cand_id}_{filt}_thumbnail_grid.png'
         if verbose:
             print('Output name:', output_name)
         
