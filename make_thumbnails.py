@@ -120,16 +120,18 @@ def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=T
             print('Thumbnail array:')
             print(thumbnail_array)
             print(' ')
-
-        output_name = f'{outdir}/{field}_ccd{ccd}_cand{cand_id}_{filt}_thumbnail_grid.png'
-        if verbose:
-            print('Output name:', output_name)
         
-        # Create thumbnail evolution grid
-        make_stamps(ra, dec, thumbnail_array, output=output_name, labels=True, size=size, verbose=verbose)
+        if len(thumbnail_array[0]) > 1:
 
-        print(f'Thumbnail grid for candidate {cand_id} saved!')
-        print('Save location:', output_name)
+            output_name = f'{outdir}/{field}_ccd{ccd}_cand{cand_id}_{filt}_thumbnail_grid.png'
+            if verbose:
+                print('Output name:', output_name)
+            
+            # Create thumbnail evolution grid
+            make_stamps(ra, dec, thumbnail_array, output=output_name, labels=True, size=size, verbose=verbose)
+
+            print(f'Thumbnail grid for candidate {cand_id} saved!')
+            print('Save location:', output_name)
 
 
 def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True, verbose=False):
