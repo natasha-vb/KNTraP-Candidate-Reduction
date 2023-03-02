@@ -44,14 +44,14 @@ if __name__ == "__main__":
 
     # Grab all masterlists of filtered candidates 
     if args.top_cands:
-        top = '*_candidates'
+        top = '*_candidates_rf'
     else:
         top = ''
 
     if args.field:
-        filtered_mlists = glob.glob(f'./masterlist/{args.field}/priority/*.csv')
+        filtered_mlists = glob.glob(f'./masterlist/{args.field}/priority/{top}*.csv')
     else:
-        filtered_mlists = glob.glob(f'./masterlist/*/priority/*.csv')
+        filtered_mlists = glob.glob(f'./masterlist/*/priority/{top}*.csv')
 
     for f in filtered_mlists:
         # Setting up directory to save light curves. Directory name is the filtering criteria parameters
