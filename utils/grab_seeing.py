@@ -1,16 +1,22 @@
 import glob
 import pandas as pd
 
-def grab_seeing(lcfile, field, ccd):
+def grab_seeing(lcfile, field, ccd, debug=False):
 
     df_seeing = pd.DataFrame()
     
     if field == 'SCVZ':
         field = 'S-CVZ'
-    elif field == 'KNTRAPaa':
+    if field == 'KNTRAPaa':
         field = 'KNTRAP1'
-    elif field == 'FOURHR':
-        field == '4hr'
+    if field == 'FOURHR':
+        field = '4hr'
+    if field == 'KNTRAP12':
+        field = 'KNTraP12'
+    if field == 'KNTRAP13':
+        field = 'KNTraP13'
+    if field == 'KNTRAP14':
+        field = 'KNTraP14'
 
     for i in range(len(lcfile)):
         lc_row = lcfile.iloc[i]
@@ -31,7 +37,14 @@ def grab_seeing(lcfile, field, ccd):
         df_obslog.columns = ['#expid', 'ra', 'dec', 'ut', 'filt', 'time', 'secz', 'psf', 'sky', 'cloud', 'teff', 'Object']
 
         df_obslog_field = df_obslog[df_obslog['Object'] == field]
+        if debug:
+            print(f'All seeing values for field {field}')
+            print(df_obslog_field)
+
         df_obslog_seeing = df_obslog_field['psf'][df_obslog_field['filt'] == filter]
+        if debug:
+            print(f'Seeing values for {filter} band')
+            print(df_obslog_seeing)
 
         df_obslog_seeing_vals = [float(x) for x in df_obslog_seeing.to_list()]
 
