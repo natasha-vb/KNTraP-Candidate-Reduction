@@ -252,10 +252,12 @@ if __name__ == "__main__":
 
     _ = create_cutout_files(m_pri, args.field, size=image_size, save_fits=args.save_fits, primary=True, verbose=args.verbose)
 
+    print('All primary candidate thumbnails created!')
+
     # Run secondary candidates
     m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates*')
     print('Found masterlist: ', m_sec)
 
     _ = create_cutout_files(m_sec, args.field, size=image_size, save_fits=args.save_fits, primary=False, verbose=args.verbose)
 
-        
+    print('All secondary candidate thumbnails created!')
