@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     # Grab all masterlists of filtered candidates 
     if args.top_cands:
-        top = '*_candidates'
+        top = '*_candidates_rf'
     else:
         top = ''
 

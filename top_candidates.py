@@ -66,11 +66,11 @@ if __name__ == "__main__":
         print(f'NUMBER AFTER FILTERING CANDIDATES WITH STAR-LIKE OBJECTS IN TEMPLATE IMAGE: {n_cands}')
 
         # With kilonova-like rising and/or fading rates
-        mlist = mlist[lambda mlist: (mlist.RISE_i == True) | (mlist.FADE_i == True) |
-                                    (mlist.RISE_g == True) | (mlist.FADE_g == True)]
+        # mlist = mlist[lambda mlist: (mlist.RISE_i == True) | (mlist.FADE_i == True) |
+        #                             (mlist.RISE_g == True) | (mlist.FADE_g == True)]
         
         # Requiring both rise and fade rates
-        # mlist = mlist[lambda mlist: (mlist.RATE_i == True) | (mlist.RATE_g == True)]
+        mlist = mlist[lambda mlist: (mlist.RATE_i == True) | (mlist.RATE_g == True)]
         
         n_cands = len(mlist)
         print(' ')
@@ -99,7 +99,7 @@ if __name__ == "__main__":
         #
         {}""" % (ellipticity, fwhm, spread_model,3, mcut_i_1h_len)
 
-        with open(f'{priority_outdir}/primary_candidates_{field}.csv', 'w') as fp:
+        with open(f'{priority_outdir}/primary_candidates_rf_{field}.csv', 'w') as fp:
             fp.write(text.format(mcut_i_1h.to_csv(index=False)))
 
         if args.verbose:
@@ -130,7 +130,7 @@ if __name__ == "__main__":
         #
         {}""" % (ellipticity, fwhm, spread_model,3 , mcut_g_1h_len)
 
-        with open(f'{priority_outdir}/secondary_candidates_{field}.csv', 'w') as fp:
+        with open(f'{priority_outdir}/secondary_candidates_rf_{field}.csv', 'w') as fp:
             fp.write(text.format(mcut_g_1h.to_csv(index=False)))
 
         if args.verbose:
