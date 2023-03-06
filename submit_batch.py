@@ -51,13 +51,17 @@ echo Slurm Job JOB_NAME done in $(($duration / 60)) minutes and $(($duration % 6
 def submit_slurm_OzSTAR_batch(commandfile,
                                 bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
                                 memory_request=8000,
+                                skip_se = False,
                                 verbose=False,
                                 do_not_submit=False):
     # Get environment variables for pipeline set up
     pipedata_dir      = '/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPreprocessed/candidate_reduction/KNTraP-Candidate-Reduction'
     walltime          = os.getenv('OZSTARwalltime')
     if walltime == None:
+        if skip_se == True:
+            walltime ='1:30:00'
         walltime='17:00:00'
+        
 
     # with open(commandfile) as fp:
         pipecommand = commandfile.strip()
@@ -210,12 +214,13 @@ if __name__ == "__main__":
 
         commandfile         = f'python main.py {field} --ccd {ccd} {skip_se} {debug} {verbose}'
     
-        # Optional arguments (with defaults set)
+        # Optional arguments (with defaults set) 
         bashrcfile          = args.bashrcfile
-        memory_request      = int(args.memory_request)
+        memory_request      = int(args.memory_request) ### should add part here to reduce memory, if --skip_se
 
         _ = submit_slurm_OzSTAR_batch(commandfile,
                                     bashrcfile=bashrcfile,
                                     memory_request = memory_request,
+                                    skip_se = args.skip_se
                                     verbose=verbose,
                                     do_not_submit=do_not_submit)
