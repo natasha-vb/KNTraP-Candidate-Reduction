@@ -384,6 +384,16 @@ if __name__ == "__main__":
                         g_rate = True
                     else:
                         g_rate = False
+                    
+                    if args.debug:
+                        print('RATES:')
+                        print('i rise =', i_rise)
+                        print('i fade = ', i_fade)
+                        print('i rate = ', i_rate)
+                        print(' ')
+                        print('g rise =', g_rise)
+                        print('g fade = ', g_fade)
+                        print('g_rate = ', g_rate)
 
                     i_pos = (df_out['alpha_i'].dropna() > 0)
                     g_pos = (df_out['alpha_g'].dropna() > 0)
@@ -421,6 +431,11 @@ if __name__ == "__main__":
                         print(masterlist_tmp)
                         print('===================================================================\
 =========================================================================\n')
+
+                    if args.debug:
+                        print('MASTERLIST COLUMNS:')
+                        for col in masterlist_tmp.columns:
+                            print(col)
 
                     # Putting temp masterlist data into ccd masterlist
                     masterlist = masterlist.append(masterlist_tmp, sort=False)
