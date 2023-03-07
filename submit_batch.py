@@ -221,6 +221,6 @@ if __name__ == "__main__":
         _ = submit_slurm_OzSTAR_batch(commandfile,
                                     bashrcfile=bashrcfile,
                                     memory_request = memory_request,
-                                    skip_se = args.skip_se
+                                    skip_se = args.skip_se,
                                     verbose=verbose,
                                     do_not_submit=do_not_submit)
