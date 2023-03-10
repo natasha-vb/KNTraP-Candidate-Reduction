@@ -82,7 +82,7 @@ def get_psf(fitsfiles, outdir='./', savepsffits=False,
     params_name    = f"{tempdir_name}/temp_params.txt"
     config_name    = f"{tempdir_name}/temp_default.sex"
     psfconfig_name = f"{tempdir_name}/temp_default.psfex"
-    psfxml_name   = f"{tempdir_name}/psfex.xml"
+    psfxml_name    = f"{tempdir_name}/psfex.xml"
 
     create_temp_files(f_conv,f_params,conv_name,params_name,
                       config_name,psfconfig_name,

@@ -44,17 +44,24 @@ source BASHRCFILE
 COMMAND1
 echo `date`
 duration=$SECONDS
-echo Slurm Job JOB_NAME1 done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
+echo Slurm Job JOB_NAME done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
 echo ----------------
 SECONDS=0
 COMMAND2
 echo `date`
 duration=$SECONDS
-echo Slurm Job JOB_NAME1 done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
+echo Slurm Job JOB_NAME done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
+echo ---------------- 
+SECONDS=0
+COMMAND3
+echo `date`
+duration=$SECONDS
+echo Slurm Job JOB_NAME done in $(($duration / 60)) minutes and $(($duration % 60)) seconds
 echo ---------------- 
 '''
 
-def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
+def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, commandfile3,
+                                field,
                                 top_candidates=False,
                                 bashrcfile='/fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/setup.bash.sourceme',
                                 memory_request=8000,
@@ -70,6 +77,7 @@ def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
     # with open(commandfile) as fp:
         pipecommand1 = commandfile1.strip()
         pipecommand2 = commandfile2.strip()
+        pipecommand3 = commandfile3.strip()
 
         # Define slurm job name
         fieldname = field
@@ -94,6 +102,7 @@ def submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
         script_string = script_string.replace(f'PIPE_DATA_DIR',pipedata_dir)
         script_string = script_string.replace(f'COMMAND1',pipecommand1)
         script_string = script_string.replace(f'COMMAND2',pipecommand2)
+        script_string = script_string.replace(f'COMMAND3',pipecommand3)
         script_string = script_string.replace(f'BASHRCFILE',bashrcfile)
         script_string = script_string.replace(f'FIELDNAME',fieldname)
         script_string = script_string.replace(f'MEM_REQUEST',str(int(np.ceil(memory_request/1000.))) )
@@ -181,14 +190,17 @@ if __name__ == "__main__":
     if args.top_candidates:
         commandfile1     = f'python top_candidates.py --field {field} --v'
         commandfile2     = f'python make_lightcurves.py --field {field} --top_cands'
+        commandfile3     = f'python make_thumbnails.py {field} --v'
     else:
         commandfile1     = f'python filter_candidates.py --field {field} --v'
         commandfile2     = f'python make_lightcurves.py --field {field}'
+        commandfile3     = f'python make_thumbnails.py {field} --v'
 
     # Command line for making light curves script
     
     
-    _ = submit_slurm_OzSTAR_batch(commandfile1, commandfile2, field,
+    _ = submit_slurm_OzSTAR_batch(commandfile1, commandfile2, commandfile3,
+                                    field,
                                     top_candidates=args.top_candidates,
                                     bashrcfile=bashrcfile,
                                     memory_request=memory_request,
