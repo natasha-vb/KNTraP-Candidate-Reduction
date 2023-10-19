@@ -207,7 +207,7 @@ if __name__ == "__main__":
         if args.verbose:
             verbose         = '--v'
         else:
-            verbose         - ''
+            verbose         = ''
 
         commandfile         = f'python main.py {field} --ccd {ccd} {skip_se} {debug} {verbose}'
 
