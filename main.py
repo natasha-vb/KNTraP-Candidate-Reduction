@@ -117,9 +117,6 @@ if __name__ == "__main__":
         # Read in fits files
         sci_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.im.fits")
         diff_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.fits")
-        # tmpl_list = glob.glob(f"./templates/{args.field}/*/*ccd{ccd}_tmpl.fits") # Archival templates
-
-        # if len(tmpl_list) == 0:
         tmpl_list = glob.glob(f"../../workspace/{args.field}_tmpl/{ccd}/*.diff.tmpl.fits") # First night templates
 
         # Sort files in order of date
@@ -157,8 +154,8 @@ if __name__ == "__main__":
 
         # SE parameters
         savecats_dir = f"./cats/{args.field}/{ccd}"
-        sextractor_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/sextractor/2.19.5/bin/sex"
-        psfex_loc = "/apps/skylake/software/mpi/gcc/6.4.0/openmpi/3.0.0/psfex/3.21.1/bin/psfex"
+        sextractor_loc = "/fred/oz100/containers/commands/sex"
+        psfex_loc = "/fred/oz100/containers/commands/psfex"
         fwhm = 1.2           #default setting 1.2
         detect_minarea = 5   #default setting 5
         detect_thresh = 0.8  #default setting 1.5
@@ -285,16 +282,16 @@ if __name__ == "__main__":
 
                     # Converting ra and dec to degrees
                     coo = SkyCoord(df["ra"].astype(str),
-                                df["dec"].astype(str),
+                                   df["dec"].astype(str),
                                 unit=(u.hourangle, u.deg))
                     df["ra"] = coo.ra.degree
                     df["dec"] = coo.dec.degree
                     
-                    if args.verbose:
-                        print('-----------------------------------------')
-                        print('CANDIDATE ID: ', cand_id)
-                        print('DETECTION DATES & COORDS:')
-                        print(df[["dateobs", "ra", "dec"]])
+                    # if args.verbose:
+                    print('-----------------------------------------')
+                    print('CANDIDATE ID: ', cand_id)
+                    print('DETECTION DATES & COORDS:')
+                    print(df[["dateobs", "ra", "dec"]])
 
                     cat_matches = pd.DataFrame()
                     for ii, d in enumerate(det_dates):
@@ -306,7 +303,6 @@ if __name__ == "__main__":
                         # For deep field, use MJD date for SE catalog matching
                         datemjd = np.round(df['MJD'][ii], 0)
                         datemjd = int(datemjd)
-                        print(datemjd)
 
                         # Matching detection coordinates to source in SE catalogs
                         match_cat_table = cat_match.cat_match(datemjd, date, ra, dec, filt, field=args.field, ccd=ccd, verbose=args.verbose)
@@ -316,7 +312,7 @@ if __name__ == "__main__":
                     df_out = pd.merge(df, cat_matches, how='left', on=['dateobs','filt'])
 
                     # Adding column for seeing for each night
-                    df_seeing = grab_seeing.grab_seeing(df,args.field,ccd, debug=args.debug)
+                    df_seeing = grab_seeing.grab_seeing(df,args.field,ccd, debug=args.debug, verbose=args.verbose)
                     df_out = pd.merge(df_out,df_seeing, how='left', on=['dateobs', 'filt'])
                     
                     # True/ False for a "good" detection
@@ -325,6 +321,8 @@ if __name__ == "__main__":
                                                                                 row["SPREAD_MODEL_DIFF"] > -0.02 and
                                                                                 row["SPREAD_MODEL_DIFF"] < 0.02 else
                                                                                 False, axis=1)
+                    # df_out["good_detection"] = True
+
                     if args.verbose:
                             print('GOOD DETECTIONS?')
                             print(df_out[["dateobs","filt","seeing","good_detection"]])
@@ -341,12 +339,43 @@ if __name__ == "__main__":
                         print(' ')
 
                     # Check for star-like objects in template image
+                    # True = star-like object in template image
                     df_out['tmpl_star_check'] = df_out.apply(lambda row: True if row['SPREAD_MODEL_TMPL'] < 0.002 and
                                                                                  row['SPREAD_MODEL_TMPL'] > -0.002  else
                                                                                  False, axis=1)
-
+                    
+                    # First and last detections, and in each bands
+                    first_det = np.min(df_out['MJD'])
+                    last_det = np.max(df_out['MJD'])
+                    
+                    # Calculate peak magnitude
+                    mag_peak_mjd  = df_out.iloc[np.where(df_out['m'] == np.min(df_out['m']))]['MJD'].iloc[0]
+                    mag_faint_mjd = df_out.iloc[np.where(df_out['m'] == np.max(df_out['m']))]['MJD'].iloc[0]
+                    
+                    if len(df_out[df_out['filt'] == 'i']) != 0:
+                        mag_peak_i = min(df_out['m'][df_out['filt'] == 'i'])
+                        mag_faint_i = max(df_out['m'][df_out['filt'] == 'i'])
+                        first_det_i = np.min(df_out['MJD'][df_out['filt']=='i'])
+                        last_det_i = np.max(df_out['MJD'][df_out['filt']=='i'])
+                    else:
+                        mag_peak_i  = np.NaN 
+                        mag_faint_i = np.NaN
+                        first_det_i = np.NaN
+                        last_det_i  = np.NaN
+                        
+                    if len(df_out[df_out['filt'] == 'g']) != 0:    
+                        mag_peak_g = min(df_out['m'][df_out['filt'] == 'g'])
+                        mag_faint_g = max(df_out['m'][df_out['filt'] == 'g'])
+                        first_det_g = np.min(df_out['MJD'][df_out['filt']=='g'])
+                        last_det_g = np.max(df_out['MJD'][df_out['filt']=='g'])
+                    else:
+                        mag_peak_g  = np.NaN 
+                        mag_faint_g = np.NaN
+                        first_det_g = np.NaN
+                        last_det_g  = np.NaN              
+                    
                     # Calculate magnitude changes per day
-                    df_alpha = mag_rates.mag_rates(df_out, verbose=True)
+                    df_alpha = mag_rates.mag_rates(df_out, verbose=args.verbose)
                     df_out = pd.merge(df_out,df_alpha, how='left', on=['dateobs', 'filt'])
 
                     # Calculate magnitude SNR 
@@ -361,9 +390,21 @@ if __name__ == "__main__":
                     # Calculating masterlist data 
                     ra_ave = statistics.mean(df["ra"])
                     dec_ave = statistics.mean(df["dec"])
+
+                    x_image_data = df_out[~df_out['X_IMAGE_DIFF'].isnull()]['X_IMAGE_DIFF']
+                    y_image_data = df_out[~df_out['Y_IMAGE_DIFF'].isnull()]['Y_IMAGE_DIFF']
+                    if len(x_image_data) > 0:
+                        x_image_ave = statistics.mean(x_image_data)
+                    else:
+                        x_image_ave = np.NaN
+                    if len(y_image_data) > 0:
+                        y_image_ave = statistics.mean(y_image_data)
+                    else:
+                        y_image_ave = np.NaN
+
                     tmpl_star_check = (df_out['tmpl_star_check'] == True).any()
                     n_det = len(df_out.index)
-                    n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=True)
+                    n_conseq_det = consecutive_count.consecutive_count(df_out, verbose=args.verbose)
                     n_good_det = len(df_out[df_out["good_detection"] == True])
 
                     # Checking for KN-like rising/ fading rates (-ve means rising, +ve means fading)
@@ -385,6 +426,16 @@ if __name__ == "__main__":
                         g_rate = True
                     else:
                         g_rate = False
+                    
+                    if args.debug:
+                        print('RATES:')
+                        print('i rise =', i_rise)
+                        print('i fade = ', i_fade)
+                        print('i rate = ', i_rate)
+                        print(' ')
+                        print('g rise =', g_rise)
+                        print('g fade = ', g_fade)
+                        print('g_rate = ', g_rate)
 
                     i_pos = (df_out['alpha_i'].dropna() > 0)
                     g_pos = (df_out['alpha_g'].dropna() > 0)
@@ -397,6 +448,20 @@ if __name__ == "__main__":
                                                 "CCD": [ccd],
                                                 "RA_AVERAGE": [ra_ave],
                                                 "DEC_AVERAGE": [dec_ave],
+                                                "X_IMAGE": [x_image_ave],
+                                                "Y_IMAGE": [y_image_ave],
+                                                "MAG_PEAK_i": [mag_peak_i],
+                                                "MAG_PEAK_g": [mag_peak_g],
+                                                "MAG_PEAK_MJD": [mag_peak_mjd],
+                                                "MAG_FAINT_i": [mag_faint_i],
+                                                "MAG_FAINT_g": [mag_faint_g],
+                                                "MAG_FAINT_MJD": [mag_faint_mjd],
+                                                "FIRST_DET": [first_det],
+                                                "LAST_DET": [last_det],
+                                                "FIRST_DET_i": [first_det_i],
+                                                "LAST_DET_i": [last_det_i],
+                                                "FIRST_DET_g": [first_det_g],
+                                                "LAST_DET_g": [last_det_g],
                                                 "TMPL_STAR_CHECK": [tmpl_star_check],
                                                 "N_DETECTIONS": [n_det],
                                                 "N_GOOD_DETECTIONS": [n_good_det],
@@ -422,6 +487,11 @@ if __name__ == "__main__":
                         print(masterlist_tmp)
                         print('===================================================================\
 =========================================================================\n')
+                        
+                    if args.debug:
+                        print('MASTERLIST COLUMNS:')
+                        for col in masterlist_tmp.columns:
+                            print(col)
 
                     # Putting temp masterlist data into ccd masterlist
                     masterlist = masterlist.append(masterlist_tmp, sort=False)

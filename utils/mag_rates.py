@@ -32,6 +32,7 @@ def calculate_mag_diff(lc, verbose=False):
 
     return alpha_temp
 
+
 def mag_rates(lc_file, verbose=False):
 
     lc_file_i = lc_file[lc_file['filt'] == 'i']
@@ -43,12 +44,12 @@ def mag_rates(lc_file, verbose=False):
         print('MAGNITUDE CHANGE RATE CALCULATIONS')
 
     if len(lc_file_i) != 0:
-        alpha_i = calculate_mag_diff(lc_file_i, verbose=True)
+        alpha_i = calculate_mag_diff(lc_file_i, verbose=verbose)
     else:
         alpha_i = pd.DataFrame(columns={'dateobs','filt','alpha'})
     
     if len(lc_file_g) != 0:
-        alpha_g = calculate_mag_diff(lc_file_g, verbose=True)
+        alpha_g = calculate_mag_diff(lc_file_g, verbose=verbose)
     else:
         alpha_g = pd.DataFrame(columns={'dateobs','filt','alpha'})
 

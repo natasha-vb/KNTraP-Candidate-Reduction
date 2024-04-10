@@ -31,7 +31,6 @@ batch_script_template = '''#!/bin/bash
 #SBATCH --cpus-per-task=1
 #SBATCH --time=OZSTARWALLTIME
 #SBATCH --mem-per-cpu=MEM_REQUESTG
-RESERVATION_LINE
 
 echo Slurm Job JOB_NAME start
 echo Job bash script is: JOB_BASH_SCRIPT
@@ -39,8 +38,10 @@ echo Job .out is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.
 echo Job .err is saved at: /fred/oz100/NOAO_archive/KNTraP_Project/photpipe/v20.0/DECAMNOAO/KNTraPstkrep/candidate_reduction/KNTraP-Candidate-Reduction/logs/ozstar/FIELDNAME/JOB_NAME.err
 echo `date`
 SECONDS=0
+echo $PYTHONPATH
 echo ----------------
 source BASHRCFILE
+echo $PYTHONPATH
 COMMAND
 echo ----------------
 echo `date`
@@ -207,7 +208,7 @@ if __name__ == "__main__":
         if args.verbose:
             verbose         = '--v'
         else:
-            verbose         - ''
+            verbose         = ''
 
         commandfile         = f'python main.py {field} --ccd {ccd} {skip_se} {debug} {verbose}'
 

@@ -51,7 +51,7 @@ if __name__ == "__main__":
             print('Crossedmatched Masterlist:')
             print(ml_xmatch)
 
-            ml_xmatch.to_csv(f'{outdir}/masterlist_{args.field}.allccds_xmatch.csv', index=False)
+            ml_xmatch.to_csv(f'{outdir}/masterlist_{field}.allccds_xmatch.csv', index=False)
         except:
             print('Masterlist is empty or corrupted:')
             print(ml)

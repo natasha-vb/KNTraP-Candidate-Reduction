@@ -1,7 +1,7 @@
 import glob
 import pandas as pd
 
-def grab_seeing(lcfile, field, ccd, debug=False):
+def grab_seeing(lcfile, field, ccd, debug=False, verbose=False):
 
     df_seeing = pd.DataFrame()
     
@@ -48,8 +48,9 @@ def grab_seeing(lcfile, field, ccd, debug=False):
 
         df_obslog_seeing_vals = [float(x) for x in df_obslog_seeing.to_list()]
 
-        print(f'Seeing values list for field {field}:')
-        print(df_obslog_seeing_vals)
+        if verbose:
+            print(f'Seeing values list for field {field}:')
+            print(df_obslog_seeing_vals)
 
         if len(df_obslog_seeing_vals) > 1:
             # sum up all the seeing values and average them

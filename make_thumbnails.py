@@ -97,9 +97,9 @@ def make_stamps(RA,DEC,fitsfiles_2Darray,output='stamp.png',labels=False,size=50
 
 def make_thumbnail_grid(cand_id, ccd, ra, dec, field, outdir, size=50, primary=True, verbose=False):
     if primary:
-        cand_directory = f'primary_candidates_rf_{field}'
+        cand_directory = f'primary_candidates_{field}'
     else:
-        cand_directory = f'secondary_candidates_rf_{field}'
+        cand_directory = f'secondary_candidates_{field}'
     
     # Grab i and g band cutouts 
     filters = ['i','g']
@@ -180,9 +180,9 @@ def create_cutout_files(cand_list, field, size=50, save_fits=False, primary=True
 
                     # Create directory for thumbnail if not already existing
                     if primary:
-                        cand_directory = f'primary_candidates_rf_{field}'
+                        cand_directory = f'primary_candidates_{field}'
                     else:
-                        cand_directory = f'secondary_candidates_rf_{field}'
+                        cand_directory = f'secondary_candidates_{field}'
 
                     thumbnail_outdir = (f'./lc_files/{field}/filtered_candidates/{cand_directory}/thumbnails')
                     if not os.path.exists(thumbnail_outdir):
@@ -247,7 +247,7 @@ if __name__ == "__main__":
         image_size=50
 
     # Run primary candidates
-    m_pri = glob.glob(f'./masterlist/{args.field}/priority/primary_candidates_rf*')
+    m_pri = glob.glob(f'./masterlist/{args.field}/priority/primary_candidates*')
     print('Found masterlist: ', m_pri)
 
     _ = create_cutout_files(m_pri, args.field, size=image_size, save_fits=args.save_fits, primary=True, verbose=args.verbose)
@@ -255,7 +255,7 @@ if __name__ == "__main__":
     print('All primary candidate thumbnails created!')
 
     # Run secondary candidates
-    m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates_rf*')
+    m_sec = glob.glob(f'./masterlist/{args.field}/priority/secondary_candidates*')
     print('Found masterlist: ', m_sec)
 
     _ = create_cutout_files(m_sec, args.field, size=image_size, save_fits=args.save_fits, primary=False, verbose=args.verbose)
